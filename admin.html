@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🛠️ Админ-панель | Уникальные десерты</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+    
+    .tab-btn {
+      padding: 12px 28px;
+      border-radius: 40px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      backdrop-filter: blur(4px);
+    }
+    
+    .tab-btn.active {
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+      border-color: var(--accent);
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      padding: 30px;
+      backdrop-filter: blur(8px);
+      box-shadow: var(--shadow);
+      margin-bottom: 30px;
+    }
+    
+    .panel-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    
+    .cakes-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    .cakes-table th {
+      text-align: left;
+      padding: 15px 10px;
+      color: var(--muted);
+      font-weight: 600;
+      border-bottom: 2px solid var(--border);
+    }
+    
+    .cakes-table td {
+      padding: 15px 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .cake-thumb {
+      width: 60px;
+      height: 60px;
+      border-radius: 15px;
+      object-fit: cover;
+    }
+    
+    .actions {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .btn.small {
+      padding: 6px 12px;
+      font-size: 0.85rem;
+    }
+    
+    .btn.danger {
+      background: rgba(239, 68, 68, 0.1);
+      border-color: rgba(239, 68, 68, 0.3);
+      color: #ef4444;
+    }
+    
+    .contact-item {
+      display: grid;
+      grid-template-columns: 130px 1fr 1fr 40px 40px 50px;
+      gap: 10px;
+      align-items: center;
+      padding: 15px;
+      background: var(--bg);
+      border-radius: 20px;
+      margin-bottom: 10px;
+      border: 1px solid var(--border);
+    }
+    
+    @media (max-width: 768px) {
+      .contact-item {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+    }
+    
+    .btn.move {
+      padding: 6px 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .btn.move:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+    
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    
+    @media (max-width: 600px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+    
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 1rem;
+    }
+    
+    .form-group textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+    
+    .ingredients-input {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    
+    .ingredients-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    
+    .ingredient-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 5px 12px;
+      border-radius: 40px;
+    }
+    
+    .ingredient-item button {
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 1.2rem;
+      padding: 0 5px;
+    }
+    
+    .media-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    
+    .media-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg);
+      padding: 10px 15px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+    }
+    
+    .media-item select {
+      width: auto;
+      padding: 8px 12px;
+    }
+    
+    .media-item input {
+      flex: 1;
+      padding: 8px 12px;
+    }
+    
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: rgba(34, 197, 94, 0.15);
+      color: #22c55e;
+      border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+    
+    /* ===== МОДАЛЬНОЕ ОКНО ===== */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+      z-index: 99999;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    
+    .modal.active {
+      display: flex;
+    }
+    
+    .modal-content {
+      max-width: 700px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      overflow-x: hidden;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      padding: 30px;
+      position: relative;
+    }
+    
+    .modal-content::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    .modal-content::-webkit-scrollbar-track {
+      background: transparent;
+      margin: 10px 0;
+    }
+    
+    .modal-content::-webkit-scrollbar-thumb {
+      background: var(--accent);
+      border-radius: 10px;
+    }
+    
+    .modal-content::-webkit-scrollbar-thumb:hover {
+      background: var(--accent2);
+    }
+    
+    .modal-content {
+      scrollbar-width: thin;
+      scrollbar-color: var(--accent) transparent;
+    }
+    
+    .order-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 15px;
+    }
+    
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 40px;
+      color: var(--muted);
+    }
+
+    footer {
+      position: relative;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body id="app-body">
+  <header>
+    <div class="container nav">
+      <a href="index.html" class="brand">
+        <div class="logo"></div>
+        <div>🍰 Уникальные десерты</div>
+      </a>
+      <div class="nav-actions">
+        <div id="themeSwitcher"></div>
+        <a href="index.html" class="btn">🏠 Каталог</a>
+        <a href="orders.html" class="btn">📦 Заказы</a>
+        <a href="settings.html" class="btn">⚙️ Настройки</a>
+        <button class="btn" id="logoutBtn">🚪 Выйти</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div id="accessDenied" style="display: none;">
+      <div class="panel">
+        <h2>⛔ Доступ запрещён</h2>
+        <p style="margin: 20px 0;">Эта страница доступна только администраторам.</p>
+        <a href="index.html" class="btn primary">Вернуться в каталог</a>
+      </div>
+    </div>
+
+    <div id="adminContent" style="display: none;">
+      <div id="messageContainer"></div>
+
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="cakes">🍰 Торты</button>
+        <button class="tab-btn" data-tab="contacts">📞 Контакты</button>
+        <button class="tab-btn" data-tab="orders">📦 Заказы</button>
+      </div>
+
+      <!-- Вкладка: Торты -->
+      <div class="tab-content active" id="tab-cakes">
+        <div class="panel">
+          <div class="panel-title">
+            <span>🍰 Управление тортами</span>
+            <button class="btn primary" id="addCakeBtn">➕ Добавить торт</button>
+          </div>
+          
+          <table class="cakes-table">
+            <thead>
+              <tr>
+                <th>Фото</th>
+                <th>Название</th>
+                <th>Цена</th>
+                <th>Ингредиенты</th>
+                <th>Действия</th>
+              </tr>
+            </thead>
+            <tbody id="cakesTableBody">
+              <tr><td colspan="5" style="text-align: center;">Загрузка...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Вкладка: Контакты -->
+      <div class="tab-content" id="tab-contacts">
+        <div class="panel">
+          <div class="panel-title">
+            <span>📞 Контакты в футере</span>
+            <button class="btn primary" id="addContactBtn">➕ Добавить контакт</button>
+          </div>
+          
+          <p style="margin-bottom: 20px; color: var(--muted);">
+            Эти контакты отображаются внизу всех страниц сайта.
+          </p>
+          
+          <div id="contactsEditor"></div>
+          
+          <button class="btn primary" id="saveContactsBtn" style="margin-top: 20px;">
+            💾 Сохранить контакты
+          </button>
+        </div>
+      </div>
+
+      <!-- Вкладка: Заказы -->
+      <div class="tab-content" id="tab-orders">
+        <div class="panel">
+          <div class="panel-title">📦 Заказы</div>
+          <div id="ordersList">Загрузка...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Модальное окно для торта -->
+    <div class="modal" id="cakeModal">
+      <div class="modal-content">
+        <h2 style="margin-bottom: 25px;" id="modalTitle">Добавить торт</h2>
+        
+        <form id="cakeForm">
+          <input type="hidden" id="cakeId">
+          
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Название *</label>
+              <input type="text" id="cakeTitle" required placeholder="Шоколадный мусс">
+            </div>
+            
+            <div class="form-group">
+              <label>Цена (₽) *</label>
+              <input type="number" id="cakePrice" required placeholder="1990">
+            </div>
+            
+            <div class="form-group full-width">
+              <label>Краткое описание *</label>
+              <input type="text" id="cakeShort" required placeholder="Нежный мусс и тёмный шоколад">
+            </div>
+            
+            <div class="form-group full-width">
+              <label>Полное описание</label>
+              <textarea id="cakeDescription" placeholder="Подробное описание..."></textarea>
+            </div>
+            
+            <div class="form-group full-width">
+              <label>Ингредиенты</label>
+              <div class="ingredients-input">
+                <input type="text" id="newIngredient" placeholder="Например: шоколад">
+                <button type="button" class="btn" id="addIngredientBtn">Добавить</button>
+              </div>
+              <div class="ingredients-list" id="ingredientsList"></div>
+            </div>
+            
+            <div class="form-group full-width">
+              <label>Медиа (фото и видео)</label>
+              <div id="mediaList" class="media-list"></div>
+              <button type="button" class="btn" id="addMediaBtn" style="margin-top: 10px;">
+                ➕ Добавить медиа
+              </button>
+            </div>
+          </div>
+          
+          <div style="display: flex; gap: 10px; margin-top: 25px;">
+            <button type="submit" class="btn primary">💾 Сохранить</button>
+            <button type="button" class="btn" id="cancelModalBtn">Отмена</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container footer-wrap">
+      <div>
+        <div class="footer-title">📞 Контакты (превью)</div>
+        <div class="footer-sub">Как видят пользователи</div>
+        <div class="contact-list" id="footerContactsPreview"></div>
+      </div>
+      <div class="small">© 2026 Уникальные десерты</div>
+    </div>
+  </footer>
+
+  <script src="js/theme.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/utils.js"></script>
+
+  <script>
+    (function(){
+      "use strict";
+
+      let currentCakes = [];
+      let currentContacts = { items: [] };
+      let tempIngredients = [];
+      let tempMedia = [];
+      let editingCakeId = null;
+
+      // ===== ПРОВЕРКА ДОСТУПА =====
+      async function checkAccess() {
+        const session = SweetBakeAPI.auth.getSession();
+        
+        if (!session?.userId) {
+          window.location.href = 'login.html';
+          return false;
+        }
+        
+        try {
+          const user = await SweetBakeAPI.api.users.get(session.userId);
+          
+          if (user.role !== 'admin') {
+            document.getElementById('accessDenied').style.display = 'block';
+            document.getElementById('adminContent').style.display = 'none';
+            return false;
+          }
+          
+          document.getElementById('accessDenied').style.display = 'none';
+          document.getElementById('adminContent').style.display = 'block';
+          return true;
+        } catch (e) {
+          SweetBakeAPI.auth.logout();
+          window.location.href = 'login.html';
+          return false;
+        }
+      }
+
+      // ===== ЗАГРУЗКА ДАННЫХ =====
+      async function loadCakes() {
+        try {
+          currentCakes = await SweetBakeAPI.api.cakes.getAll();
+          renderCakesTable();
+        } catch (e) {
+          console.error('Ошибка загрузки тортов:', e);
+        }
+      }
+
+      async function loadContacts() {
+        try {
+          currentContacts = await SweetBakeAPI.api.contacts.get();
+          renderContactsEditor();
+          renderContactsPreview();
+        } catch (e) {
+          console.error('Ошибка загрузки контактов:', e);
+        }
+      }
+
+      async function loadOrders() {
+        const container = document.getElementById('ordersList');
+        
+        try {
+          const orders = await SweetBakeAPI.api.orders.getAll();
+          
+          if (orders.length === 0) {
+            container.innerHTML = '<div class="empty-state">📭 Пока нет заказов</div>';
+            return;
+          }
+          
+          container.innerHTML = orders.map(o => `
+            <div class="order-card">
+              <div class="order-header">
+                <h3>${o.cakeTitle}</h3>
+                <span class="status-badge">${o.status || 'новый'}</span>
+              </div>
+              <p style="color: var(--muted);">Заказчик: ${o.userEmail}</p>
+              <p style="color: var(--muted);">Сумма: ${SweetBakeUtils.formatPrice(o.price)}</p>
+              <p style="color: var(--muted); font-size: 0.85rem;">
+                Дата: ${SweetBakeUtils.formatDateTime(o.createdAt)}
+              </p>
+            </div>
+          `).join('');
+        } catch (e) {
+          container.innerHTML = '<div class="empty-state">❌ Ошибка загрузки</div>';
+        }
+      }
+
+      // ===== РЕНДЕРИНГ =====
+      function renderCakesTable() {
+        const tbody = document.getElementById('cakesTableBody');
+        
+        if (currentCakes.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Нет тортов. Добавьте первый!</td></tr>';
+          return;
+        }
+        
+        tbody.innerHTML = currentCakes.map(cake => `
+          <tr>
+            <td>
+              ${cake.media?.[0]?.url 
+                ? `<img src="${cake.media[0].url}" class="cake-thumb" alt="${cake.title}">` 
+                : '📷'}
+            </td>
+            <td>
+              <strong>${cake.title}</strong><br>
+              <small style="color: var(--muted);">${cake.short}</small>
+            </td>
+            <td>${SweetBakeUtils.formatPrice(cake.price)}</td>
+            <td>${(cake.ingredients || []).slice(0, 3).join(', ')}</td>
+            <td>
+              <div class="actions">
+                <button class="btn small edit-cake" data-id="${cake.id}">✏️</button>
+                <button class="btn small danger delete-cake" data-id="${cake.id}">🗑️</button>
+              </div>
+            </td>
+          </tr>
+        `).join('');
+        
+        document.querySelectorAll('.edit-cake').forEach(btn => {
+          btn.addEventListener('click', () => editCake(btn.dataset.id));
+        });
+        
+        document.querySelectorAll('.delete-cake').forEach(btn => {
+          btn.addEventListener('click', () => deleteCake(btn.dataset.id));
+        });
+      }
+
+      function renderContactsEditor() {
+        const container = document.getElementById('contactsEditor');
+        const items = currentContacts.items || [];
+        
+        container.innerHTML = items.map((item, idx) => {
+          const isFirst = idx === 0;
+          const isLast = idx === items.length - 1;
+          
+          return `
+            <div class="contact-item">
+              <select data-index="${idx}" data-field="type">
+                <option value="phone" ${item.type === 'phone' ? 'selected' : ''}>📞 Телефон</option>
+                <option value="email" ${item.type === 'email' ? 'selected' : ''}>📧 Email</option>
+                <option value="other" ${item.type === 'other' ? 'selected' : ''}>🔗 Другое</option>
+              </select>
+              <input type="text" data-index="${idx}" data-field="label" 
+                     value="${item.label || ''}" placeholder="Подпись">
+              <input type="text" data-index="${idx}" data-field="value" 
+                     value="${item.value || ''}" placeholder="Значение">
+              <button class="btn move move-up" data-index="${idx}" ${isFirst ? 'disabled' : ''}>⬆️</button>
+              <button class="btn move move-down" data-index="${idx}" ${isLast ? 'disabled' : ''}>⬇️</button>
+              <button class="btn small danger delete-contact" data-index="${idx}">🗑️</button>
+            </div>
+          `;
+        }).join('');
+        
+        // Обработчики изменения данных
+        document.querySelectorAll('[data-field]').forEach(el => {
+          const handler = (e) => {
+            currentContacts.items[e.target.dataset.index][e.target.dataset.field] = e.target.value;
+          };
+          el.addEventListener('change', handler);
+          el.addEventListener('input', handler);
+        });
+        
+        // Обработчики перемещения вверх
+        document.querySelectorAll('.move-up').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const idx = parseInt(btn.dataset.index);
+            if (idx > 0) {
+              const temp = currentContacts.items[idx];
+              currentContacts.items[idx] = currentContacts.items[idx - 1];
+              currentContacts.items[idx - 1] = temp;
+              renderContactsEditor();
+            }
+          });
+        });
+        
+        // Обработчики перемещения вниз
+        document.querySelectorAll('.move-down').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const idx = parseInt(btn.dataset.index);
+            if (idx < currentContacts.items.length - 1) {
+              const temp = currentContacts.items[idx];
+              currentContacts.items[idx] = currentContacts.items[idx + 1];
+              currentContacts.items[idx + 1] = temp;
+              renderContactsEditor();
+            }
+          });
+        });
+        
+        // Обработчики удаления
+        document.querySelectorAll('.delete-contact').forEach(btn => {
+          btn.addEventListener('click', () => {
+            currentContacts.items.splice(parseInt(btn.dataset.index), 1);
+            renderContactsEditor();
+          });
+        });
+      }
+
+      function renderContactsPreview() {
+        const container = document.getElementById('footerContactsPreview');
+        container.innerHTML = '';
+        
+        (currentContacts.items || []).forEach(item => {
+          const row = document.createElement('div');
+          row.className = 'contact-row';
+          row.innerHTML = `<span class="contact-label">${item.label}</span><span>${item.value}</span>`;
+          container.appendChild(row);
+        });
+      }
+
+      function renderIngredientsList() {
+        const container = document.getElementById('ingredientsList');
+        container.innerHTML = tempIngredients.map(ing => `
+          <span class="ingredient-item">
+            ${ing}
+            <button type="button" onclick="this.parentElement.remove(); 
+              window.tempIngredients = window.tempIngredients.filter(i => i !== '${ing}');">
+              ✕
+            </button>
+          </span>
+        `).join('');
+        window.tempIngredients = tempIngredients;
+      }
+
+      function renderMediaList() {
+        const container = document.getElementById('mediaList');
+        container.innerHTML = tempMedia.map((m, idx) => `
+          <div class="media-item">
+            <select onchange="window.tempMedia[${idx}].type = this.value">
+              <option value="image" ${m.type === 'image' ? 'selected' : ''}>🖼️ Фото</option>
+              <option value="video" ${m.type === 'video' ? 'selected' : ''}>🎬 Видео</option>
+            </select>
+            <input type="text" value="${m.url}" placeholder="URL" 
+                   onchange="window.tempMedia[${idx}].url = this.value">
+            <button type="button" class="btn small danger" 
+                    onclick="this.parentElement.remove(); window.tempMedia.splice(${idx}, 1); 
+                             window.renderMediaList();">🗑️</button>
+          </div>
+        `).join('');
+        window.tempMedia = tempMedia;
+        window.renderMediaList = renderMediaList;
+      }
+
+      // ===== CRUD ОПЕРАЦИИ =====
+      function editCake(id) {
+        const cake = currentCakes.find(c => c.id === id);
+        if (!cake) return;
+        
+        editingCakeId = id;
+        document.getElementById('modalTitle').textContent = '✏️ Редактировать торт';
+        document.getElementById('cakeId').value = id;
+        document.getElementById('cakeTitle').value = cake.title;
+        document.getElementById('cakePrice').value = cake.price;
+        document.getElementById('cakeShort').value = cake.short;
+        document.getElementById('cakeDescription').value = cake.description || '';
+        
+        tempIngredients = [...(cake.ingredients || [])];
+        tempMedia = [...(cake.media || [])];
+        
+        renderIngredientsList();
+        renderMediaList();
+        
+        document.getElementById('cakeModal').classList.add('active');
+      }
+
+      async function deleteCake(id) {
+        if (!confirm('Удалить торт навсегда?')) return;
+        
+        try {
+          await SweetBakeAPI.api.cakes.delete(id);
+          SweetBakeUtils.showToast('✅ Торт удалён');
+          await loadCakes();
+        } catch (e) {
+          SweetBakeUtils.showToast('❌ Ошибка удаления', 'error');
+        }
+      }
+
+      async function saveCake(data) {
+        try {
+          if (editingCakeId) {
+            await SweetBakeAPI.api.cakes.update(editingCakeId, data);
+            SweetBakeUtils.showToast('✅ Торт обновлён');
+          } else {
+            data.id = SweetBakeUtils.generateId('cake_');
+            await SweetBakeAPI.api.cakes.create(data);
+            SweetBakeUtils.showToast('✅ Торт добавлен');
+          }
+          
+          document.getElementById('cakeModal').classList.remove('active');
+          await loadCakes();
+        } catch (e) {
+          SweetBakeUtils.showToast('❌ Ошибка сохранения', 'error');
+        }
+      }
+
+      async function saveContacts() {
+        try {
+          await SweetBakeAPI.api.contacts.update(currentContacts);
+          SweetBakeUtils.showToast('✅ Контакты сохранены');
+          renderContactsPreview();
+        } catch (e) {
+          SweetBakeUtils.showToast('❌ Ошибка сохранения', 'error');
+        }
+      }
+
+      // ===== ИНИЦИАЛИЗАЦИЯ =====
+      async function init() {
+        // Тема
+        SweetBakeTheme.createSwitcher('themeSwitcher');
+        
+        // Проверка доступа
+        const hasAccess = await checkAccess();
+        if (!hasAccess) return;
+        
+        // Загрузка данных
+        await loadCakes();
+        await loadContacts();
+        await loadOrders();
+        
+        // Табы
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            btn.classList.add('active');
+            document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
+            
+            if (btn.dataset.tab === 'orders') loadOrders();
+          });
+        });
+        
+        // Выход
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+          SweetBakeAPI.auth.logout();
+          window.location.href = 'index.html';
+        });
+        
+        // Кнопки тортов
+        document.getElementById('addCakeBtn').addEventListener('click', () => {
+          editingCakeId = null;
+          document.getElementById('modalTitle').textContent = '🍰 Добавить торт';
+          document.getElementById('cakeForm').reset();
+          document.getElementById('cakeId').value = '';
+          tempIngredients = [];
+          tempMedia = [];
+          renderIngredientsList();
+          renderMediaList();
+          document.getElementById('cakeModal').classList.add('active');
+        });
+        
+        document.getElementById('addIngredientBtn').addEventListener('click', () => {
+          const input = document.getElementById('newIngredient');
+          const val = input.value.trim();
+          if (val && !tempIngredients.includes(val)) {
+            tempIngredients.push(val);
+            renderIngredientsList();
+            input.value = '';
+          }
+        });
+        
+        document.getElementById('addMediaBtn').addEventListener('click', () => {
+          tempMedia.push({ type: 'image', url: '' });
+          renderMediaList();
+        });
+        
+        document.getElementById('cakeForm').addEventListener('submit', (e) => {
+          e.preventDefault();
+          
+          const data = {
+            title: document.getElementById('cakeTitle').value,
+            price: parseInt(document.getElementById('cakePrice').value),
+            short: document.getElementById('cakeShort').value,
+            description: document.getElementById('cakeDescription').value,
+            ingredients: tempIngredients,
+            media: tempMedia.filter(m => m.url.trim())
+          };
+          
+          if (editingCakeId) data.id = editingCakeId;
+          
+          saveCake(data);
+        });
+        
+        document.getElementById('cancelModalBtn').addEventListener('click', () => {
+          document.getElementById('cakeModal').classList.remove('active');
+        });
+        
+        // Кнопки контактов
+        document.getElementById('addContactBtn').addEventListener('click', () => {
+          currentContacts.items.push({
+            id: SweetBakeUtils.generateId('c_'),
+            type: 'phone',
+            label: 'Новый контакт',
+            value: ''
+          });
+          renderContactsEditor();
+        });
+        
+        document.getElementById('saveContactsBtn').addEventListener('click', saveContacts);
+        
+        // Закрытие модалки по клику вне
+        document.getElementById('cakeModal').addEventListener('click', (e) => {
+          if (e.target.classList.contains('modal')) {
+            document.getElementById('cakeModal').classList.remove('active');
+          }
+        });
+      }
+
+      // Глобальные переменные для инлайн-обработчиков
+      window.tempIngredients = tempIngredients;
+      window.tempMedia = tempMedia;
+      window.renderMediaList = renderMediaList;
+
+      init();
+    })();
+  </script>
+</body>
+</html>

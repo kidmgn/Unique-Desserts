@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🔐 Вход | Уникальные десерты</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* Дополнительные стили для страницы входа */
+    .auth-container {
+      max-width: 450px;
+      margin: 40px auto;
+    }
+    
+    .auth-panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      padding: 40px 35px;
+      backdrop-filter: blur(8px);
+      box-shadow: var(--shadow);
+    }
+    
+    .auth-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+    
+    .auth-subtitle {
+      text-align: center;
+      color: var(--muted);
+      margin-bottom: 25px;
+    }
+    
+    .demo-hint {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 15px 18px;
+      margin-bottom: 28px;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+    
+    .demo-hint strong {
+      color: var(--text);
+    }
+    
+    .demo-hint code {
+      background: var(--card);
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+    
+    .auth-form {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+    
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .form-group label {
+      color: var(--text);
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-left: 5px;
+    }
+    
+    .form-group input {
+      width: 100%;
+      padding: 15px 18px;
+      border-radius: 18px;
+      border: 1.5px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 1rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+    
+    .form-group input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(249, 168, 212, 0.15);
+    }
+    
+    .form-group input::placeholder {
+      color: var(--muted);
+      opacity: 0.6;
+      font-size: 0.9rem;
+    }
+    
+    .btn-login {
+      width: 100%;
+      padding: 16px;
+      font-size: 1.1rem;
+      justify-content: center;
+      margin-top: 10px;
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+      border: none;
+      color: white;
+      font-weight: 700;
+      border-radius: 18px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .btn-login:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+    
+    .btn-login:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .auth-footer {
+      text-align: center;
+      margin-top: 25px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+    
+    .auth-footer a {
+      color: var(--accent);
+      font-weight: 700;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+    
+    .auth-footer a:hover {
+      opacity: 0.8;
+      text-decoration: underline;
+    }
+    
+    .error-message {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #ef4444;
+      padding: 14px 18px;
+      border-radius: 18px;
+      font-size: 0.9rem;
+      display: none;
+      margin-bottom: 20px;
+    }
+    
+    .error-message.show {
+      display: block;
+    }
+  </style>
+</head>
+<body id="app-body">
+  <header>
+    <div class="container nav">
+      <a href="index.html" class="brand">
+        <div class="logo"></div>
+        <div>🍰 Уникальные десерты</div>
+      </a>
+      <div class="nav-actions">
+        <div id="themeSwitcher"></div>
+        <a href="index.html" class="btn">🏠 Каталог</a>
+        <!-- Убрали кнопки "Регистрация", т.к. она есть внизу формы -->
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="auth-container">
+      <div class="auth-panel">
+        <h1 class="auth-title">🔐 Вход</h1>
+        <p class="auth-subtitle">Добро пожаловать обратно!</p>
+        
+        <div class="demo-hint">
+          <strong>🎮 Демо-доступ:</strong><br>
+          <strong>Админ:</strong> <code>admin@sweetbake.ru</code> / <code>admin123</code><br>
+          <strong>Пользователь:</strong> <code>user@test.ru</code> / <code>123456</code>
+        </div>
+        
+        <div class="error-message" id="errorMessage"></div>
+        
+        <form class="auth-form" id="loginForm">
+          <div class="form-group">
+            <label>📧 Email</label>
+            <input type="email" id="email" placeholder="you@example.com" required autocomplete="email">
+          </div>
+          
+          <div class="form-group">
+            <label>🔒 Пароль</label>
+            <input type="password" id="password" placeholder="••••••••" required autocomplete="current-password">
+          </div>
+          
+          <button type="submit" class="btn-login">
+            Войти
+          </button>
+        </form>
+        
+        <div class="auth-footer">
+          Нет аккаунта? <a href="register.html">Зарегистрироваться</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container footer-wrap">
+      <div>
+        <div class="footer-title">📞 Контакты</div>
+        <div class="footer-sub">Свяжитесь с нами для заказа</div>
+        <div class="contact-list" id="footerContacts"></div>
+      </div>
+      <div class="small">
+        <div><b>🍪 Навигация:</b></div>
+        <div><a href="index.html">Каталог</a> · <a href="cake.html?id=cake_1">Пример торта</a></div>
+        <div style="margin-top: 16px;">© 2026 Уникальные десерты</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Внешние скрипты -->
+  <script src="js/theme.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/utils.js"></script>
+
+  <script>
+    (function(){
+      "use strict";
+
+      // ===== ИНИЦИАЛИЗАЦИЯ =====
+      async function init() {
+        // Создаём переключатель тем
+        SweetBakeTheme.createSwitcher('themeSwitcher');
+        
+        // Загружаем контакты
+        await loadContacts();
+        
+        // Проверяем, не авторизован ли уже пользователь
+        const session = SweetBakeAPI.auth.getSession();
+        if (session) {
+          window.location.href = 'index.html';
+          return;
+        }
+        
+        // Обработчик формы
+        document.getElementById('loginForm').addEventListener('submit', handleLogin);
+      }
+
+      // ===== ЗАГРУЗКА КОНТАКТОВ =====
+      async function loadContacts() {
+        try {
+          const contacts = await SweetBakeAPI.api.contacts.get();
+          const container = document.getElementById('footerContacts');
+          if (!container) return;
+          
+          container.innerHTML = '';
+          (contacts.items || []).forEach(item => {
+            const row = document.createElement('div');
+            row.className = 'contact-row';
+            row.innerHTML = `<span class="contact-label">${item.label}</span><span>${item.value}</span>`;
+            container.appendChild(row);
+          });
+        } catch (e) {
+          console.warn('Контакты не загружены');
+        }
+      }
+
+      // ===== ОБРАБОТКА ВХОДА =====
+      async function handleLogin(e) {
+        e.preventDefault();
+        
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        const errorEl = document.getElementById('errorMessage');
+        
+        // Скрываем предыдущую ошибку
+        errorEl.classList.remove('show');
+        
+        // Валидация
+        if (!email || !password) {
+          showError('Пожалуйста, заполните все поля');
+          return;
+        }
+        
+        // Блокируем кнопку на время запроса
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = '⏳ Входим...';
+        submitBtn.disabled = true;
+        
+        try {
+          const result = await SweetBakeAPI.auth.login(email, password);
+          
+          SweetBakeUtils.showToast(`✅ Добро пожаловать, ${result.user.name || result.user.email}!`);
+          
+          // Перенаправляем на главную
+          setTimeout(() => {
+            window.location.href = 'index.html';
+          }, 500);
+          
+        } catch (error) {
+          showError(error.message || 'Неверный email или пароль');
+          
+          // Разблокируем кнопку
+          submitBtn.textContent = originalText;
+          submitBtn.disabled = false;
+        }
+      }
+
+      // ===== ПОКАЗАТЬ ОШИБКУ =====
+      function showError(message) {
+        const errorEl = document.getElementById('errorMessage');
+        errorEl.textContent = message;
+        errorEl.classList.add('show');
+      }
+
+      init();
+    })();
+  </script>
+</body>
+</html>

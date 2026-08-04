@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ℹ️ Информация | Уникальные десерты</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    .settings-container { max-width: 800px; margin: 0 auto; }
+    .page-title { font-size: 2rem; font-weight: 700; margin-bottom: 30px; }
+    .settings-section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 30px;
+      margin-bottom: 25px;
+      backdrop-filter: blur(8px);
+      box-shadow: var(--shadow);
+    }
+    .section-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+    .section-desc { color: var(--muted); margin-bottom: 25px; font-size: 0.95rem; }
+    
+    /* Профиль с аватаром */
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 25px;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+    }
+    
+    .avatar-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .avatar-preview {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      border: 3px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+    
+    .avatar-selector {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .avatar-option {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      background: var(--bg);
+      border: 2px solid var(--border);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .avatar-option:hover {
+      transform: scale(1.1);
+      border-color: var(--accent);
+    }
+    
+    .avatar-option.active {
+      border-color: var(--accent);
+      border-width: 3px;
+      background: var(--card);
+    }
+    
+    .avatar-emoji {
+      font-size: 1.5rem;
+    }
+    
+    .profile-info {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 15px 20px;
+      align-items: center;
+      flex: 1;
+    }
+    
+    .profile-label { color: var(--muted); font-weight: 500; min-width: 100px; }
+    .profile-value { font-weight: 600; }
+    .profile-badge { display: inline-block; padding: 4px 12px; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; }
+    .badge-admin { background: linear-gradient(135deg, var(--accent2), var(--accent)); color: white; }
+    .badge-user { background: var(--bg); border: 1px solid var(--border); color: var(--text); }
+    
+    .theme-selector { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; margin-top: 20px; }
+    .theme-option {
+      background: var(--bg); border: 2px solid var(--border); border-radius: 20px;
+      padding: 20px 15px; text-align: center; cursor: pointer; transition: all 0.2s;
+    }
+    .theme-option:hover { transform: translateY(-3px); border-color: var(--accent); }
+    .theme-option.active { border-color: var(--accent); border-width: 3px; background: var(--card); }
+    .theme-preview { width: 60px; height: 60px; border-radius: 50%; margin: 0 auto 12px; border: 2px solid var(--border); }
+    .theme-name { font-weight: 600; margin-bottom: 5px; }
+    .theme-desc { font-size: 0.8rem; color: var(--muted); }
+    .theme-hint {
+      margin-top: 20px;
+      padding: 15px;
+      background: var(--bg);
+      border-radius: 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-align: center;
+    }
+    
+    .btn-save {
+      margin-top: 20px;
+      width: 100%;
+      justify-content: center;
+    }
+    
+    .empty-state { text-align: center; padding: 60px 40px; background: var(--card); border: 1px solid var(--border); border-radius: 30px; }
+    .empty-icon { font-size: 4rem; margin-bottom: 20px; }
+    .empty-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 10px; }
+    .empty-text { color: var(--muted); margin-bottom: 25px; }
+    
+    .success-message {
+      background: rgba(34, 197, 94, 0.1);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      color: #22c55e;
+      padding: 12px 18px;
+      border-radius: 18px;
+      margin-top: 15px;
+      display: none;
+    }
+    
+    .success-message.show {
+      display: block;
+    }
+  </style>
+</head>
+<body id="app-body">
+  <header>
+    <div class="container nav">
+      <a href="index.html" class="brand">
+        <div class="logo"></div>
+        <div>🍰 Уникальные десерты</div>
+      </a>
+      <div class="nav-actions">
+        <div id="themeSwitcher"></div>
+        <a href="index.html" class="btn">🏠 Каталог</a>
+        <a href="orders.html" class="btn">📦 Заказы</a>
+        <a href="admin.html" class="btn primary" id="adminLink" style="display: none;">🛠️ Админ</a>
+        <button class="btn" id="logoutBtn" style="display: none;">🚪 Выйти</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="settings-container">
+      <div id="authRequired" style="display: none;">
+        <div class="empty-state">
+          <div class="empty-icon">🔐</div>
+          <h2 class="empty-title">Требуется авторизация</h2>
+          <p class="empty-text">Чтобы просматривать информацию, необходимо войти в аккаунт.</p>
+          <div style="display: flex; gap: 15px; justify-content: center;">
+            <a href="login.html" class="btn primary">🔐 Вход</a>
+            <a href="register.html" class="btn">📝 Регистрация</a>
+          </div>
+        </div>
+      </div>
+      
+      <div id="settingsContent" style="display: none;">
+        <h1 class="page-title">ℹ️ Информация</h1>
+        
+        <!-- Профиль с аватаром -->
+        <div class="settings-section">
+          <div class="section-title"><span>👤</span><span>Профиль</span></div>
+          
+          <div class="profile-header">
+            <div class="avatar-section">
+              <div class="avatar-preview" id="avatarPreview">🍰</div>
+              <div class="avatar-selector" id="avatarSelector"></div>
+            </div>
+            
+            <div class="profile-info" id="profileInfo"></div>
+          </div>
+          
+          <button class="btn primary btn-save" id="saveProfileBtn">💾 Сохранить изменения</button>
+          <div class="success-message" id="saveSuccess">✅ Изменения сохранены!</div>
+        </div>
+        
+        <!-- Оформление -->
+<div class="settings-section">
+  <div class="section-title"><span>🎨</span><span>Оформление</span></div>
+  <p class="section-desc">Выберите тему, которая вам больше нравится.</p>
+  <div class="theme-selector" id="themeSelector"></div>
+  <div class="theme-hint">
+    💡 Тему также можно быстро переключить с помощью кружков в шапке сайта.
+  </div>
+  
+  <!-- Переключатель эмодзи-фона -->
+  <div style="margin-top: 25px; padding-top: 20px; border-top: 1px solid var(--border);">
+    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px;">
+      <div>
+        <div style="font-weight: 600; margin-bottom: 5px;">🎭 Анимированные эмодзи на фоне</div>
+        <div style="font-size: 0.85rem; color: var(--muted);">Включает плавающие тематические эмодзи на заднем плане</div>
+      </div>
+      <label style="cursor: pointer; display: flex; align-items: center; gap: 10px;">
+        <input type="checkbox" id="emojiToggle" style="width: 20px; height: 20px; cursor: pointer;">
+        <span id="emojiToggleLabel">Включить</span>
+      </label>
+    </div>
+  </div>
+</div>
+        
+        <!-- О сайте -->
+        <div class="settings-section">
+          <div class="section-title"><span>ℹ️</span><span>О сайте</span></div>
+          <div class="profile-info">
+            <span class="profile-label">Название</span><span class="profile-value">Уникальные десерты</span>
+            <span class="profile-label">Версия</span><span class="profile-value">1.0.0</span>
+            <span class="profile-label">Лицензия</span><span class="profile-value">MIT</span>
+            <span class="profile-label">Автор</span><span class="profile-value">Уникальные десерты Team</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container footer-wrap">
+      <div>
+        <div class="footer-title">📞 Контакты</div>
+        <div class="footer-sub">Свяжитесь с нами для заказа</div>
+        <div class="contact-list" id="footerContacts"></div>
+      </div>
+      <div class="small">
+        <div><b>🍪 Навигация:</b></div>
+        <div><a href="index.html">Каталог</a> · <a href="cake.html?id=cake_1">Пример торта</a> · <a href="orders.html">Заказы</a></div>
+        <div style="margin-top: 16px;">© 2026 Уникальные десерты</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/theme.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/utils.js"></script>
+
+  <script>
+    (function(){
+      "use strict";
+      let currentUser = null;
+      let currentTheme = null;
+      let selectedAvatar = '🍰';
+
+      // Доступные аватары
+      const AVATARS = ['🍰', '🧁', '🍪', '🍩', '🍫', '🍓', '🍒', '🥐', '☕', '🍵'];
+
+      // ===== ИНИЦИАЛИЗАЦИЯ =====
+      async function init() {
+        SweetBakeTheme.createSwitcher('themeSwitcher');
+        currentTheme = SweetBakeTheme.getCurrent();
+        await loadContacts();
+        
+        currentUser = await SweetBakeUtils.updateAuthUI();
+        
+        if (!currentUser) {
+          document.getElementById('authRequired').style.display = 'block';
+          document.getElementById('settingsContent').style.display = 'none';
+        } else {
+          document.getElementById('authRequired').style.display = 'none';
+          document.getElementById('settingsContent').style.display = 'block';
+          
+          // Загружаем сохранённый аватар
+          const savedAvatar = localStorage.getItem(`avatar_${currentUser.id}`);
+          if (savedAvatar) {
+            selectedAvatar = savedAvatar;
+          }
+          
+          renderAvatarSelector();
+          renderProfile();
+          renderThemeSelector();
+          
+          // Кнопка админа в шапке
+          const adminLink = document.getElementById('adminLink');
+          if (adminLink) {
+            adminLink.style.display = currentUser.role === 'admin' ? 'inline-flex' : 'none';
+          }
+          
+          // Кнопка выхода
+          const logoutBtn = document.getElementById('logoutBtn');
+          if (logoutBtn) {
+            logoutBtn.style.display = 'inline-flex';
+            logoutBtn.addEventListener('click', () => {
+              SweetBakeAPI.auth.logout();
+              window.location.href = 'index.html';
+            });
+          }
+          
+          // Сохранение профиля
+          document.getElementById('saveProfileBtn').addEventListener('click', saveProfile);
+        }
+      }
+
+      // ===== ЗАГРУЗКА КОНТАКТОВ =====
+      async function loadContacts() {
+        try {
+          const contacts = await SweetBakeAPI.api.contacts.get();
+          const container = document.getElementById('footerContacts');
+          if (!container) return;
+          container.innerHTML = '';
+          (contacts.items || []).forEach(item => {
+            const row = document.createElement('div');
+            row.className = 'contact-row';
+            row.innerHTML = `<span class="contact-label">${item.label}</span><span>${item.value}</span>`;
+            container.appendChild(row);
+          });
+        } catch (e) { console.warn('Контакты не загружены'); }
+      }
+
+      // ===== РЕНДЕР ВЫБОРА АВАТАРА =====
+      function renderAvatarSelector() {
+        const container = document.getElementById('avatarSelector');
+        const preview = document.getElementById('avatarPreview');
+        
+        container.innerHTML = AVATARS.map(avatar => `
+          <div class="avatar-option ${selectedAvatar === avatar ? 'active' : ''}" data-avatar="${avatar}">
+            ${avatar}
+          </div>
+        `).join('');
+        
+        preview.textContent = selectedAvatar;
+        
+        container.querySelectorAll('.avatar-option').forEach(option => {
+          option.addEventListener('click', () => {
+            const avatar = option.dataset.avatar;
+            selectedAvatar = avatar;
+            
+            container.querySelectorAll('.avatar-option').forEach(opt => opt.classList.remove('active'));
+            option.classList.add('active');
+            
+            document.getElementById('avatarPreview').textContent = avatar;
+          });
+        });
+      }
+
+      // ===== РЕНДЕР ПРОФИЛЯ =====
+      function renderProfile() {
+        const container = document.getElementById('profileInfo');
+        const roleBadge = currentUser.role === 'admin' 
+          ? '<span class="profile-badge badge-admin">Администратор</span>'
+          : '<span class="profile-badge badge-user">Пользователь</span>';
+        
+        container.innerHTML = `
+          <span class="profile-label">Имя</span>
+          <span class="profile-value">
+            <input type="text" id="profileName" value="${currentUser.name || ''}" placeholder="Ваше имя" style="width: 100%; padding: 8px 12px; border-radius: 12px; border: 1px solid var(--border); background: var(--bg); color: var(--text);">
+          </span>
+          
+          <span class="profile-label">Email</span>
+          <span class="profile-value">${currentUser.email}</span>
+          
+          <span class="profile-label">Роль</span>
+          <span class="profile-value">${roleBadge}</span>
+        `;
+      }
+
+      // ===== СОХРАНЕНИЕ ПРОФИЛЯ =====
+      async function saveProfile() {
+        const newName = document.getElementById('profileName').value.trim();
+        
+        // Сохраняем аватар
+        localStorage.setItem(`avatar_${currentUser.id}`, selectedAvatar);
+        
+        // Обновляем имя пользователя (если изменилось)
+        if (newName && newName !== currentUser.name) {
+          try {
+            await SweetBakeAPI.api.users.update(currentUser.id, {
+              ...currentUser,
+              name: newName
+            });
+            currentUser.name = newName;
+            SweetBakeUtils.showToast('✅ Имя обновлено');
+          } catch (e) {
+            SweetBakeUtils.showToast('❌ Не удалось обновить имя', 'error');
+          }
+        }
+        
+        // Показываем сообщение об успехе
+        const successMsg = document.getElementById('saveSuccess');
+        successMsg.classList.add('show');
+        setTimeout(() => successMsg.classList.remove('show'), 3000);
+        
+        // Обновляем отображение
+        SweetBakeUtils.showToast('✅ Аватар сохранён');
+      }
+
+      // ===== РЕНДЕР ВЫБОРА ТЕМЫ =====
+      function renderThemeSelector() {
+        const container = document.getElementById('themeSelector');
+        const themes = SweetBakeTheme.getList();
+        
+        container.innerHTML = themes.map(theme => {
+          const isActive = theme.id === currentTheme;
+          return `
+            <div class="theme-option ${isActive ? 'active' : ''}" data-theme="${theme.id}">
+              <div class="theme-preview" style="background: linear-gradient(145deg, ${theme.accent2}, ${theme.accent});"></div>
+              <div class="theme-name">${theme.name}</div>
+              <div class="theme-desc">${getThemeDescription(theme.id)}</div>
+            </div>
+          `;
+        }).join('');
+        
+        container.querySelectorAll('.theme-option').forEach(option => {
+          option.addEventListener('click', () => {
+            const themeId = option.dataset.theme;
+            SweetBakeTheme.apply(themeId);
+            currentTheme = themeId;
+            container.querySelectorAll('.theme-option').forEach(opt => opt.classList.remove('active'));
+            option.classList.add('active');
+            SweetBakeUtils.showToast(`✅ Тема "${getThemeName(themeId)}" применена`);
+          });
+        });
+      }
+
+      function getThemeDescription(id) {
+        const desc = { 
+          pink: 'Нежная розовая', 
+          brown: 'Тёплый шоколад', 
+          green: 'Свежая матча', 
+          yellow: 'Солнечный лимон', 
+          dark: 'Тёмная ночь' 
+        };
+        return desc[id] || '';
+      }
+
+      function getThemeName(id) {
+        const names = { 
+          pink: '🌸 Розовая', 
+          brown: '☕ Шоколад', 
+          green: '🌿 Матча', 
+          yellow: '🍋 Лимон', 
+          dark: '🌙 Тёмная' 
+        };
+        return names[id] || id;
+      }
+
+      init();
+      // Настройка переключателя эмодзи
+const emojiToggle = document.getElementById('emojiToggle');
+const emojiToggleLabel = document.getElementById('emojiToggleLabel');
+
+if (emojiToggle) {
+  // Загружаем сохранённое состояние
+  const emojiEnabled = SweetBakeTheme.isEmojiEnabled();
+  emojiToggle.checked = emojiEnabled;
+  emojiToggleLabel.textContent = emojiEnabled ? 'Выключить' : 'Включить';
+  
+  emojiToggle.addEventListener('change', () => {
+    SweetBakeTheme.toggleEmoji(emojiToggle.checked);
+    emojiToggleLabel.textContent = emojiToggle.checked ? 'Выключить' : 'Включить';
+    SweetBakeUtils.showToast(emojiToggle.checked ? '✅ Эмодзи включены' : '❌ Эмодзи выключены');
+  });
+}
+    })();
+  </script>
+</body>
+</html>

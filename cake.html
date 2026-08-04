@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🍰 Торт | Уникальные десерты</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    .pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .product-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 50px;
+    }
+    
+    @media (max-width: 900px) {
+      .product-container {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .gallery {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .main-media {
+      aspect-ratio: 4 / 3;
+      border-radius: 30px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--card);
+      box-shadow: var(--shadow);
+    }
+    
+    .main-media img,
+    .main-media video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    
+    .thumbnails {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    
+    .thumb {
+      width: 80px;
+      height: 80px;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 2px solid var(--border);
+      cursor: pointer;
+      transition: all 0.2s;
+      opacity: 0.7;
+    }
+    
+    .thumb:hover,
+    .thumb.active {
+      opacity: 1;
+      border-color: var(--accent);
+      transform: scale(1.05);
+    }
+    
+    .thumb img,
+    .thumb video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .product-info {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      padding: 30px;
+      backdrop-filter: blur(8px);
+      box-shadow: var(--shadow);
+    }
+    
+    .product-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 15px;
+      line-height: 1.2;
+    }
+    
+    .product-price {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+    
+    .product-short {
+      font-size: 1.1rem;
+      color: var(--muted);
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .product-desc {
+      line-height: 1.7;
+      margin-bottom: 25px;
+    }
+    
+    .ingredients-title {
+      font-weight: 700;
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+    }
+    
+    .ingredients-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 30px;
+    }
+    
+    .ingredient-tag {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 6px 16px;
+      border-radius: 40px;
+      font-size: 0.9rem;
+    }
+    
+    .btn-order {
+      width: 100%;
+      padding: 18px;
+      font-size: 1.2rem;
+      justify-content: center;
+    }
+    
+    .reviews-section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      padding: 30px;
+      backdrop-filter: blur(8px);
+      margin-bottom: 40px;
+    }
+    
+    .reviews-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 25px;
+    }
+    
+    .review-item {
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .review-item:last-child {
+      border-bottom: none;
+    }
+    
+    .review-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    
+    .review-author {
+      font-weight: 700;
+    }
+    
+    .review-rating {
+      color: #fbbf24;
+      letter-spacing: 2px;
+    }
+    
+    .review-date {
+      color: var(--muted);
+      font-size: 0.85rem;
+      margin-left: auto;
+    }
+    
+    .review-text {
+      color: var(--text);
+      line-height: 1.6;
+    }
+    
+    .add-review {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+    
+    .add-review h3 {
+      margin-bottom: 15px;
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--muted);
+    }
+    
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      font-family: inherit;
+      resize: vertical;
+    }
+    
+    .form-group textarea {
+      min-height: 100px;
+    }
+    
+    .loader {
+      text-align: center;
+      padding: 50px;
+      color: var(--muted);
+    }
+    
+    .error-panel {
+      text-align: center;
+      padding: 50px;
+      background: var(--card);
+      border-radius: 30px;
+      border: 1px solid var(--border);
+    }
+    
+    .empty-text {
+      color: var(--muted);
+      text-align: center;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body id="app-body">
+  <header>
+    <div class="container nav">
+      <a href="index.html" class="brand">
+        <div class="logo"></div>
+        <div>🍰 Уникальные десерты</div>
+      </a>
+      <div class="nav-actions">
+        <div id="themeSwitcher"></div>
+        
+        <!-- Кнопка для гостей -->
+        <a href="login.html" class="pill" id="guestBtn" style="text-decoration: none;">
+          <span>👤</span>
+          <span>Вход / Регистрация</span>
+        </a>
+        
+        <!-- Элементы для авторизованных -->
+        <span class="pill" id="userGreeting" style="display: none;">
+          <span id="userAvatar">👤</span>
+          <span id="userName">Гость</span>
+        </span>
+        <a href="index.html" class="btn">🏠 Каталог</a>
+        <a href="orders.html" class="btn">📦 Заказы</a>
+        <a href="settings.html" class="btn" id="settingsLink" style="display: none;">⚙️ Настройки</a>
+        <a href="admin.html" class="btn primary" id="adminLink" style="display: none;">🛠️ Админ</a>
+        <button class="btn" id="logoutBtn" style="display: none;">🚪 Выйти</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div id="productContent">
+      <div class="loader">🍰 Загружаем торт...</div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container footer-wrap">
+      <div>
+        <div class="footer-title">📞 Контакты</div>
+        <div class="footer-sub">Свяжитесь с нами для заказа</div>
+        <div class="contact-list" id="footerContacts"></div>
+      </div>
+      <div class="small">
+        <div><b>🍪 Навигация:</b></div>
+        <div><a href="index.html">Каталог</a> · <a href="orders.html">Заказы</a></div>
+        <div style="margin-top: 16px;">© 2026 Уникальные десерты</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Внешние скрипты -->
+  <script src="js/theme.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/utils.js"></script>
+
+  <script>
+    (function(){
+      "use strict";
+
+      const cakeId = SweetBakeUtils.getUrlParam('id') || 'cake_1';
+      let currentCake = null;
+      let currentUser = null;
+
+      // ===== ИНИЦИАЛИЗАЦИЯ =====
+      async function init() {
+        SweetBakeTheme.createSwitcher('themeSwitcher');
+        await updateAuthUI();
+        await loadContacts();
+        await loadCake();
+        
+        document.getElementById('logoutBtn')?.addEventListener('click', () => {
+          SweetBakeAPI.auth.logout();
+          window.location.reload();
+        });
+      }
+
+      // ===== ОБНОВЛЕНИЕ UI =====
+      async function updateAuthUI() {
+        try {
+          currentUser = await SweetBakeAPI.auth.getCurrentUser();
+        } catch (e) {
+          currentUser = null;
+        }
+        
+        const guestBtn = document.getElementById('guestBtn');
+        const userGreeting = document.getElementById('userGreeting');
+        const adminLink = document.getElementById('adminLink');
+        const settingsLink = document.getElementById('settingsLink');
+        const logoutBtn = document.getElementById('logoutBtn');
+        
+        if (!currentUser) {
+          if (guestBtn) guestBtn.style.display = 'flex';
+          if (userGreeting) userGreeting.style.display = 'none';
+          if (adminLink) adminLink.style.display = 'none';
+          if (settingsLink) settingsLink.style.display = 'none';
+          if (logoutBtn) logoutBtn.style.display = 'none';
+        } else {
+          if (guestBtn) guestBtn.style.display = 'none';
+          if (userGreeting) {
+            userGreeting.style.display = 'flex';
+            
+            const savedAvatar = localStorage.getItem(`avatar_${currentUser.id}`) || '👤';
+            const avatarSpan = document.getElementById('userAvatar');
+            const nameSpan = document.getElementById('userName');
+            
+            if (avatarSpan) avatarSpan.textContent = savedAvatar;
+            if (nameSpan) nameSpan.textContent = currentUser.name || currentUser.email;
+          }
+          if (settingsLink) settingsLink.style.display = 'inline-flex';
+          if (adminLink) {
+            adminLink.style.display = currentUser.role === 'admin' ? 'inline-flex' : 'none';
+          }
+          if (logoutBtn) logoutBtn.style.display = 'inline-flex';
+        }
+        
+        return currentUser;
+      }
+
+      // ===== ЗАГРУЗКА КОНТАКТОВ =====
+      async function loadContacts() {
+        try {
+          const contacts = await SweetBakeAPI.api.contacts.get();
+          const container = document.getElementById('footerContacts');
+          if (!container) return;
+          
+          container.innerHTML = '';
+          (contacts.items || []).forEach(item => {
+            const row = document.createElement('div');
+            row.className = 'contact-row';
+            row.innerHTML = `<span class="contact-label">${item.label}</span><span>${item.value}</span>`;
+            container.appendChild(row);
+          });
+        } catch (e) {
+          console.warn('Контакты не загружены');
+        }
+      }
+
+      // ===== ЗАГРУЗКА ТОРТА =====
+      async function loadCake() {
+        const container = document.getElementById('productContent');
+        
+        try {
+          currentCake = await SweetBakeAPI.api.cakes.get(cakeId);
+          document.title = `${currentCake.title} | SweetBake`;
+          
+          const mediaItems = currentCake.media || [];
+          const mainMedia = mediaItems[0];
+          
+          const mainMediaHtml = mainMedia?.type === 'video'
+            ? `<video src="${mainMedia.url}" controls autoplay muted loop playsinline></video>`
+            : `<img src="${mainMedia?.url || 'https://placehold.co/600x400/fbcfe8/4a154b?text=🍰'}" alt="${currentCake.title}" id="mainMedia">`;
+          
+          const thumbnailsHtml = mediaItems.length > 1
+            ? mediaItems.map((item, idx) => `
+                <div class="thumb ${idx === 0 ? 'active' : ''}" data-index="${idx}">
+                  ${item.type === 'video' 
+                    ? `<video src="${item.url}" muted></video>` 
+                    : `<img src="${item.url}" alt="">`
+                  }
+                </div>
+              `).join('')
+            : '';
+          
+          container.innerHTML = `
+            <div class="product-container">
+              <div class="gallery">
+                <div class="main-media" id="mainMediaContainer">${mainMediaHtml}</div>
+                ${thumbnailsHtml ? `<div class="thumbnails" id="thumbnails">${thumbnailsHtml}</div>` : ''}
+              </div>
+              
+              <div class="product-info">
+                <h1 class="product-title">${currentCake.title}</h1>
+                <div class="product-price">${SweetBakeUtils.formatPrice(currentCake.price)}</div>
+                <p class="product-short">${currentCake.short}</p>
+                <p class="product-desc">${currentCake.description || 'Подробное описание скоро появится.'}</p>
+                
+                <div class="ingredients-title">🍰 Ингредиенты:</div>
+                <div class="ingredients-list">
+                  ${(currentCake.ingredients || []).map(ing => `<span class="ingredient-tag">${ing}</span>`).join('')}
+                </div>
+                
+                <button class="btn primary btn-order" id="orderBtn">✨ Оформить заказ</button>
+              </div>
+            </div>
+            
+            <div class="reviews-section">
+              <h2 class="reviews-title">💬 Отзывы</h2>
+              <div id="reviewsList"><div class="loader">Загрузка отзывов...</div></div>
+              
+              <div class="add-review" id="addReviewSection">
+                <h3>Оставить отзыв</h3>
+                <div id="reviewForm" style="display: none;">
+                  <div class="form-group">
+                    <label>Оценка</label>
+                    <select id="reviewRating">
+                      <option value="5">⭐⭐⭐⭐⭐ (5)</option>
+                      <option value="4">⭐⭐⭐⭐ (4)</option>
+                      <option value="3">⭐⭐⭐ (3)</option>
+                      <option value="2">⭐⭐ (2)</option>
+                      <option value="1">⭐ (1)</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Ваш отзыв</label>
+                    <textarea id="reviewText" placeholder="Поделитесь впечатлениями..."></textarea>
+                  </div>
+                  <button class="btn primary" id="submitReview">📝 Отправить отзыв</button>
+                </div>
+                <p id="loginToReview" style="display: none;">
+                  <a href="login.html">Войдите</a>, чтобы оставить отзыв.
+                </p>
+              </div>
+            </div>
+          `;
+          
+          // Миниатюры
+          if (mediaItems.length > 1) {
+            document.querySelectorAll('.thumb').forEach(thumb => {
+              thumb.addEventListener('click', () => {
+                const idx = thumb.dataset.index;
+                const item = mediaItems[idx];
+                const mainContainer = document.getElementById('mainMediaContainer');
+                
+                mainContainer.innerHTML = item.type === 'video'
+                  ? `<video src="${item.url}" controls autoplay muted loop playsinline></video>`
+                  : `<img src="${item.url}" alt="${currentCake.title}">`;
+                
+                document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+                thumb.classList.add('active');
+              });
+            });
+          }
+          
+          document.getElementById('orderBtn').addEventListener('click', handleOrder);
+          await loadReviews();
+          setupReviewForm();
+          
+        } catch (e) {
+          container.innerHTML = `
+            <div class="error-panel">
+              <h2>😕 Торт не найден</h2>
+              <p>К сожалению, этот десерт сейчас недоступен.</p>
+              <a href="index.html" class="btn primary">Вернуться в каталог</a>
+            </div>
+          `;
+        }
+      }
+
+      // ===== ЗАГРУЗКА ОТЗЫВОВ =====
+      async function loadReviews() {
+        const container = document.getElementById('reviewsList');
+        
+        try {
+          const reviews = await SweetBakeAPI.api.reviews.getAll(cakeId);
+          
+          if (reviews.length === 0) {
+            container.innerHTML = '<p class="empty-text">✨ Пока нет отзывов. Будьте первым!</p>';
+            return;
+          }
+          
+          container.innerHTML = reviews.map(r => `
+            <div class="review-item">
+              <div class="review-header">
+                <span class="review-author">👤 ${r.authorName || 'Покупатель'}</span>
+                <span class="review-rating">${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</span>
+                <span class="review-date">${SweetBakeUtils.formatDate(r.createdAt)}</span>
+              </div>
+              <p class="review-text">${r.text}</p>
+            </div>
+          `).join('');
+          
+        } catch (e) {
+          container.innerHTML = '<p class="error-text">Не удалось загрузить отзывы</p>';
+        }
+      }
+
+      // ===== ФОРМА ОТЗЫВА =====
+      function setupReviewForm() {
+        const formDiv = document.getElementById('reviewForm');
+        const loginMsg = document.getElementById('loginToReview');
+        
+        if (currentUser) {
+          formDiv.style.display = 'block';
+          loginMsg.style.display = 'none';
+          
+          document.getElementById('submitReview').addEventListener('click', async () => {
+            const rating = parseInt(document.getElementById('reviewRating').value);
+            const text = document.getElementById('reviewText').value.trim();
+            
+            if (!text) {
+              SweetBakeUtils.showToast('Пожалуйста, напишите отзыв', 'error');
+              return;
+            }
+            
+            try {
+              await SweetBakeAPI.api.reviews.create({
+                id: SweetBakeUtils.generateId('r_'),
+                cakeId: cakeId,
+                authorId: currentUser.id,
+                authorName: currentUser.name || currentUser.email,
+                rating: rating,
+                text: text,
+                createdAt: Date.now()
+              });
+              
+              document.getElementById('reviewText').value = '';
+              await loadReviews();
+              SweetBakeUtils.showToast('✅ Спасибо за отзыв!');
+            } catch (e) {
+              SweetBakeUtils.showToast('❌ Ошибка при отправке', 'error');
+            }
+          });
+        } else {
+          formDiv.style.display = 'none';
+          loginMsg.style.display = 'block';
+        }
+      }
+
+      // ===== ОФОРМЛЕНИЕ ЗАКАЗА =====
+      async function handleOrder() {
+        if (!currentUser) {
+          if (confirm('Для заказа необходимо войти. Перейти на страницу входа?')) {
+            window.location.href = 'login.html';
+          }
+          return;
+        }
+        
+        if (!currentCake) return;
+        
+        try {
+          await SweetBakeAPI.api.orders.create({
+            id: SweetBakeUtils.generateId('o_'),
+            cakeId: currentCake.id,
+            cakeTitle: currentCake.title,
+            userId: currentUser.id,
+            userEmail: currentUser.email,
+            status: 'new',
+            createdAt: Date.now(),
+            price: currentCake.price
+          });
+          
+          SweetBakeUtils.showToast(`🎉 Заказ на "${currentCake.title}" оформлен!`);
+        } catch (e) {
+          SweetBakeUtils.showToast('❌ Ошибка при оформлении заказа', 'error');
+        }
+      }
+
+      init();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📦 Заказы | Уникальные десерты</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    .pill { display: flex; align-items: center; gap: 8px; }
+    
+    .orders-container { max-width: 900px; margin: 0 auto; }
+    
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .page-title { font-size: 2rem; font-weight: 700; }
+    
+    .order-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 24px;
+      margin-bottom: 20px;
+      backdrop-filter: blur(8px);
+      box-shadow: var(--shadow);
+      transition: transform 0.2s;
+    }
+    
+    .order-card:hover { transform: translateY(-3px); }
+    
+    .order-card.completed {
+      opacity: 0.7;
+      border-color: rgba(34, 197, 94, 0.3);
+    }
+    
+    .order-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+    
+    .order-title { font-size: 1.3rem; font-weight: 700; }
+    
+    .order-status {
+      padding: 6px 16px;
+      border-radius: 40px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    
+    .status-new {
+      background: rgba(59, 130, 246, 0.15);
+      color: #3b82f6;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+    
+    .status-completed {
+      background: rgba(34, 197, 94, 0.15);
+      color: #22c55e;
+      border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+    
+    .order-info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 15px;
+      padding: 15px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .info-item { display: flex; flex-direction: column; gap: 5px; }
+    
+    .info-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .info-value { font-weight: 600; font-size: 1.1rem; }
+    
+    .order-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    
+    .order-date { color: var(--muted); font-size: 0.9rem; }
+    
+    .order-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    
+    .btn.small {
+      padding: 6px 12px;
+      font-size: 0.85rem;
+    }
+    
+    .btn.success {
+      background: rgba(34, 197, 94, 0.1);
+      border-color: rgba(34, 197, 94, 0.3);
+      color: #22c55e;
+    }
+    
+    .btn.danger {
+      background: rgba(239, 68, 68, 0.1);
+      border-color: rgba(239, 68, 68, 0.3);
+      color: #ef4444;
+    }
+    
+    .order-link {
+      color: var(--accent);
+      font-weight: 600;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .order-link:hover { text-decoration: underline; }
+    
+    .empty-state {
+      text-align: center;
+      padding: 60px 40px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      backdrop-filter: blur(8px);
+    }
+    
+    .empty-icon { font-size: 4rem; margin-bottom: 20px; }
+    .empty-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 10px; }
+    .empty-text { color: var(--muted); margin-bottom: 25px; }
+    .loading-state { text-align: center; padding: 40px; color: var(--muted); }
+  </style>
+</head>
+<body id="app-body">
+  <header>
+    <div class="container nav">
+      <a href="index.html" class="brand">
+        <div class="logo"></div>
+        <div>🍰 Уникальные десерты</div>
+      </a>
+      <div class="nav-actions">
+        <div id="themeSwitcher"></div>
+        
+        <a href="login.html" class="pill" id="guestBtn" style="text-decoration: none;">
+          <span>👤</span>
+          <span>Вход / Регистрация</span>
+        </a>
+        
+        <span class="pill" id="userGreeting" style="display: none;">
+          <span id="userAvatar">👤</span>
+          <span id="userName">Гость</span>
+        </span>
+        <a href="index.html" class="btn">🏠 Каталог</a>
+        <a href="settings.html" class="btn" id="settingsLink" style="display: none;">⚙️ Настройки</a>
+        <a href="admin.html" class="btn primary" id="adminLink" style="display: none;">🛠️ Админ</a>
+        <button class="btn" id="logoutBtn" style="display: none;">🚪 Выйти</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="orders-container">
+      <div id="authRequired" style="display: none;">
+        <div class="empty-state">
+          <div class="empty-icon">🔐</div>
+          <h2 class="empty-title">Требуется авторизация</h2>
+          <p class="empty-text">Чтобы просматривать заказы, необходимо войти в аккаунт.</p>
+          <div style="display: flex; gap: 15px; justify-content: center;">
+            <a href="login.html" class="btn primary">🔐 Вход</a>
+            <a href="register.html" class="btn">📝 Регистрация</a>
+          </div>
+        </div>
+      </div>
+      
+      <div id="ordersContent" style="display: none;">
+        <div class="page-header">
+          <h1 class="page-title">📦 Заказы</h1>
+          <a href="index.html" class="btn primary" id="orderMoreBtn">🍰 Заказать ещё</a>
+        </div>
+        
+        <div id="ordersList">
+          <div class="loading-state">Загрузка заказов...</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container footer-wrap">
+      <div>
+        <div class="footer-title">📞 Контакты</div>
+        <div class="footer-sub">Свяжитесь с нами для заказа</div>
+        <div class="contact-list" id="footerContacts"></div>
+      </div>
+      <div class="small">
+        <div><b>🍪 Навигация:</b></div>
+        <div><a href="index.html">Каталог</a> · <a href="cake.html?id=cake_1">Пример торта</a> · <a href="orders.html">Заказы</a></div>
+        <div style="margin-top: 16px;">© 2026 Уникальные десерты</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/theme.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/utils.js"></script>
+
+  <script>
+    (function(){
+      "use strict";
+
+      let currentUser = null;
+
+      async function init() {
+        SweetBakeTheme.createSwitcher('themeSwitcher');
+        await loadContacts();
+        await updateAuthUI();
+        
+        currentUser = await SweetBakeAPI.auth.getCurrentUser();
+        
+        if (!currentUser) {
+          document.getElementById('authRequired').style.display = 'block';
+          document.getElementById('ordersContent').style.display = 'none';
+        } else {
+          document.getElementById('authRequired').style.display = 'none';
+          document.getElementById('ordersContent').style.display = 'block';
+          
+          // Скрываем кнопку «Заказать ещё» для админа
+          if (currentUser.role === 'admin') {
+            document.getElementById('orderMoreBtn').style.display = 'none';
+          }
+          
+          await loadOrders();
+        }
+        
+        document.getElementById('logoutBtn')?.addEventListener('click', () => {
+          SweetBakeAPI.auth.logout();
+          window.location.reload();
+        });
+      }
+
+      async function updateAuthUI() {
+        try { currentUser = await SweetBakeAPI.auth.getCurrentUser(); } catch (e) { currentUser = null; }
+        
+        const guestBtn = document.getElementById('guestBtn');
+        const userGreeting = document.getElementById('userGreeting');
+        const adminLink = document.getElementById('adminLink');
+        const settingsLink = document.getElementById('settingsLink');
+        const logoutBtn = document.getElementById('logoutBtn');
+        
+        if (!currentUser) {
+          if (guestBtn) guestBtn.style.display = 'flex';
+          if (userGreeting) userGreeting.style.display = 'none';
+          if (adminLink) adminLink.style.display = 'none';
+          if (settingsLink) settingsLink.style.display = 'none';
+          if (logoutBtn) logoutBtn.style.display = 'none';
+        } else {
+          if (guestBtn) guestBtn.style.display = 'none';
+          if (userGreeting) {
+            userGreeting.style.display = 'flex';
+            const savedAvatar = localStorage.getItem(`avatar_${currentUser.id}`) || '👤';
+            document.getElementById('userAvatar').textContent = savedAvatar;
+            document.getElementById('userName').textContent = currentUser.name || currentUser.email;
+          }
+          if (settingsLink) settingsLink.style.display = 'inline-flex';
+          if (adminLink) adminLink.style.display = currentUser.role === 'admin' ? 'inline-flex' : 'none';
+          if (logoutBtn) logoutBtn.style.display = 'inline-flex';
+        }
+        return currentUser;
+      }
+
+      async function loadContacts() {
+        try {
+          const contacts = await SweetBakeAPI.api.contacts.get();
+          const container = document.getElementById('footerContacts');
+          if (!container) return;
+          container.innerHTML = '';
+          (contacts.items || []).forEach(item => {
+            const row = document.createElement('div');
+            row.className = 'contact-row';
+            row.innerHTML = `<span class="contact-label">${item.label}</span><span>${item.value}</span>`;
+            container.appendChild(row);
+          });
+        } catch (e) { console.warn('Контакты не загружены'); }
+      }
+
+      async function loadOrders() {
+        const container = document.getElementById('ordersList');
+        
+        try {
+          let orders;
+          
+          if (currentUser.role === 'admin') {
+            orders = await SweetBakeAPI.api.orders.getAll();
+          } else {
+            orders = await SweetBakeAPI.api.orders.getUserOrders(currentUser.id);
+          }
+          
+          if (orders.length === 0) {
+            container.innerHTML = `
+              <div class="empty-state">
+                <div class="empty-icon">📭</div>
+                <h2 class="empty-title">${currentUser.role === 'admin' ? 'Нет заказов' : 'У вас пока нет заказов'}</h2>
+                <p class="empty-text">${currentUser.role === 'admin' ? 'Заказы появятся, когда клиенты их оформят.' : 'Выберите что-нибудь вкусное!'}</p>
+                ${currentUser.role !== 'admin' ? '<a href="index.html" class="btn primary">Перейти в каталог</a>' : ''}
+              </div>
+            `;
+            return;
+          }
+          
+          container.innerHTML = orders.map(order => {
+            const statusClass = order.status === 'completed' ? 'status-completed' : 'status-new';
+            const statusText = order.status === 'completed' ? '✅ Выполнен' : '🆕 Новый';
+            const isCompleted = order.status === 'completed';
+            
+            const adminActions = currentUser.role === 'admin' ? `
+              <div class="order-actions">
+                ${!isCompleted ? `<button class="btn small success complete-order" data-id="${order.id}">✅ Выполнен</button>` : ''}
+                <button class="btn small danger delete-order" data-id="${order.id}">🗑️ Удалить</button>
+              </div>
+            ` : '';
+            
+            return `
+              <div class="order-card ${isCompleted ? 'completed' : ''}" id="order-${order.id}">
+                <div class="order-header">
+                  <h3 class="order-title">${order.cakeTitle || 'Торт'}</h3>
+                  <span class="order-status ${statusClass}">${statusText}</span>
+                </div>
+                
+                <div class="order-info">
+                  <div class="info-item">
+                    <span class="info-label">Заказчик</span>
+                    <span class="info-value">${order.userEmail}</span>
+                  </div>
+                  <div class="info-item">
+                    <span class="info-label">Номер заказа</span>
+                    <span class="info-value">#${order.id.slice(-8).toUpperCase()}</span>
+                  </div>
+                  <div class="info-item">
+                    <span class="info-label">Сумма</span>
+                    <span class="info-value">${SweetBakeUtils.formatPrice(order.price || 0)}</span>
+                  </div>
+                </div>
+                
+                <div class="order-footer">
+                  <span class="order-date">📅 ${SweetBakeUtils.formatDateTime(order.createdAt)}</span>
+                  <a href="cake.html?id=${order.cakeId}" class="order-link">Смотреть торт →</a>
+                  ${adminActions}
+                </div>
+              </div>
+            `;
+          }).join('');
+          
+          document.querySelectorAll('.complete-order').forEach(btn => {
+            btn.addEventListener('click', async () => {
+              if (!confirm('Отметить заказ как выполненный?')) return;
+              try {
+                const allOrders = await SweetBakeAPI.api.orders.getAll();
+                const order = allOrders.find(o => o.id === btn.dataset.id);
+                if (order) {
+                  await SweetBakeAPI.api.orders.update(btn.dataset.id, { ...order, status: 'completed' });
+                  SweetBakeUtils.showToast('✅ Заказ выполнен');
+                  await loadOrders();
+                }
+              } catch (e) { SweetBakeUtils.showToast('❌ Ошибка', 'error'); }
+            });
+          });
+          
+          document.querySelectorAll('.delete-order').forEach(btn => {
+            btn.addEventListener('click', async () => {
+              if (!confirm('Удалить заказ?')) return;
+              try {
+                await SweetBakeAPI.api.orders.delete(btn.dataset.id);
+                SweetBakeUtils.showToast('🗑️ Заказ удалён');
+                await loadOrders();
+              } catch (e) { SweetBakeUtils.showToast('❌ Ошибка', 'error'); }
+            });
+          });
+          
+        } catch (e) {
+          container.innerHTML = `<div class="empty-state"><div class="empty-icon">😕</div><h2 class="empty-title">Ошибка загрузки</h2></div>`;
+        }
+      }
+
+      init();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+{
+  "cakes": [
+    {
+      "title": "Шоколадный мусс",
+      "price": 1990,
+      "short": "Нежный мусс и тёмный шоколад",
+      "description": "Слой за слоем: влажный бисквит, шоколадный мусс, тонкая глазурь. Идеален для дня рождения.",
+      "ingredients": [
+        "шоколад",
+        "сливки",
+        "какао"
+      ],
+      "media": [
+        {
+          "type": "image",
+          "url": "https://avatars.mds.yandex.net/i?id=8030e9e584ea2b469c6e4aa3abb05bcc_l-3006415-images-thumbs&n=13"
+        },
+        {
+          "type": "video",
+          "url": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+        }
+      ],
+      "id": "cake_1"
+    },
+    {
+      "title": "Клубничный чизкейк",
+      "price": 2390,
+      "short": "Классика с ягодной кислинкой",
+      "description": "Нежный крем-чиз, песочная основа и клубничная шапка. Можно сделать без сахара.",
+      "ingredients": [
+        "сливочный сыр",
+        "клубника",
+        "печенье"
+      ],
+      "media": [
+        {
+          "type": "image",
+          "url": "https://avatars.mds.yandex.net/i?id=ebff5749d5d29db650900b1b4218334c_l-8437019-images-thumbs&n=13"
+        }
+      ],
+      "id": "cake_2"
+    },
+    {
+      "title": "Медовик карамельный",
+      "price": 1790,
+      "short": "Медовые коржи + карамельный крем",
+      "description": "Домашний вкус, мягкие коржи и крем с карамелью. Хорошо держит форму.",
+      "ingredients": [
+        "мёд",
+        "сметана",
+        "карамель"
+      ],
+      "media": [
+        {
+          "type": "image",
+          "url": "https://i.pinimg.com/736x/2f/8f/a5/2f8fa5e380736ecbe623af92708ac03f.jpg"
+        }
+      ],
+      "id": "cake_3"
+    }
+  ],
+  "users": [
+    {
+      "id": "u_admin",
+      "email": "admin@sweetbake.ru",
+      "password": "admin123",
+      "role": "admin",
+      "name": "Администратор"
+    },
+    {
+      "id": "u_user1",
+      "email": "user@test.ru",
+      "password": "123456",
+      "role": "user",
+      "name": "Илья"
+    },
+    {
+      "id": "u_1776841360957",
+      "name": "Илья",
+      "email": "kid.mgn@gmail.com",
+      "password": "5684265",
+      "role": "user"
+    }
+  ],
+  "contacts": {
+    "items": [
+      {
+        "id": "c1",
+        "type": "phone",
+        "label": "Телефон",
+        "value": "+7 (999) 123-45-67"
+      },
+      {
+        "id": "c2",
+        "type": "email",
+        "label": "Почта",
+        "value": "order@sweetbake.ru"
+      },
+      {
+        "id": "c3",
+        "type": "other",
+        "label": "Telegram",
+        "value": "@sweetbake"
+      },
+      {
+        "id": "c_1785842199918_nbd0zgh02",
+        "type": "other",
+        "label": "МАХ",
+        "value": "+7 (952) 527-58-11"
+      },
+      {
+        "id": "c4",
+        "type": "other",
+        "label": "Адрес",
+        "value": "ул. Кондитерская, д. 5"
+      }
+    ]
+  },
+  "orders": [],
+  "reviews": [
+    {
+      "id": "r1",
+      "cakeId": "cake_1",
+      "authorId": "u_user1",
+      "authorName": "Анна",
+      "rating": 5,
+      "text": "Потрясающий торт! Очень нежный и вкусный.",
+      "createdAt": 1704067200000
+    }
+  ]
+}

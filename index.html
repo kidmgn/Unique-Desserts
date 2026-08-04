@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🍰 Уникальные десерты — Каталог</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    .pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+  </style>
+</head>
+<body id="app-body">
+  <header>
+    <div class="container nav">
+      <a href="index.html" class="brand">
+  <div class="logo"></div>
+  <div style="line-height: 1.2;">🍰 Уникальные десерты</div>
+</a>
+      <div class="nav-actions">
+        <div id="themeSwitcher"></div>
+        
+        <!-- Кнопка для гостей -->
+        <a href="login.html" class="pill" id="guestBtn" style="text-decoration: none;">
+          <span>👤</span>
+          <span>Вход / Регистрация</span>
+        </a>
+        
+        <!-- Элементы для авторизованных -->
+        <span class="pill" id="userGreeting" style="display: none;">
+          <span id="userAvatar">👤</span>
+          <span id="userName">Гость</span>
+        </span>
+        <a href="settings.html" class="btn" id="settingsLink" style="display: none;">⚙️ Настройки</a>
+        <a href="admin.html" class="btn primary" id="adminLink" style="display: none;">🛠️ Админ</a>
+        <button class="btn" id="logoutBtn" style="display: none;">🚪 Выйти</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="hero">
+      <h1>Десерты, созданные с душой</h1>
+      <p>Только натуральные ингредиенты · Доставка по городу</p>
+    </div>
+
+    <div class="toolbar">
+      <div class="pill">
+        <span>🔍</span>
+        <input type="text" id="searchInput" placeholder="Шоколад, клубника, карамель...">
+      </div>
+    </div>
+
+    <div class="cards-grid" id="cardsContainer">
+      <div class="notice">🍬 Загружаем вкусности...</div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container footer-wrap">
+      <div>
+        <div class="footer-title">📞 Контакты</div>
+        <div class="footer-sub">Свяжитесь с нами для заказа</div>
+        <div class="contact-list" id="footerContacts"></div>
+      </div>
+      <div class="small">
+        <div><b>🍪 Навигация:</b></div>
+        <div><a href="index.html">Каталог</a> · <a href="cake.html?id=cake_1">Пример торта</a> · <a href="orders.html">Заказы</a></div>
+        <div style="margin-top: 16px;">© 2026 Уникальные десерты</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Внешние скрипты -->
+  <script src="js/theme.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/utils.js"></script>
+  
+  <script>
+    (function(){
+      "use strict";
+
+      let currentUser = null;
+
+      // ===== ИНИЦИАЛИЗАЦИЯ =====
+      async function init() {
+        // Создаём переключатель тем
+        SweetBakeTheme.createSwitcher('themeSwitcher');
+        
+        // Обновляем UI авторизации
+        await updateAuthUI();
+        
+        // Загружаем контакты
+        await loadContacts();
+        
+        // Загружаем торты
+        await loadCakes();
+        
+        // Настраиваем поиск
+        const searchInput = document.getElementById('searchInput');
+        const debouncedLoad = SweetBakeUtils.debounce(loadCakes, 300);
+        searchInput.addEventListener('input', () => {
+          debouncedLoad(searchInput.value);
+        });
+        
+        // Кнопка выхода
+        document.getElementById('logoutBtn')?.addEventListener('click', () => {
+          SweetBakeAPI.auth.logout();
+          window.location.reload();
+        });
+      }
+
+      // ===== ОБНОВЛЕНИЕ UI ПОСЛЕ АВТОРИЗАЦИИ =====
+      async function updateAuthUI() {
+        try {
+          currentUser = await SweetBakeAPI.auth.getCurrentUser();
+        } catch (e) {
+          currentUser = null;
+        }
+        
+        const guestBtn = document.getElementById('guestBtn');
+        const userGreeting = document.getElementById('userGreeting');
+        const adminLink = document.getElementById('adminLink');
+        const settingsLink = document.getElementById('settingsLink');
+        const logoutBtn = document.getElementById('logoutBtn');
+        
+        if (!currentUser) {
+          // Гость
+          if (guestBtn) guestBtn.style.display = 'flex';
+          if (userGreeting) userGreeting.style.display = 'none';
+          if (adminLink) adminLink.style.display = 'none';
+          if (settingsLink) settingsLink.style.display = 'none';
+          if (logoutBtn) logoutBtn.style.display = 'none';
+        } else {
+          // Авторизован
+          if (guestBtn) guestBtn.style.display = 'none';
+          if (userGreeting) {
+            userGreeting.style.display = 'flex';
+            
+            // Загружаем аватар
+            const savedAvatar = localStorage.getItem(`avatar_${currentUser.id}`) || '👤';
+            const avatarSpan = document.getElementById('userAvatar');
+            const nameSpan = document.getElementById('userName');
+            
+            if (avatarSpan) avatarSpan.textContent = savedAvatar;
+            if (nameSpan) nameSpan.textContent = currentUser.name || currentUser.email;
+          }
+          if (settingsLink) settingsLink.style.display = 'inline-flex';
+          if (adminLink) {
+            adminLink.style.display = currentUser.role === 'admin' ? 'inline-flex' : 'none';
+          }
+          if (logoutBtn) logoutBtn.style.display = 'inline-flex';
+        }
+        
+        return currentUser;
+      }
+
+      // ===== ЗАГРУЗКА КОНТАКТОВ =====
+      async function loadContacts() {
+        try {
+          const contacts = await SweetBakeAPI.api.contacts.get();
+          const container = document.getElementById('footerContacts');
+          if (!container) return;
+          
+          container.innerHTML = '';
+          (contacts.items || []).forEach(item => {
+            const row = document.createElement('div');
+            row.className = 'contact-row';
+            row.innerHTML = `<span class="contact-label">${item.label}</span><span>${item.value}</span>`;
+            container.appendChild(row);
+          });
+        } catch (e) {
+          console.warn('Контакты не загружены');
+        }
+      }
+
+      // ===== ЗАГРУЗКА ТОРТОВ =====
+      async function loadCakes(searchTerm = '') {
+        const container = document.getElementById('cardsContainer');
+        
+        try {
+          const cakes = await SweetBakeAPI.api.cakes.getAll();
+          const term = searchTerm.toLowerCase();
+          
+          const filtered = cakes.filter(c => 
+            !term || 
+            c.title.toLowerCase().includes(term) || 
+            (c.ingredients || []).join(' ').toLowerCase().includes(term)
+          );
+          
+          if (filtered.length === 0) {
+            container.innerHTML = '<div class="notice">😕 Ничего не найдено</div>';
+            return;
+          }
+          
+          container.innerHTML = filtered.map(cake => `
+            <article class="cake-card" onclick="location.href='cake.html?id=${cake.id}'">
+              <div class="card-media">
+                ${cake.media?.[0]?.type === 'video' 
+                  ? `<video src="${cake.media[0].url}" muted autoplay loop playsinline></video>`
+                  : `<img src="${cake.media?.[0]?.url || 'https://placehold.co/600x400/fbcfe8/4a154b?text=🍰'}" alt="${cake.title}">`
+                }
+              </div>
+              <div class="card-content">
+                <div class="card-title">
+                  <h3>${cake.title}</h3>
+                  <span class="price">${SweetBakeUtils.formatPrice(cake.price)}</span>
+                </div>
+                <div class="card-desc">${cake.short} · ${(cake.ingredients || []).slice(0,4).join(', ')}</div>
+                <div class="tags">
+                  ${(cake.ingredients || []).slice(0,3).map(t => `<span class="tag">${t}</span>`).join('')}
+                </div>
+              </div>
+            </article>
+          `).join('');
+          
+        } catch (e) {
+          container.innerHTML = '<div class="notice">⚠️ Сервер не запущен. Выполните: npm start</div>';
+        }
+      }
+
+      init();
+    })();
+  </script>
+</body>
+</html>

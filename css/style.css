@@ -1,0 +1,397 @@
+/*/* ===== БАЗОВЫЕ СТИЛИ SWEETBAKE ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Nunito', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg-gradient, #fff5f7);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: background 0.3s ease, color 0.2s ease;
+  line-height: 1.5;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.container {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 20px 24px;
+  width: 100%;
+}
+
+/* Шапка */
+header {
+  position: sticky;
+  top: 0;
+  backdrop-filter: blur(12px);
+  background: var(--header-bg);
+  border-bottom: 1px solid var(--border);
+  z-index: 50;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  font-size: 1.6rem;
+  letter-spacing: -0.3px;
+}
+
+.logo {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  background: linear-gradient(145deg, var(--accent2), var(--accent));
+  box-shadow: 0 8px 18px var(--accent);
+}
+
+/* Кнопки */
+.btn {
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  padding: 10px 18px;
+  border-radius: 40px;
+  cursor: pointer;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+  backdrop-filter: blur(4px);
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+  border-color: var(--accent);
+}
+
+.btn.primary {
+  background: linear-gradient(135deg, var(--accent2), var(--accent));
+  border-color: var(--accent);
+}
+
+/* Переключатель тем */
+.theme-switcher {
+  display: flex;
+  gap: 8px;
+  margin-right: 10px;
+}
+
+.theme-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.theme-btn:hover {
+  transform: scale(1.15);
+}
+
+.theme-btn.active {
+  border-width: 4px;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+/* Hero */
+.hero {
+  text-align: center;
+  padding: 40px 30px;
+  border-radius: 40px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(8px);
+  margin-bottom: 30px;
+  box-shadow: var(--shadow);
+}
+
+.hero h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 10px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Карточки */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+@media (max-width: 1000px) {
+  .cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 650px) {
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
+  .hero h1 {
+    font-size: 2.2rem;
+  }
+}
+
+.cake-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.25s;
+  backdrop-filter: blur(8px);
+  box-shadow: var(--shadow);
+}
+
+.cake-card:hover {
+  transform: translateY(-10px);
+  border-color: var(--accent);
+}
+
+.card-media {
+  aspect-ratio: 4 / 3;
+  background: var(--muted);
+}
+
+.card-media img,
+.card-media video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.card-content {
+  padding: 22px 20px;
+}
+
+.card-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.card-title h3 {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.price {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--accent);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.tag {
+  font-size: 0.75rem;
+  padding: 5px 12px;
+  border-radius: 40px;
+  background: var(--card);
+  border: 1px solid var(--border);
+}
+
+/* Футер */
+footer {
+  margin-top: auto;
+  border-top: 1px solid var(--border);
+  background: var(--footer-bg);
+  backdrop-filter: blur(8px);
+}
+
+.footer-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.footer-title {
+  font-weight: 800;
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+}
+
+.contact-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.contact-row {
+  display: flex;
+  gap: 12px;
+}
+
+.contact-label {
+  min-width: 85px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* Утилиты */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 10px 20px;
+  border-radius: 60px;
+  backdrop-filter: blur(4px);
+}
+
+.pill input {
+  border: none;
+  background: transparent;
+  outline: none;
+  color: var(--text);
+  font-size: 1rem;
+  min-width: 240px;
+}
+
+.notice {
+  grid-column: 1 / -1;
+  padding: 20px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 30px;
+  text-align: center;
+  color: var(--muted);
+}
+
+.small {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+[data-auth] {
+  display: none;
+}
+
+/* ===== ЭМОДЗИ-ФОН ===== */
+.emoji-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.emoji-item {
+  position: absolute;
+  opacity: 0.12;
+  pointer-events: none;
+  user-select: none;
+  will-change: transform, left, top;
+}
+
+/* Контент поверх эмодзи */
+header, main, footer, .modal, .toast {
+  position: relative;
+  z-index: 1;
+}
+/* ===== КАСТОМНЫЙ СКРОЛЛБАР ДЛЯ ВСЕХ ЭЛЕМЕНТОВ ===== */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) var(--bg);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, var(--accent2), var(--accent));
+  border-radius: 10px;
+  border: 2px solid var(--bg);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+/* Скроллбар для вложенных элементов (модалки, textarea и т.д.) */
+textarea::-webkit-scrollbar,
+.modal-content::-webkit-scrollbar,
+.settings-section::-webkit-scrollbar,
+.panel::-webkit-scrollbar {
+  width: 8px;
+}
+
+textarea::-webkit-scrollbar-track,
+.modal-content::-webkit-scrollbar-track,
+.settings-section::-webkit-scrollbar-track,
+.panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+textarea::-webkit-scrollbar-thumb,
+.modal-content::-webkit-scrollbar-thumb,
+.settings-section::-webkit-scrollbar-thumb,
+.panel::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, var(--accent2), var(--accent));
+  border-radius: 8px;
+  border: 2px solid transparent;
+}
