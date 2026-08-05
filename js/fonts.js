@@ -14,7 +14,7 @@
 
   // Увеличенный размер для каллиграфических шрифтов
   const SIZES = {
-    greatvibes: '1.2em'
+    greatvibes: '1.05em'
   };
 
   function applyFont(fontName) {
