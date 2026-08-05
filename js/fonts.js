@@ -22,26 +22,16 @@
     // Создаём новый стиль
     const style = document.createElement('style');
     style.id = 'dynamic-font-style';
+    style.textContent = `* { font-family: ${font} !important; }`;
+    document.head.appendChild(style);
     
-    // Для каллиграфических шрифтов увеличиваем обычный текст, но не заголовки
+    // Для каллиграфических шрифтов увеличиваем базовый размер body
     if (fontName === 'greatvibes') {
-      style.textContent = `
-        * {
-          font-family: ${font} !important;
-        }
-        body, p, span, div, a, li, td, th, input, textarea, select, button, label, .tag, .card-desc, .small {
-          font-size: 1.15em !important;
-        }
-      `;
+      document.body.style.fontSize = '1.15em';
     } else {
-      style.textContent = `
-        * {
-          font-family: ${font} !important;
-        }
-      `;
+      document.body.style.fontSize = '';
     }
     
-    document.head.appendChild(style);
     localStorage.setItem('sweetbake_font', fontName);
   }
 
