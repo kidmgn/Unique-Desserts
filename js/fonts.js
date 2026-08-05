@@ -9,7 +9,7 @@
     arial: "Arial, sans-serif",
     verdana: "Verdana, sans-serif",
     roboto: "'Roboto', sans-serif",
-    greatvibes: "'Great Vibes', cursive"
+    playball: "'Playball', cursive"
   };
 
   function applyFont(fontName) {
