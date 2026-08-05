@@ -4,7 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Настройки | Уникальные десерты</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' x='-10' font-size='90'>⚙️</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' x='-10' font-size='90'>🍰</text></svg>">
+  
+  <script>
+    (function() {
+      var theme = localStorage.getItem('sweetbake_theme');
+      var colors = { pink: '#fff0f5', brown: '#f5e6d3', green: '#ecfdf5', yellow: '#fefce8', dark: '#0f172a' };
+      if (theme && colors[theme]) {
+        document.documentElement.style.backgroundColor = colors[theme];
+      }
+    })();
+  </script>
+  
   <link rel="stylesheet" href="css/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
@@ -22,7 +33,6 @@
     .section-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
     .section-desc { color: var(--muted); margin-bottom: 25px; font-size: 0.95rem; }
     
-    /* Профиль с аватаром */
     .profile-header {
       display: flex;
       align-items: center;
@@ -83,10 +93,6 @@
       background: var(--card);
     }
     
-    .avatar-emoji {
-      font-size: 1.5rem;
-    }
-    
     .profile-info {
       display: grid;
       grid-template-columns: auto 1fr;
@@ -127,6 +133,27 @@
       justify-content: center;
     }
     
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--muted);
+    }
+    
+    .form-group input {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 1rem;
+    }
+    
     .empty-state { text-align: center; padding: 60px 40px; background: var(--card); border: 1px solid var(--border); border-radius: 30px; }
     .empty-icon { font-size: 4rem; margin-bottom: 20px; }
     .empty-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 10px; }
@@ -142,9 +169,19 @@
       display: none;
     }
     
-    .success-message.show {
-      display: block;
+    .success-message.show { display: block; }
+    
+    .error-message {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #ef4444;
+      padding: 12px 18px;
+      border-radius: 18px;
+      margin-top: 10px;
+      display: none;
     }
+    
+    .error-message.show { display: block; }
   </style>
 </head>
 <body id="app-body">
@@ -170,7 +207,7 @@
         <div class="empty-state">
           <div class="empty-icon">🔐</div>
           <h2 class="empty-title">Требуется авторизация</h2>
-          <p class="empty-text">Чтобы просматривать информацию, необходимо войти в аккаунт.</p>
+          <p class="empty-text">Чтобы просматривать настройки, необходимо войти в аккаунт.</p>
           <div style="display: flex; gap: 15px; justify-content: center;">
             <a href="login.html" class="btn primary">🔐 Вход</a>
             <a href="register.html" class="btn">📝 Регистрация</a>
@@ -179,7 +216,7 @@
       </div>
       
       <div id="settingsContent" style="display: none;">
-        <h1 class="page-title">ℹ️ Информация</h1>
+        <h1 class="page-title">⚙️ Настройки</h1>
         
         <!-- Профиль с аватаром -->
         <div class="settings-section">
@@ -196,40 +233,60 @@
           
           <button class="btn primary btn-save" id="saveProfileBtn">💾 Сохранить изменения</button>
           <div class="success-message" id="saveSuccess">✅ Изменения сохранены!</div>
+          
+          <!-- Смена пароля -->
+          <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border);">
+            <h3 style="margin-bottom: 15px;">🔒 Сменить пароль</h3>
+            <div class="form-group">
+              <label>Текущий пароль</label>
+              <input type="password" id="currentPassword" placeholder="••••••••">
+            </div>
+            <div class="form-group">
+              <label>Новый пароль</label>
+              <input type="password" id="newPassword" placeholder="••••••••">
+            </div>
+            <div class="form-group">
+              <label>Подтвердите новый пароль</label>
+              <input type="password" id="confirmNewPassword" placeholder="••••••••">
+            </div>
+            <button class="btn primary" id="changePasswordBtn">🔒 Сменить пароль</button>
+            <div class="success-message" id="passwordSuccess">✅ Пароль изменён!</div>
+            <div class="error-message" id="passwordError"></div>
+          </div>
         </div>
         
         <!-- Оформление -->
-<div class="settings-section">
-  <div class="section-title"><span>🎨</span><span>Оформление</span></div>
-  <p class="section-desc">Выберите тему, которая вам больше нравится.</p>
-  <div class="theme-selector" id="themeSelector"></div>
-  <div class="theme-hint">
-    💡 Тему также можно быстро переключить с помощью кружков в шапке сайта.
-  </div>
-  
-  <!-- Переключатель эмодзи-фона -->
-  <div style="margin-top: 25px; padding-top: 20px; border-top: 1px solid var(--border);">
-    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px;">
-      <div>
-        <div style="font-weight: 600; margin-bottom: 5px;">🎭 Анимированные эмодзи на фоне</div>
-        <div style="font-size: 0.85rem; color: var(--muted);">Включает плавающие тематические эмодзи на заднем плане</div>
-      </div>
-      <label style="cursor: pointer; display: flex; align-items: center; gap: 10px;">
-        <input type="checkbox" id="emojiToggle" style="width: 20px; height: 20px; cursor: pointer;">
-        <span id="emojiToggleLabel">Включить</span>
-      </label>
-    </div>
-  </div>
-</div>
+        <div class="settings-section">
+          <div class="section-title"><span>🎨</span><span>Оформление</span></div>
+          <p class="section-desc">Выберите тему, которая вам больше нравится.</p>
+          <div class="theme-selector" id="themeSelector"></div>
+          <div class="theme-hint">
+            💡 Тему также можно быстро переключить с помощью кружков в шапке сайта.
+          </div>
+          
+          <!-- Переключатель эмодзи-фона -->
+          <div style="margin-top: 25px; padding-top: 20px; border-top: 1px solid var(--border);">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px;">
+              <div>
+                <div style="font-weight: 600; margin-bottom: 5px;">🎭 Анимированные эмодзи на фоне</div>
+                <div style="font-size: 0.85rem; color: var(--muted);">Включает плавающие тематические эмодзи на заднем плане</div>
+              </div>
+              <label style="cursor: pointer; display: flex; align-items: center; gap: 10px;">
+                <input type="checkbox" id="emojiToggle" style="width: 20px; height: 20px; cursor: pointer;">
+                <span id="emojiToggleLabel">Включить</span>
+              </label>
+            </div>
+          </div>
+        </div>
         
         <!-- О сайте -->
         <div class="settings-section">
           <div class="section-title"><span>ℹ️</span><span>О сайте</span></div>
           <div class="profile-info">
             <span class="profile-label">Название</span><span class="profile-value">Уникальные десерты</span>
-            <span class="profile-label">Версия</span><span class="profile-value">2.5.1</span>
+            <span class="profile-label">Версия</span><span class="profile-value">2.5</span>
             <span class="profile-label">Лицензия</span><span class="profile-value">MIT</span>
-            <span class="profile-label">Автор</span><span class="profile-value">Уникальные десерты Team</span>
+            <span class="profile-label">Автор</span><span class="profile-value">Уникальные десерты</span>
           </div>
         </div>
       </div>
@@ -262,7 +319,6 @@
       let currentTheme = null;
       let selectedAvatar = '🍰';
 
-      // Доступные аватары
       const AVATARS = ['🍰', '🧁', '🍪', '🍩', '🍫', '🍓', '🍒', '🥐', '☕', '🍵'];
 
       // ===== ИНИЦИАЛИЗАЦИЯ =====
@@ -280,21 +336,16 @@
           document.getElementById('authRequired').style.display = 'none';
           document.getElementById('settingsContent').style.display = 'block';
           
-          // Загружаем сохранённый аватар
           const savedAvatar = localStorage.getItem(`avatar_${currentUser.id}`);
-          if (savedAvatar) {
-            selectedAvatar = savedAvatar;
-          }
+          if (savedAvatar) selectedAvatar = savedAvatar;
           
           renderAvatarSelector();
           renderProfile();
           renderThemeSelector();
           
-          // Кнопка админа в шапке
+          // Кнопка админа
           const adminLink = document.getElementById('adminLink');
-          if (adminLink) {
-            adminLink.style.display = currentUser.role === 'admin' ? 'inline-flex' : 'none';
-          }
+          if (adminLink) adminLink.style.display = currentUser.role === 'admin' ? 'inline-flex' : 'none';
           
           // Кнопка выхода
           const logoutBtn = document.getElementById('logoutBtn');
@@ -308,6 +359,12 @@
           
           // Сохранение профиля
           document.getElementById('saveProfileBtn').addEventListener('click', saveProfile);
+          
+          // Смена пароля
+          document.getElementById('changePasswordBtn').addEventListener('click', changePassword);
+          
+          // Переключатель эмодзи
+          setupEmojiToggle();
         }
       }
 
@@ -327,33 +384,28 @@
         } catch (e) { console.warn('Контакты не загружены'); }
       }
 
-      // ===== РЕНДЕР ВЫБОРА АВАТАРА =====
+      // ===== АВАТАР =====
       function renderAvatarSelector() {
         const container = document.getElementById('avatarSelector');
         const preview = document.getElementById('avatarPreview');
         
         container.innerHTML = AVATARS.map(avatar => `
-          <div class="avatar-option ${selectedAvatar === avatar ? 'active' : ''}" data-avatar="${avatar}">
-            ${avatar}
-          </div>
+          <div class="avatar-option ${selectedAvatar === avatar ? 'active' : ''}" data-avatar="${avatar}">${avatar}</div>
         `).join('');
         
         preview.textContent = selectedAvatar;
         
         container.querySelectorAll('.avatar-option').forEach(option => {
           option.addEventListener('click', () => {
-            const avatar = option.dataset.avatar;
-            selectedAvatar = avatar;
-            
+            selectedAvatar = option.dataset.avatar;
             container.querySelectorAll('.avatar-option').forEach(opt => opt.classList.remove('active'));
             option.classList.add('active');
-            
-            document.getElementById('avatarPreview').textContent = avatar;
+            document.getElementById('avatarPreview').textContent = selectedAvatar;
           });
         });
       }
 
-      // ===== РЕНДЕР ПРОФИЛЯ =====
+      // ===== ПРОФИЛЬ =====
       function renderProfile() {
         const container = document.getElementById('profileInfo');
         const roleBadge = currentUser.role === 'admin' 
@@ -367,7 +419,9 @@
           </span>
           
           <span class="profile-label">Email</span>
-          <span class="profile-value">${currentUser.email}</span>
+          <span class="profile-value">
+            <input type="email" id="profileEmail" value="${currentUser.email || ''}" placeholder="your@email.com" style="width: 100%; padding: 8px 12px; border-radius: 12px; border: 1px solid var(--border); background: var(--bg); color: var(--text);">
+          </span>
           
           <span class="profile-label">Роль</span>
           <span class="profile-value">${roleBadge}</span>
@@ -377,34 +431,120 @@
       // ===== СОХРАНЕНИЕ ПРОФИЛЯ =====
       async function saveProfile() {
         const newName = document.getElementById('profileName').value.trim();
+        const newEmail = document.getElementById('profileEmail').value.trim();
         
-        // Сохраняем аватар
         localStorage.setItem(`avatar_${currentUser.id}`, selectedAvatar);
         
-        // Обновляем имя пользователя (если изменилось)
-        if (newName && newName !== currentUser.name) {
-          try {
-            await SweetBakeAPI.api.users.update(currentUser.id, {
-              ...currentUser,
-              name: newName
-            });
-            currentUser.name = newName;
-            SweetBakeUtils.showToast('✅ Имя обновлено');
-          } catch (e) {
-            SweetBakeUtils.showToast('❌ Не удалось обновить имя', 'error');
+        if (newEmail && newEmail !== currentUser.email) {
+          const allUsers = await SweetBakeAPI.api.users.getAll();
+          if (allUsers.some(u => u.email.toLowerCase() === newEmail.toLowerCase() && u.id !== currentUser.id)) {
+            SweetBakeUtils.showToast('❌ Этот email уже используется', 'error');
+            return;
           }
         }
         
-        // Показываем сообщение об успехе
+        const updates = {};
+        if (newName && newName !== currentUser.name) updates.name = newName;
+        if (newEmail && newEmail !== currentUser.email) updates.email = newEmail;
+        
+        if (Object.keys(updates).length > 0) {
+          try {
+            const updated = await SweetBakeAPI.api.users.update(currentUser.id, { ...currentUser, ...updates });
+            currentUser = updated;
+            SweetBakeUtils.showToast('✅ Данные обновлены');
+          } catch (e) {
+            SweetBakeUtils.showToast('❌ Ошибка при обновлении', 'error');
+          }
+        }
+        
         const successMsg = document.getElementById('saveSuccess');
         successMsg.classList.add('show');
         setTimeout(() => successMsg.classList.remove('show'), 3000);
-        
-        // Обновляем отображение
-        SweetBakeUtils.showToast('✅ Аватар сохранён');
       }
 
-      // ===== РЕНДЕР ВЫБОРА ТЕМЫ =====
+      // ===== СМЕНА ПАРОЛЯ =====
+      async function changePassword() {
+        const currentPassword = document.getElementById('currentPassword').value;
+        const newPassword = document.getElementById('newPassword').value;
+        const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+        
+        const errorEl = document.getElementById('passwordError');
+        const successEl = document.getElementById('passwordSuccess');
+        
+        errorEl.style.display = 'none';
+        errorEl.classList.remove('show');
+        successEl.style.display = 'none';
+        successEl.classList.remove('show');
+        
+        if (!currentPassword || !newPassword || !confirmNewPassword) {
+          errorEl.textContent = '❌ Заполните все поля';
+          errorEl.style.display = 'block';
+          errorEl.classList.add('show');
+          return;
+        }
+        
+        if (currentPassword !== currentUser.password) {
+          errorEl.textContent = '❌ Неверный текущий пароль';
+          errorEl.style.display = 'block';
+          errorEl.classList.add('show');
+          return;
+        }
+        
+        if (newPassword.length < 6) {
+          errorEl.textContent = '❌ Новый пароль должен содержать минимум 6 символов';
+          errorEl.style.display = 'block';
+          errorEl.classList.add('show');
+          return;
+        }
+        
+        if (newPassword !== confirmNewPassword) {
+          errorEl.textContent = '❌ Новые пароли не совпадают';
+          errorEl.style.display = 'block';
+          errorEl.classList.add('show');
+          return;
+        }
+        
+        try {
+          await SweetBakeAPI.api.users.update(currentUser.id, { ...currentUser, password: newPassword });
+          currentUser.password = newPassword;
+          
+          document.getElementById('currentPassword').value = '';
+          document.getElementById('newPassword').value = '';
+          document.getElementById('confirmNewPassword').value = '';
+          
+          successEl.style.display = 'block';
+          successEl.classList.add('show');
+          setTimeout(() => {
+            successEl.style.display = 'none';
+            successEl.classList.remove('show');
+          }, 3000);
+          SweetBakeUtils.showToast('✅ Пароль изменён');
+        } catch (e) {
+          errorEl.textContent = '❌ Ошибка при смене пароля';
+          errorEl.style.display = 'block';
+          errorEl.classList.add('show');
+        }
+      }
+
+      // ===== ПЕРЕКЛЮЧАТЕЛЬ ЭМОДЗИ =====
+      function setupEmojiToggle() {
+        const emojiToggle = document.getElementById('emojiToggle');
+        const emojiToggleLabel = document.getElementById('emojiToggleLabel');
+        
+        if (emojiToggle) {
+          const emojiEnabled = SweetBakeTheme.isEmojiEnabled();
+          emojiToggle.checked = emojiEnabled;
+          emojiToggleLabel.textContent = emojiEnabled ? 'Выключить' : 'Включить';
+          
+          emojiToggle.addEventListener('change', () => {
+            SweetBakeTheme.toggleEmoji(emojiToggle.checked);
+            emojiToggleLabel.textContent = emojiToggle.checked ? 'Выключить' : 'Включить';
+            SweetBakeUtils.showToast(emojiToggle.checked ? '✅ Эмодзи включены' : '❌ Эмодзи выключены');
+          });
+        }
+      }
+
+      // ===== ТЕМА =====
       function renderThemeSelector() {
         const container = document.getElementById('themeSelector');
         const themes = SweetBakeTheme.getList();
@@ -433,44 +573,16 @@
       }
 
       function getThemeDescription(id) {
-        const desc = { 
-          pink: 'Нежная розовая', 
-          brown: 'Тёплый шоколад', 
-          green: 'Свежая матча', 
-          yellow: 'Солнечный лимон', 
-          dark: 'Тёмная ночь' 
-        };
+        const desc = { pink: 'Нежная розовая', brown: 'Тёплый шоколад', green: 'Свежая матча', yellow: 'Солнечный лимон', dark: 'Тёмная ночь' };
         return desc[id] || '';
       }
 
       function getThemeName(id) {
-        const names = { 
-          pink: '🌸 Розовая', 
-          brown: '☕ Шоколад', 
-          green: '🌿 Матча', 
-          yellow: '🍋 Лимон', 
-          dark: '🌙 Тёмная' 
-        };
+        const names = { pink: '🌸 Розовая', brown: '☕ Шоколад', green: '🌿 Матча', yellow: '🍋 Лимон', dark: '🌙 Тёмная' };
         return names[id] || id;
       }
 
       init();
-      // Настройка переключателя эмодзи
-const emojiToggle = document.getElementById('emojiToggle');
-const emojiToggleLabel = document.getElementById('emojiToggleLabel');
-
-if (emojiToggle) {
-  // Загружаем сохранённое состояние
-  const emojiEnabled = SweetBakeTheme.isEmojiEnabled();
-  emojiToggle.checked = emojiEnabled;
-  emojiToggleLabel.textContent = emojiEnabled ? 'Выключить' : 'Включить';
-  
-  emojiToggle.addEventListener('change', () => {
-    SweetBakeTheme.toggleEmoji(emojiToggle.checked);
-    emojiToggleLabel.textContent = emojiToggle.checked ? 'Выключить' : 'Включить';
-    SweetBakeUtils.showToast(emojiToggle.checked ? '✅ Эмодзи включены' : '❌ Эмодзи выключены');
-  });
-}
     })();
   </script>
 </body>
