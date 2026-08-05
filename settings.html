@@ -104,7 +104,6 @@
     .badge-admin { background: linear-gradient(135deg, var(--accent2), var(--accent)); color: white; }
     .badge-user { background: var(--bg); border: 1px solid var(--border); color: var(--text); }
     
-    /* Звёздочка-подсказка для email */
     .email-tooltip {
       color: var(--accent);
       cursor: help;
@@ -186,15 +185,8 @@
       gap: 15px;
     }
     
-    .setting-label {
-      font-weight: 600;
-      margin-bottom: 5px;
-    }
-    
-    .setting-desc {
-      font-size: 0.85rem;
-      color: var(--muted);
-    }
+    .setting-label { font-weight: 600; margin-bottom: 5px; }
+    .setting-desc { font-size: 0.85rem; color: var(--muted); }
     
     select.setting-select {
       padding: 10px 16px;
@@ -367,7 +359,7 @@
 
       const AVATARS = ['🍰', '🧁', '🍪', '🍩', '🍫', '🍓', '🍒', '🥐', '☕', '🍵'];
 
-      // ===== ВАЛИДАЦИЯ РОССИЙСКОГО EMAIL =====
+      // ===== ВАЛИДАЦИЯ =====
       function isValidRussianEmail(email) {
         const allowedDomains = ['@mail.ru', '@yandex.ru'];
         return allowedDomains.some(domain => email.toLowerCase().endsWith(domain));
@@ -419,7 +411,7 @@
         }
       }
 
-      // ===== ЗАГРУЗКА КОНТАКТОВ =====
+      // ===== КОНТАКТЫ =====
       async function loadContacts() {
         try {
           const contacts = await SweetBakeAPI.api.contacts.get();
@@ -539,73 +531,61 @@
         
         if (!currentPassword || !newPassword || !confirmNewPassword) {
           errorEl.textContent = '❌ Заполните все поля';
-          errorEl.style.display = 'block';
-          errorEl.classList.add('show');
+          errorEl.style.display = 'block'; errorEl.classList.add('show');
           return;
         }
         
         if (currentPassword !== currentUser.password) {
           errorEl.textContent = '❌ Неверный текущий пароль';
-          errorEl.style.display = 'block';
-          errorEl.classList.add('show');
+          errorEl.style.display = 'block'; errorEl.classList.add('show');
           return;
         }
         
         if (newPassword.length < 6) {
           errorEl.textContent = '❌ Новый пароль должен содержать минимум 6 символов';
-          errorEl.style.display = 'block';
-          errorEl.classList.add('show');
+          errorEl.style.display = 'block'; errorEl.classList.add('show');
           return;
         }
         
         if (newPassword !== confirmNewPassword) {
           errorEl.textContent = '❌ Новые пароли не совпадают';
-          errorEl.style.display = 'block';
-          errorEl.classList.add('show');
+          errorEl.style.display = 'block'; errorEl.classList.add('show');
           return;
         }
         
         try {
           await SweetBakeAPI.api.users.update(currentUser.id, { ...currentUser, password: newPassword });
           currentUser.password = newPassword;
-          
           document.getElementById('currentPassword').value = '';
           document.getElementById('newPassword').value = '';
           document.getElementById('confirmNewPassword').value = '';
-          
-          successEl.style.display = 'block';
-          successEl.classList.add('show');
-          setTimeout(() => {
-            successEl.style.display = 'none';
-            successEl.classList.remove('show');
-          }, 3000);
+          successEl.style.display = 'block'; successEl.classList.add('show');
+          setTimeout(() => { successEl.style.display = 'none'; successEl.classList.remove('show'); }, 3000);
           SweetBakeUtils.showToast('✅ Пароль изменён');
         } catch (e) {
           errorEl.textContent = '❌ Ошибка при смене пароля';
-          errorEl.style.display = 'block';
-          errorEl.classList.add('show');
+          errorEl.style.display = 'block'; errorEl.classList.add('show');
         }
       }
 
-      // ===== ПЕРЕКЛЮЧАТЕЛЬ ЭМОДЗИ =====
+      // ===== ЭМОДЗИ =====
       function setupEmojiToggle() {
         const emojiToggle = document.getElementById('emojiToggle');
         const emojiToggleLabel = document.getElementById('emojiToggleLabel');
+        if (!emojiToggle) return;
         
-        if (emojiToggle) {
-          const emojiEnabled = SweetBakeTheme.isEmojiEnabled();
-          emojiToggle.checked = emojiEnabled;
-          emojiToggleLabel.textContent = emojiEnabled ? 'Выключить' : 'Включить';
-          
-          emojiToggle.addEventListener('change', () => {
-            SweetBakeTheme.toggleEmoji(emojiToggle.checked);
-            emojiToggleLabel.textContent = emojiToggle.checked ? 'Выключить' : 'Включить';
-            SweetBakeUtils.showToast(emojiToggle.checked ? '✅ Эмодзи включены' : '❌ Эмодзи выключены');
-          });
-        }
+        const emojiEnabled = SweetBakeTheme.isEmojiEnabled();
+        emojiToggle.checked = emojiEnabled;
+        emojiToggleLabel.textContent = emojiEnabled ? 'Выключить' : 'Включить';
+        
+        emojiToggle.addEventListener('change', () => {
+          SweetBakeTheme.toggleEmoji(emojiToggle.checked);
+          emojiToggleLabel.textContent = emojiToggle.checked ? 'Выключить' : 'Включить';
+          SweetBakeUtils.showToast(emojiToggle.checked ? '✅ Эмодзи включены' : '❌ Эмодзи выключены');
+        });
       }
 
-      // ===== ВЫБОР ШРИФТА =====
+      // ===== ШРИФТ =====
       function setupFontSelector() {
         const fontSelect = document.getElementById('fontSelect');
         if (!fontSelect) return;
