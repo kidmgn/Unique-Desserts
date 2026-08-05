@@ -25,10 +25,12 @@
     style.textContent = `* { font-family: ${font} !important; }`;
     document.head.appendChild(style);
     
-    // Для каллиграфических шрифтов увеличиваем базовый размер body
+    // Для каллиграфических шрифтов — шире буквы, обычный размер
     if (fontName === 'greatvibes') {
-      document.body.style.fontSize = '1.15em';
+      document.body.style.letterSpacing = '0.5px';
+      document.body.style.fontSize = '';
     } else {
+      document.body.style.letterSpacing = '';
       document.body.style.fontSize = '';
     }
     
