@@ -12,14 +12,19 @@
     playball: "'Playball', cursive"
   };
 
+  const SIZES = {
+    playball: '1.1em'  // Чуть крупнее для читаемости
+  };
+
   function applyFont(fontName) {
     const font = FONTS[fontName] || FONTS.nunito;
+    const size = SIZES[fontName] || '1em';
     
-    // Удаляем старый динамический стиль
+    // Удаляем старый стиль
     const oldStyle = document.getElementById('dynamic-font-style');
     if (oldStyle) oldStyle.remove();
     
-    // Создаём новый стиль в конце head с наивысшим приоритетом
+    // Создаём новый стиль
     const style = document.createElement('style');
     style.id = 'dynamic-font-style';
     style.textContent = `
@@ -30,6 +35,7 @@
       .form-group input, .form-group textarea, .form-group select,
       * {
         font-family: ${font} !important;
+        font-size: ${size};
       }
     `;
     document.head.appendChild(style);
