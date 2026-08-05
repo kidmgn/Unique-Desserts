@@ -9,11 +9,12 @@
     arial: "Arial, sans-serif",
     verdana: "Verdana, sans-serif",
     roboto: "'Roboto', sans-serif",
-    playball: "'Playball', cursive"
+    greatvibes: "'Great Vibes', cursive"
   };
 
+  // Увеличенный размер для каллиграфических шрифтов
   const SIZES = {
-    playball: '1.1em'  // Чуть крупнее для читаемости
+    greatvibes: '1.2em'
   };
 
   function applyFont(fontName) {
