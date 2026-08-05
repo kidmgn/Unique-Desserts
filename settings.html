@@ -82,10 +82,7 @@
       transition: all 0.2s;
     }
     
-    .avatar-option:hover {
-      transform: scale(1.1);
-      border-color: var(--accent);
-    }
+    .avatar-option:hover { transform: scale(1.1); border-color: var(--accent); }
     
     .avatar-option.active {
       border-color: var(--accent);
@@ -127,21 +124,10 @@
       text-align: center;
     }
     
-    .btn-save {
-      margin-top: 20px;
-      width: 100%;
-      justify-content: center;
-    }
+    .btn-save { margin-top: 20px; width: 100%; justify-content: center; }
     
-    .form-group {
-      margin-bottom: 15px;
-    }
-    
-    .form-group label {
-      display: block;
-      margin-bottom: 5px;
-      color: var(--muted);
-    }
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; margin-bottom: 5px; color: var(--muted); }
     
     .form-group input {
       width: 100%;
@@ -182,6 +168,8 @@
     }
     
     .error-message.show { display: block; }
+    
+    .email-hint { font-size: 0.8rem; color: var(--muted); margin-top: 5px; }
   </style>
 </head>
 <body id="app-body">
@@ -236,7 +224,7 @@
           
           <!-- Смена пароля -->
           <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border);">
-            <h3 style="margin-bottom: 15px;">🔒 Смена пароля</h3>
+            <h3 style="margin-bottom: 15px;">🔒 Сменить пароль</h3>
             <div class="form-group">
               <label>Текущий пароль</label>
               <input type="password" id="currentPassword" placeholder="••••••••">
@@ -321,6 +309,18 @@
 
       const AVATARS = ['🍰', '🧁', '🍪', '🍩', '🍫', '🍓', '🍒', '🥐', '☕', '🍵'];
 
+      // ===== ВАЛИДАЦИЯ РОССИЙСКОГО EMAIL =====
+      function isValidRussianEmail(email) {
+        const allowedDomains = ['@mail.ru', '@yandex.ru'];
+        return allowedDomains.some(domain => email.toLowerCase().endsWith(domain));
+      }
+
+      // ===== БАЗОВАЯ ВАЛИДАЦИЯ ФОРМАТА EMAIL =====
+      function isValidEmailFormat(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+      }
+
       // ===== ИНИЦИАЛИЗАЦИЯ =====
       async function init() {
         SweetBakeTheme.createSwitcher('themeSwitcher');
@@ -343,11 +343,9 @@
           renderProfile();
           renderThemeSelector();
           
-          // Кнопка админа
           const adminLink = document.getElementById('adminLink');
           if (adminLink) adminLink.style.display = currentUser.role === 'admin' ? 'inline-flex' : 'none';
           
-          // Кнопка выхода
           const logoutBtn = document.getElementById('logoutBtn');
           if (logoutBtn) {
             logoutBtn.style.display = 'inline-flex';
@@ -357,13 +355,8 @@
             });
           }
           
-          // Сохранение профиля
           document.getElementById('saveProfileBtn').addEventListener('click', saveProfile);
-          
-          // Смена пароля
           document.getElementById('changePasswordBtn').addEventListener('click', changePassword);
-          
-          // Переключатель эмодзи
           setupEmojiToggle();
         }
       }
@@ -420,7 +413,8 @@
           
           <span class="profile-label">Email</span>
           <span class="profile-value">
-            <input type="email" id="profileEmail" value="${currentUser.email || ''}" placeholder="your@email.com" style="width: 100%; padding: 8px 12px; border-radius: 12px; border: 1px solid var(--border); background: var(--bg); color: var(--text);">
+            <input type="email" id="profileEmail" value="${currentUser.email || ''}" placeholder="your@mail.ru" style="width: 100%; padding: 8px 12px; border-radius: 12px; border: 1px solid var(--border); background: var(--bg); color: var(--text);">
+            <div class="email-hint">Разрешены только: @mail.ru и @yandex.ru</div>
           </span>
           
           <span class="profile-label">Роль</span>
@@ -435,7 +429,18 @@
         
         localStorage.setItem(`avatar_${currentUser.id}`, selectedAvatar);
         
+        // Валидация email
         if (newEmail && newEmail !== currentUser.email) {
+          if (!isValidEmailFormat(newEmail)) {
+            SweetBakeUtils.showToast('❌ Некорректный формат email', 'error');
+            return;
+          }
+          
+          if (!isValidRussianEmail(newEmail)) {
+            SweetBakeUtils.showToast('❌ Разрешены только email: @mail.ru или @yandex.ru', 'error');
+            return;
+          }
+          
           const allUsers = await SweetBakeAPI.api.users.getAll();
           if (allUsers.some(u => u.email.toLowerCase() === newEmail.toLowerCase() && u.id !== currentUser.id)) {
             SweetBakeUtils.showToast('❌ Этот email уже используется', 'error');
