@@ -14,8 +14,26 @@
 
   function applyFont(fontName) {
     const font = FONTS[fontName] || FONTS.nunito;
-    // Применяем ко ВСЕМ элементам с !important
-    document.documentElement.style.setProperty('font-family', font, 'important');
+    
+    // Удаляем старый динамический стиль
+    const oldStyle = document.getElementById('dynamic-font-style');
+    if (oldStyle) oldStyle.remove();
+    
+    // Создаём новый стиль в конце head с наивысшим приоритетом
+    const style = document.createElement('style');
+    style.id = 'dynamic-font-style';
+    style.textContent = `
+      body, div, p, span, a, h1, h2, h3, h4, h5, h6,
+      button, input, select, textarea, label, table, th, td,
+      header, footer, main, nav, section, article,
+      .btn, .pill, .tag, .card-title, .card-desc, .price,
+      .form-group input, .form-group textarea, .form-group select,
+      * {
+        font-family: ${font} !important;
+      }
+    `;
+    document.head.appendChild(style);
+    
     localStorage.setItem('sweetbake_font', fontName);
   }
 
