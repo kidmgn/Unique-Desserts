@@ -14,7 +14,8 @@
 
   function applyFont(fontName) {
     const font = FONTS[fontName] || FONTS.nunito;
-    document.documentElement.style.fontFamily = font;
+    // Применяем ко ВСЕМ элементам с !important
+    document.documentElement.style.setProperty('font-family', font, 'important');
     localStorage.setItem('sweetbake_font', fontName);
   }
 
@@ -22,6 +23,7 @@
     return localStorage.getItem('sweetbake_font') || 'nunito';
   }
 
+  // Применяем сохранённый шрифт при загрузке
   const savedFont = getSavedFont();
   applyFont(savedFont);
 
