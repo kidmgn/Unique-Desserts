@@ -1,4 +1,4 @@
-/*/* ===== БАЗОВЫЕ СТИЛИ SWEETBAKE ===== */
+/* ===== БАЗОВЫЕ СТИЛИ SWEETBAKE ===== */
 * {
   margin: 0;
   padding: 0;
@@ -6,7 +6,7 @@
 }
 
 body {
-  font-family: 'Nunito', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  /* font-family управляется через js/fonts.js */
   background: var(--bg-gradient, #fff5f7);
   color: var(--text);
   min-height: 100vh;
@@ -341,12 +341,12 @@ footer {
   will-change: transform, left, top;
 }
 
-/* Контент поверх эмодзи */
 header, main, footer, .modal, .toast {
   position: relative;
   z-index: 1;
 }
-/* ===== КАСТОМНЫЙ СКРОЛЛБАР ДЛЯ ВСЕХ ЭЛЕМЕНТОВ ===== */
+
+/* ===== КАСТОМНЫЙ СКРОЛЛБАР ===== */
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--accent) var(--bg);
@@ -372,7 +372,6 @@ header, main, footer, .modal, .toast {
   background: var(--accent);
 }
 
-/* Скроллбар для вложенных элементов (модалки, textarea и т.д.) */
 textarea::-webkit-scrollbar,
 .modal-content::-webkit-scrollbar,
 .settings-section::-webkit-scrollbar,
