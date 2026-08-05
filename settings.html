@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="ru">
-<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,7 +17,7 @@
   </script>
   
   <link rel="stylesheet" href="css/style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Pacifico&display=swap" rel="stylesheet">
   <style>
     .settings-container { max-width: 800px; margin: 0 auto; }
     .page-title { font-size: 2rem; font-weight: 700; margin-bottom: 30px; }
@@ -112,7 +111,6 @@
       font-weight: 700;
       font-size: 1.2rem;
       margin-left: 2px;
-      position: relative;
     }
     
     .theme-selector { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; margin-top: 20px; }
@@ -179,6 +177,35 @@
     }
     
     .error-message.show { display: block; }
+    
+    .setting-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    
+    .setting-label {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    
+    .setting-desc {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    
+    select.setting-select {
+      padding: 10px 16px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 1rem;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body id="app-body">
@@ -255,7 +282,9 @@
         <!-- Оформление -->
         <div class="settings-section">
           <div class="section-title"><span>🎨</span><span>Оформление</span></div>
-          <p class="section-desc">Выберите тему, которая вам больше нравится.</p>
+          <p class="section-desc">Настройте внешний вид сайта под себя.</p>
+          
+          <!-- Выбор темы -->
           <div class="theme-selector" id="themeSelector"></div>
           <div class="theme-hint">
             💡 Тему также можно быстро переключить с помощью кружков в шапке сайта.
@@ -263,15 +292,34 @@
           
           <!-- Переключатель эмодзи-фона -->
           <div style="margin-top: 25px; padding-top: 20px; border-top: 1px solid var(--border);">
-            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px;">
+            <div class="setting-row">
               <div>
-                <div style="font-weight: 600; margin-bottom: 5px;">🎭 Анимированные эмодзи на фоне</div>
-                <div style="font-size: 0.85rem; color: var(--muted);">Включает плавающие тематические эмодзи на заднем плане</div>
+                <div class="setting-label">🎭 Анимированные эмодзи на фоне</div>
+                <div class="setting-desc">Включает плавающие тематические эмодзи на заднем плане</div>
               </div>
               <label style="cursor: pointer; display: flex; align-items: center; gap: 10px;">
                 <input type="checkbox" id="emojiToggle" style="width: 20px; height: 20px; cursor: pointer;">
                 <span id="emojiToggleLabel">Включить</span>
               </label>
+            </div>
+          </div>
+          
+          <!-- Выбор шрифта -->
+          <div style="margin-top: 25px; padding-top: 20px; border-top: 1px solid var(--border);">
+            <div class="setting-row">
+              <div>
+                <div class="setting-label">🔤 Шрифт сайта</div>
+                <div class="setting-desc">Выберите шрифт для всех страниц</div>
+              </div>
+              <select id="fontSelect" class="setting-select">
+                <option value="nunito">Nunito (текущий)</option>
+                <option value="georgia">Georgia (классический)</option>
+                <option value="times">Times New Roman</option>
+                <option value="arial">Arial</option>
+                <option value="verdana">Verdana</option>
+                <option value="roboto">Roboto</option>
+                <option value="pacifico">Pacifico (каллиграфический)</option>
+              </select>
             </div>
           </div>
         </div>
@@ -308,6 +356,7 @@
   <script src="js/theme.js"></script>
   <script src="js/api.js"></script>
   <script src="js/utils.js"></script>
+  <script src="js/fonts.js"></script>
 
   <script>
     (function(){
@@ -324,7 +373,6 @@
         return allowedDomains.some(domain => email.toLowerCase().endsWith(domain));
       }
 
-      // ===== БАЗОВАЯ ВАЛИДАЦИЯ ФОРМАТА EMAIL =====
       function isValidEmailFormat(email) {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return re.test(email);
@@ -351,6 +399,8 @@
           renderAvatarSelector();
           renderProfile();
           renderThemeSelector();
+          setupEmojiToggle();
+          setupFontSelector();
           
           const adminLink = document.getElementById('adminLink');
           if (adminLink) adminLink.style.display = currentUser.role === 'admin' ? 'inline-flex' : 'none';
@@ -366,7 +416,6 @@
           
           document.getElementById('saveProfileBtn').addEventListener('click', saveProfile);
           document.getElementById('changePasswordBtn').addEventListener('click', changePassword);
-          setupEmojiToggle();
         }
       }
 
@@ -437,7 +486,6 @@
         
         localStorage.setItem(`avatar_${currentUser.id}`, selectedAvatar);
         
-        // Валидация email
         if (newEmail && newEmail !== currentUser.email) {
           if (!isValidEmailFormat(newEmail)) {
             SweetBakeUtils.showToast('❌ Некорректный формат email', 'error');
@@ -555,6 +603,21 @@
             SweetBakeUtils.showToast(emojiToggle.checked ? '✅ Эмодзи включены' : '❌ Эмодзи выключены');
           });
         }
+      }
+
+      // ===== ВЫБОР ШРИФТА =====
+      function setupFontSelector() {
+        const fontSelect = document.getElementById('fontSelect');
+        if (!fontSelect) return;
+        
+        const savedFont = localStorage.getItem('sweetbake_font') || 'nunito';
+        fontSelect.value = savedFont;
+        
+        fontSelect.addEventListener('change', () => {
+          const font = fontSelect.value;
+          SweetBakeFonts.apply(font);
+          SweetBakeUtils.showToast(`✅ Шрифт изменён`);
+        });
       }
 
       // ===== ТЕМА =====
