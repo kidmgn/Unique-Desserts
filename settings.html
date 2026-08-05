@@ -104,6 +104,16 @@
     .badge-admin { background: linear-gradient(135deg, var(--accent2), var(--accent)); color: white; }
     .badge-user { background: var(--bg); border: 1px solid var(--border); color: var(--text); }
     
+    /* Звёздочка-подсказка для email */
+    .email-tooltip {
+      color: var(--accent);
+      cursor: help;
+      font-weight: 700;
+      font-size: 1.2rem;
+      margin-left: 2px;
+      position: relative;
+    }
+    
     .theme-selector { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; margin-top: 20px; }
     .theme-option {
       background: var(--bg); border: 2px solid var(--border); border-radius: 20px;
@@ -168,8 +178,6 @@
     }
     
     .error-message.show { display: block; }
-    
-    .email-hint { font-size: 0.8rem; color: var(--muted); margin-top: 5px; }
   </style>
 </head>
 <body id="app-body">
@@ -411,10 +419,9 @@
             <input type="text" id="profileName" value="${currentUser.name || ''}" placeholder="Ваше имя" style="width: 100%; padding: 8px 12px; border-radius: 12px; border: 1px solid var(--border); background: var(--bg); color: var(--text);">
           </span>
           
-          <span class="profile-label">Email</span>
+          <span class="profile-label">Email <span class="email-tooltip" title="Разрешены только: @mail.ru и @yandex.ru">*</span></span>
           <span class="profile-value">
             <input type="email" id="profileEmail" value="${currentUser.email || ''}" placeholder="your@mail.ru" style="width: 100%; padding: 8px 12px; border-radius: 12px; border: 1px solid var(--border); background: var(--bg); color: var(--text);">
-            <div class="email-hint">Разрешены только: @mail.ru и @yandex.ru</div>
           </span>
           
           <span class="profile-label">Роль</span>
