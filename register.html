@@ -4,15 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Регистрация | Уникальные десерты</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' x='-10' font-size='90'>📝</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' x='-10' font-size='90'>📝</text></svg>">
+  
+  <script>
+    (function() {
+      var theme = localStorage.getItem('sweetbake_theme');
+      var colors = { pink: '#fff0f5', brown: '#f5e6d3', green: '#ecfdf5', yellow: '#fefce8', dark: '#0f172a' };
+      if (theme && colors[theme]) {
+        document.documentElement.style.backgroundColor = colors[theme];
+      }
+    })();
+  </script>
+  
   <link rel="stylesheet" href="css/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    /* Дополнительные стили для страницы регистрации */
-    .auth-container {
-      max-width: 450px;
-      margin: 40px auto;
-    }
+    .auth-container { max-width: 450px; margin: 40px auto; }
     
     .auth-panel {
       background: var(--card);
@@ -23,37 +30,14 @@
       box-shadow: var(--shadow);
     }
     
-    .auth-title {
-      font-size: 2rem;
-      font-weight: 700;
-      margin-bottom: 8px;
-      text-align: center;
-    }
+    .auth-title { font-size: 2rem; font-weight: 700; margin-bottom: 8px; text-align: center; }
+    .auth-subtitle { text-align: center; color: var(--muted); margin-bottom: 28px; }
     
-    .auth-subtitle {
-      text-align: center;
-      color: var(--muted);
-      margin-bottom: 28px;
-    }
+    .auth-form { display: flex; flex-direction: column; gap: 22px; }
     
-    .auth-form {
-      display: flex;
-      flex-direction: column;
-      gap: 22px;
-    }
+    .form-group { display: flex; flex-direction: column; gap: 8px; }
     
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    
-    .form-group label {
-      color: var(--text);
-      font-weight: 600;
-      font-size: 0.95rem;
-      margin-left: 5px;
-    }
+    .form-group label { color: var(--text); font-weight: 600; font-size: 0.95rem; margin-left: 5px; }
     
     .form-group input {
       width: 100%;
@@ -68,23 +52,13 @@
       outline: none;
     }
     
-    .form-group input:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(249, 168, 212, 0.15);
-    }
+    .form-group input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(249, 168, 212, 0.15); }
     
-    .form-group input::placeholder {
-      color: var(--muted);
-      opacity: 0.6;
-      font-size: 0.9rem;
-    }
+    .form-group input::placeholder { color: var(--muted); opacity: 0.6; font-size: 0.9rem; }
     
-    .password-hint {
-      font-size: 0.8rem;
-      color: var(--muted);
-      margin-top: 5px;
-      margin-left: 5px;
-    }
+    .password-hint { font-size: 0.8rem; color: var(--muted); margin-top: 5px; margin-left: 5px; }
+    
+    .email-hint { font-size: 0.8rem; color: var(--muted); margin-top: 5px; margin-left: 5px; }
     
     .btn-register {
       width: 100%;
@@ -101,35 +75,13 @@
       transition: transform 0.2s, box-shadow 0.2s;
     }
     
-    .btn-register:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow);
-    }
+    .btn-register:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+    .btn-register:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
     
-    .btn-register:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      transform: none;
-    }
+    .auth-footer { text-align: center; margin-top: 25px; padding-top: 20px; border-top: 1px solid var(--border); }
     
-    .auth-footer {
-      text-align: center;
-      margin-top: 25px;
-      padding-top: 20px;
-      border-top: 1px solid var(--border);
-    }
-    
-    .auth-footer a {
-      color: var(--accent);
-      font-weight: 700;
-      text-decoration: none;
-      transition: opacity 0.2s;
-    }
-    
-    .auth-footer a:hover {
-      opacity: 0.8;
-      text-decoration: underline;
-    }
+    .auth-footer a { color: var(--accent); font-weight: 700; text-decoration: none; transition: opacity 0.2s; }
+    .auth-footer a:hover { opacity: 0.8; text-decoration: underline; }
     
     .error-message {
       background: rgba(239, 68, 68, 0.1);
@@ -142,9 +94,7 @@
       margin-bottom: 20px;
     }
     
-    .error-message.show {
-      display: block;
-    }
+    .error-message.show { display: block; }
     
     .success-message {
       background: rgba(34, 197, 94, 0.1);
@@ -157,9 +107,7 @@
       margin-bottom: 20px;
     }
     
-    .success-message.show {
-      display: block;
-    }
+    .success-message.show { display: block; }
   </style>
 </head>
 <body id="app-body">
@@ -172,7 +120,6 @@
       <div class="nav-actions">
         <div id="themeSwitcher"></div>
         <a href="index.html" class="btn">🏠 Каталог</a>
-        <!-- Убрали кнопку "Вход", т.к. она есть внизу формы -->
       </div>
     </div>
   </header>
@@ -194,7 +141,8 @@
           
           <div class="form-group">
             <label>📧 Email *</label>
-            <input type="email" id="email" placeholder="you@example.com" required autocomplete="email">
+            <input type="email" id="email" placeholder="you@mail.ru" required autocomplete="email">
+            <div class="email-hint">Разрешены только: @mail.ru и @yandex.ru</div>
           </div>
           
           <div class="form-group">
@@ -208,9 +156,7 @@
             <input type="password" id="confirmPassword" placeholder="••••••••" required autocomplete="new-password">
           </div>
           
-          <button type="submit" class="btn-register">
-            📝 Зарегистрироваться
-          </button>
+          <button type="submit" class="btn-register">📝 Зарегистрироваться</button>
         </form>
         
         <div class="auth-footer">
@@ -235,7 +181,6 @@
     </div>
   </footer>
 
-  <!-- Внешние скрипты -->
   <script src="js/theme.js"></script>
   <script src="js/api.js"></script>
   <script src="js/utils.js"></script>
@@ -244,26 +189,19 @@
     (function(){
       "use strict";
 
-      // ===== ИНИЦИАЛИЗАЦИЯ =====
       async function init() {
-        // Создаём переключатель тем
         SweetBakeTheme.createSwitcher('themeSwitcher');
-        
-        // Загружаем контакты
         await loadContacts();
         
-        // Проверяем, не авторизован ли уже пользователь
         const session = SweetBakeAPI.auth.getSession();
         if (session) {
           window.location.href = 'index.html';
           return;
         }
         
-        // Обработчик формы
         document.getElementById('registerForm').addEventListener('submit', handleRegister);
       }
 
-      // ===== ЗАГРУЗКА КОНТАКТОВ =====
       async function loadContacts() {
         try {
           const contacts = await SweetBakeAPI.api.contacts.get();
@@ -277,12 +215,28 @@
             row.innerHTML = `<span class="contact-label">${item.label}</span><span>${item.value}</span>`;
             container.appendChild(row);
           });
-        } catch (e) {
-          console.warn('Контакты не загружены');
-        }
+        } catch (e) { console.warn('Контакты не загружены'); }
       }
 
-      // ===== ОБРАБОТКА РЕГИСТРАЦИИ =====
+      // ===== ВАЛИДАЦИЯ РОССИЙСКОГО EMAIL =====
+      function isValidRussianEmail(email) {
+        const allowedDomains = ['@mail.ru', '@yandex.ru'];
+        return allowedDomains.some(domain => email.toLowerCase().endsWith(domain));
+      }
+
+      // ===== БАЗОВАЯ ВАЛИДАЦИЯ EMAIL =====
+      function isValidEmailFormat(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+      }
+
+      // ===== ПОКАЗАТЬ ОШИБКУ =====
+      function showError(message) {
+        const errorEl = document.getElementById('errorMessage');
+        errorEl.textContent = message;
+        errorEl.classList.add('show');
+      }
+
       async function handleRegister(e) {
         e.preventDefault();
         
@@ -294,32 +248,35 @@
         const errorEl = document.getElementById('errorMessage');
         const successEl = document.getElementById('successMessage');
         
-        // Скрываем предыдущие сообщения
         errorEl.classList.remove('show');
         successEl.classList.remove('show');
         
         // Валидация
         if (!email || !password || !confirmPassword) {
-          showError('Пожалуйста, заполните все обязательные поля');
+          showError('❌ Пожалуйста, заполните все обязательные поля');
           return;
         }
         
-        if (!isValidEmail(email)) {
-          showError('Пожалуйста, введите корректный email');
+        if (!isValidEmailFormat(email)) {
+          showError('❌ Пожалуйста, введите корректный email');
+          return;
+        }
+        
+        if (!isValidRussianEmail(email)) {
+          showError('❌ Разрешены только email: @mail.ru или @yandex.ru');
           return;
         }
         
         if (password.length < 6) {
-          showError('Пароль должен содержать минимум 6 символов');
+          showError('❌ Пароль должен содержать минимум 6 символов');
           return;
         }
         
         if (password !== confirmPassword) {
-          showError('Пароли не совпадают');
+          showError('❌ Пароли не совпадают');
           return;
         }
         
-        // Блокируем кнопку на время запроса
         const submitBtn = e.target.querySelector('button[type="submit"]');
         const originalText = submitBtn.textContent;
         submitBtn.textContent = '⏳ Регистрируем...';
@@ -334,37 +291,20 @@
           
           const result = await SweetBakeAPI.auth.register(userData);
           
-          // Показываем успех
           successEl.textContent = '✅ Регистрация успешна! Перенаправляем...';
           successEl.classList.add('show');
           
           SweetBakeUtils.showToast(`🎉 Добро пожаловать, ${result.user.name || result.user.email}!`);
           
-          // Перенаправляем на главную
           setTimeout(() => {
             window.location.href = 'index.html';
           }, 1000);
           
         } catch (error) {
-          showError(error.message || 'Ошибка при регистрации. Попробуйте другой email.');
-          
-          // Разблокируем кнопку
+          showError(error.message || '❌ Ошибка при регистрации. Попробуйте другой email.');
           submitBtn.textContent = originalText;
           submitBtn.disabled = false;
         }
-      }
-
-      // ===== ВАЛИДАЦИЯ EMAIL =====
-      function isValidEmail(email) {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(email);
-      }
-
-      // ===== ПОКАЗАТЬ ОШИБКУ =====
-      function showError(message) {
-        const errorEl = document.getElementById('errorMessage');
-        errorEl.textContent = message;
-        errorEl.classList.add('show');
       }
 
       init();
