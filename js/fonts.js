@@ -9,7 +9,7 @@
     arial: "Arial, sans-serif",
     verdana: "Verdana, sans-serif",
     roboto: "'Roboto', sans-serif",
-    pacifico: "'Pacifico', cursive"
+    greatvibes: "'Great Vibes', cursive"
   };
 
   function applyFont(fontName) {
