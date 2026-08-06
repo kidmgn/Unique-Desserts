@@ -6,8 +6,11 @@
 
   // ===== ДЕМО-ДАННЫЕ (загружаются при первом запуске) =====
   function seedData() {
-    // Торты
-    if (!localStorage.getItem('sweetbake_cakes')) {
+    // Торты (пустой каталог)
+if (!localStorage.getItem('sweetbake_cakes')) {
+  localStorage.setItem('sweetbake_cakes', JSON.stringify([]));
+}
+    /*if (!localStorage.getItem('sweetbake_cakes')) {
       const cakes = [
         {
           id: 'cake_1',
@@ -48,7 +51,7 @@
         }
       ];
       localStorage.setItem('sweetbake_cakes', JSON.stringify(cakes));
-    }
+    }*/
 
     // Пользователи
     if (!localStorage.getItem('sweetbake_users')) {
