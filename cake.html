@@ -1,38 +1,33 @@
 <!DOCTYPE html>
 <html lang="ru">
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Great+Vibes&display=swap" rel="stylesheet">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Торт | Уникальные десерты</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' x='-10' font-size='90'>🍰</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' x='-10' font-size='90'>🍰</text></svg>">
+  
+  <script>
+    (function() {
+      var theme = localStorage.getItem('sweetbake_theme');
+      var colors = { pink: '#fff0f5', brown: '#f5e6d3', green: '#ecfdf5', yellow: '#fefce8', dark: '#0f172a' };
+      if (theme && colors[theme]) {
+        document.documentElement.style.backgroundColor = colors[theme];
+      }
+    })();
+  </script>
+  
   <link rel="stylesheet" href="css/style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Great+Vibes&display=swap" rel="stylesheet">
   <style>
-    .pill {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+    .pill { display: flex; align-items: center; gap: 8px; }
     
-    .product-container {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      margin-bottom: 50px;
-    }
+    .product-container { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 50px; }
     
     @media (max-width: 900px) {
-      .product-container {
-        grid-template-columns: 1fr;
-      }
+      .product-container { grid-template-columns: 1fr; }
     }
     
-    .gallery {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
+    .gallery { display: flex; flex-direction: column; gap: 15px; }
     
     .main-media {
       aspect-ratio: 4 / 3;
@@ -43,19 +38,14 @@
       box-shadow: var(--shadow);
     }
     
-    .main-media img,
-    .main-media video {
+    .main-media img, .main-media video {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
     }
     
-    .thumbnails {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
+    .thumbnails { display: flex; gap: 10px; flex-wrap: wrap; }
     
     .thumb {
       width: 80px;
@@ -68,15 +58,13 @@
       opacity: 0.7;
     }
     
-    .thumb:hover,
-    .thumb.active {
+    .thumb:hover, .thumb.active {
       opacity: 1;
       border-color: var(--accent);
       transform: scale(1.05);
     }
     
-    .thumb img,
-    .thumb video {
+    .thumb img, .thumb video {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -91,19 +79,8 @@
       box-shadow: var(--shadow);
     }
     
-    .product-title {
-      font-size: 2.5rem;
-      font-weight: 800;
-      margin-bottom: 15px;
-      line-height: 1.2;
-    }
-    
-    .product-price {
-      font-size: 2.2rem;
-      font-weight: 800;
-      color: var(--accent);
-      margin-bottom: 20px;
-    }
+    .product-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 15px; line-height: 1.2; }
+    .product-price { font-size: 2.2rem; font-weight: 800; color: var(--accent); margin-bottom: 20px; }
     
     .product-short {
       font-size: 1.1rem;
@@ -113,23 +90,10 @@
       border-bottom: 1px solid var(--border);
     }
     
-    .product-desc {
-      line-height: 1.7;
-      margin-bottom: 25px;
-    }
+    .product-desc { line-height: 1.7; margin-bottom: 25px; }
+    .ingredients-title { font-weight: 700; margin-bottom: 10px; font-size: 1.1rem; }
     
-    .ingredients-title {
-      font-weight: 700;
-      margin-bottom: 10px;
-      font-size: 1.1rem;
-    }
-    
-    .ingredients-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 30px;
-    }
+    .ingredients-list { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 30px; }
     
     .ingredient-tag {
       background: var(--card);
@@ -155,20 +119,10 @@
       margin-bottom: 40px;
     }
     
-    .reviews-title {
-      font-size: 1.8rem;
-      font-weight: 700;
-      margin-bottom: 25px;
-    }
+    .reviews-title { font-size: 1.8rem; font-weight: 700; margin-bottom: 25px; }
     
-    .review-item {
-      padding: 20px 0;
-      border-bottom: 1px solid var(--border);
-    }
-    
-    .review-item:last-child {
-      border-bottom: none;
-    }
+    .review-item { padding: 20px 0; border-bottom: 1px solid var(--border); }
+    .review-item:last-child { border-bottom: none; }
     
     .review-header {
       display: flex;
@@ -178,48 +132,18 @@
       flex-wrap: wrap;
     }
     
-    .review-author {
-      font-weight: 700;
-    }
+    .review-author { font-weight: 700; }
+    .review-rating { color: #fbbf24; letter-spacing: 2px; }
+    .review-date { color: var(--muted); font-size: 0.85rem; margin-left: auto; }
+    .review-text { color: var(--text); line-height: 1.6; }
     
-    .review-rating {
-      color: #fbbf24;
-      letter-spacing: 2px;
-    }
+    .add-review { margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border); }
+    .add-review h3 { margin-bottom: 15px; }
     
-    .review-date {
-      color: var(--muted);
-      font-size: 0.85rem;
-      margin-left: auto;
-    }
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; margin-bottom: 5px; color: var(--muted); }
     
-    .review-text {
-      color: var(--text);
-      line-height: 1.6;
-    }
-    
-    .add-review {
-      margin-top: 30px;
-      padding-top: 20px;
-      border-top: 1px solid var(--border);
-    }
-    
-    .add-review h3 {
-      margin-bottom: 15px;
-    }
-    
-    .form-group {
-      margin-bottom: 15px;
-    }
-    
-    .form-group label {
-      display: block;
-      margin-bottom: 5px;
-      color: var(--muted);
-    }
-    
-    .form-group select,
-    .form-group textarea {
+    .form-group select, .form-group textarea {
       width: 100%;
       padding: 12px 16px;
       border-radius: 20px;
@@ -230,15 +154,9 @@
       resize: vertical;
     }
     
-    .form-group textarea {
-      min-height: 100px;
-    }
+    .form-group textarea { min-height: 100px; }
     
-    .loader {
-      text-align: center;
-      padding: 50px;
-      color: var(--muted);
-    }
+    .loader { text-align: center; padding: 50px; color: var(--muted); }
     
     .error-panel {
       text-align: center;
@@ -248,11 +166,7 @@
       border: 1px solid var(--border);
     }
     
-    .empty-text {
-      color: var(--muted);
-      text-align: center;
-      padding: 20px;
-    }
+    .empty-text { color: var(--muted); text-align: center; padding: 20px; }
   </style>
 </head>
 <body id="app-body">
@@ -265,13 +179,11 @@
       <div class="nav-actions">
         <div id="themeSwitcher"></div>
         
-        <!-- Кнопка для гостей -->
         <a href="login.html" class="pill" id="guestBtn" style="text-decoration: none;">
           <span>👤</span>
           <span>Вход / Регистрация</span>
         </a>
         
-        <!-- Элементы для авторизованных -->
         <span class="pill" id="userGreeting" style="display: none;">
           <span id="userAvatar">👤</span>
           <span id="userName">Гость</span>
@@ -279,7 +191,12 @@
         <a href="index.html" class="btn">🏠 Каталог</a>
         <a href="orders.html" class="btn">📦 Заказы</a>
         <a href="settings.html" class="btn" id="settingsLink" style="display: none;">⚙️ Настройки</a>
-        <a href="admin.html" class="btn primary" id="adminLink" style="display: none;">🛠️ Админ</a>
+        
+        <span class="btn-wrapper" id="adminBtnWrapper" style="display: none;">
+          <a href="admin.html" class="btn primary">🛠️ Админ</a>
+          <span class="notification-dot" id="adminNotificationDot"></span>
+        </span>
+        
         <button class="btn" id="logoutBtn" style="display: none;">🚪 Выйти</button>
       </div>
     </div>
@@ -306,7 +223,6 @@
     </div>
   </footer>
 
-  <!-- Внешние скрипты -->
   <script src="js/theme.js"></script>
   <script src="js/api.js"></script>
   <script src="js/utils.js"></script>
@@ -320,7 +236,6 @@
       let currentCake = null;
       let currentUser = null;
 
-      // ===== ИНИЦИАЛИЗАЦИЯ =====
       async function init() {
         SweetBakeTheme.createSwitcher('themeSwitcher');
         await updateAuthUI();
@@ -333,55 +248,44 @@
         });
       }
 
-      // ===== ОБНОВЛЕНИЕ UI =====
       async function updateAuthUI() {
-        try {
-          currentUser = await SweetBakeAPI.auth.getCurrentUser();
-        } catch (e) {
-          currentUser = null;
-        }
+        try { currentUser = await SweetBakeAPI.auth.getCurrentUser(); } catch (e) { currentUser = null; }
         
         const guestBtn = document.getElementById('guestBtn');
         const userGreeting = document.getElementById('userGreeting');
-        const adminLink = document.getElementById('adminLink');
+        const adminBtnWrapper = document.getElementById('adminBtnWrapper');
         const settingsLink = document.getElementById('settingsLink');
         const logoutBtn = document.getElementById('logoutBtn');
         
         if (!currentUser) {
           if (guestBtn) guestBtn.style.display = 'flex';
           if (userGreeting) userGreeting.style.display = 'none';
-          if (adminLink) adminLink.style.display = 'none';
+          if (adminBtnWrapper) adminBtnWrapper.style.display = 'none';
           if (settingsLink) settingsLink.style.display = 'none';
           if (logoutBtn) logoutBtn.style.display = 'none';
         } else {
           if (guestBtn) guestBtn.style.display = 'none';
           if (userGreeting) {
             userGreeting.style.display = 'flex';
-            
             const savedAvatar = localStorage.getItem(`avatar_${currentUser.id}`) || '👤';
-            const avatarSpan = document.getElementById('userAvatar');
-            const nameSpan = document.getElementById('userName');
-            
-            if (avatarSpan) avatarSpan.textContent = savedAvatar;
-            if (nameSpan) nameSpan.textContent = currentUser.name || currentUser.email;
+            document.getElementById('userAvatar').textContent = savedAvatar;
+            document.getElementById('userName').textContent = currentUser.name || currentUser.email;
           }
           if (settingsLink) settingsLink.style.display = 'inline-flex';
-          if (adminLink) {
-            adminLink.style.display = currentUser.role === 'admin' ? 'inline-flex' : 'none';
+          if (adminBtnWrapper) {
+            adminBtnWrapper.style.display = currentUser.role === 'admin' ? 'inline-flex' : 'none';
+            if (currentUser.role === 'admin') SweetBakeUtils.checkNewOrders();
           }
           if (logoutBtn) logoutBtn.style.display = 'inline-flex';
         }
-        
         return currentUser;
       }
 
-      // ===== ЗАГРУЗКА КОНТАКТОВ =====
       async function loadContacts() {
         try {
           const contacts = await SweetBakeAPI.api.contacts.get();
           const container = document.getElementById('footerContacts');
           if (!container) return;
-          
           container.innerHTML = '';
           (contacts.items || []).forEach(item => {
             const row = document.createElement('div');
@@ -389,18 +293,15 @@
             row.innerHTML = `<span class="contact-label">${item.label}</span><span>${item.value}</span>`;
             container.appendChild(row);
           });
-        } catch (e) {
-          console.warn('Контакты не загружены');
-        }
+        } catch (e) { console.warn('Контакты не загружены'); }
       }
 
-      // ===== ЗАГРУЗКА ТОРТА =====
       async function loadCake() {
         const container = document.getElementById('productContent');
         
         try {
           currentCake = await SweetBakeAPI.api.cakes.get(cakeId);
-          document.title = `${currentCake.title} | SweetBake`;
+          document.title = `${currentCake.title} | Уникальные десерты`;
           
           const mediaItems = currentCake.media || [];
           const mainMedia = mediaItems[0];
@@ -412,10 +313,7 @@
           const thumbnailsHtml = mediaItems.length > 1
             ? mediaItems.map((item, idx) => `
                 <div class="thumb ${idx === 0 ? 'active' : ''}" data-index="${idx}">
-                  ${item.type === 'video' 
-                    ? `<video src="${item.url}" muted></video>` 
-                    : `<img src="${item.url}" alt="">`
-                  }
+                  ${item.type === 'video' ? `<video src="${item.url}" muted></video>` : `<img src="${item.url}" alt="">`}
                 </div>
               `).join('')
             : '';
@@ -465,25 +363,20 @@
                   </div>
                   <button class="btn primary" id="submitReview">📝 Отправить отзыв</button>
                 </div>
-                <p id="loginToReview" style="display: none;">
-                  <a href="login.html">Войдите</a>, чтобы оставить отзыв.
-                </p>
+                <p id="loginToReview" style="display: none;"><a href="login.html">Войдите</a>, чтобы оставить отзыв.</p>
               </div>
             </div>
           `;
           
-          // Миниатюры
           if (mediaItems.length > 1) {
             document.querySelectorAll('.thumb').forEach(thumb => {
               thumb.addEventListener('click', () => {
                 const idx = thumb.dataset.index;
                 const item = mediaItems[idx];
                 const mainContainer = document.getElementById('mainMediaContainer');
-                
                 mainContainer.innerHTML = item.type === 'video'
                   ? `<video src="${item.url}" controls autoplay muted loop playsinline></video>`
                   : `<img src="${item.url}" alt="${currentCake.title}">`;
-                
                 document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
                 thumb.classList.add('active');
               });
@@ -505,18 +398,14 @@
         }
       }
 
-      // ===== ЗАГРУЗКА ОТЗЫВОВ =====
       async function loadReviews() {
         const container = document.getElementById('reviewsList');
-        
         try {
           const reviews = await SweetBakeAPI.api.reviews.getAll(cakeId);
-          
           if (reviews.length === 0) {
             container.innerHTML = '<p class="empty-text">✨ Пока нет отзывов. Будьте первым!</p>';
             return;
           }
-          
           container.innerHTML = reviews.map(r => `
             <div class="review-item">
               <div class="review-header">
@@ -527,13 +416,9 @@
               <p class="review-text">${r.text}</p>
             </div>
           `).join('');
-          
-        } catch (e) {
-          container.innerHTML = '<p class="error-text">Не удалось загрузить отзывы</p>';
-        }
+        } catch (e) { container.innerHTML = '<p class="error-text">Не удалось загрузить отзывы</p>'; }
       }
 
-      // ===== ФОРМА ОТЗЫВА =====
       function setupReviewForm() {
         const formDiv = document.getElementById('reviewForm');
         const loginMsg = document.getElementById('loginToReview');
@@ -546,10 +431,7 @@
             const rating = parseInt(document.getElementById('reviewRating').value);
             const text = document.getElementById('reviewText').value.trim();
             
-            if (!text) {
-              SweetBakeUtils.showToast('Пожалуйста, напишите отзыв', 'error');
-              return;
-            }
+            if (!text) { SweetBakeUtils.showToast('Пожалуйста, напишите отзыв', 'error'); return; }
             
             try {
               await SweetBakeAPI.api.reviews.create({
@@ -561,13 +443,10 @@
                 text: text,
                 createdAt: Date.now()
               });
-              
               document.getElementById('reviewText').value = '';
               await loadReviews();
               SweetBakeUtils.showToast('✅ Спасибо за отзыв!');
-            } catch (e) {
-              SweetBakeUtils.showToast('❌ Ошибка при отправке', 'error');
-            }
+            } catch (e) { SweetBakeUtils.showToast('❌ Ошибка при отправке', 'error'); }
           });
         } else {
           formDiv.style.display = 'none';
@@ -575,15 +454,11 @@
         }
       }
 
-      // ===== ОФОРМЛЕНИЕ ЗАКАЗА =====
       async function handleOrder() {
         if (!currentUser) {
-          if (confirm('Для заказа необходимо войти. Перейти на страницу входа?')) {
-            window.location.href = 'login.html';
-          }
+          if (confirm('Для заказа необходимо войти. Перейти на страницу входа?')) window.location.href = 'login.html';
           return;
         }
-        
         if (!currentCake) return;
         
         try {
@@ -597,11 +472,8 @@
             createdAt: Date.now(),
             price: currentCake.price
           });
-          
           SweetBakeUtils.showToast(`🎉 Заказ на "${currentCake.title}" оформлен!`);
-        } catch (e) {
-          SweetBakeUtils.showToast('❌ Ошибка при оформлении заказа', 'error');
-        }
+        } catch (e) { SweetBakeUtils.showToast('❌ Ошибка при оформлении заказа', 'error'); }
       }
 
       init();
