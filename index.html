@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Уникальные десерты — Каталог</title>
+  <title>🍰 Уникальные десерты — Каталог</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' x='-10' font-size='90'>🍰</text></svg>">
   
   <script>
@@ -19,23 +19,23 @@
   <link rel="stylesheet" href="css/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Great+Vibes&display=swap" rel="stylesheet">
   <style>
-  .pill { display: flex; align-items: center; gap: 8px; }
-  
-  #sortSelect {
-    border: none;
-    background: transparent;
-    outline: none;
-    color: var(--text);
-    font-family: inherit;
-    font-size: 1rem;
-    cursor: pointer;
-  }
-  
-  #sortSelect option {
-    background: var(--bg) !important;
-    color: var(--text) !important;
-  }
-</style>
+    .pill { display: flex; align-items: center; gap: 8px; }
+    
+    #sortSelect {
+      border: none;
+      background: transparent;
+      outline: none;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    
+    #sortSelect option {
+      background: var(--bg) !important;
+      color: var(--text) !important;
+    }
+  </style>
 </head>
 <body id="app-body">
   <header>
@@ -82,13 +82,9 @@
       
       <div class="pill">
         <span>📋</span>
-        <select id="sortSelect" style="padding: 10px 16px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-family: inherit; font-size: 1rem; cursor: pointer;">
-  <option value="default">По умолчанию</option>
-  <option value="price-asc">Цена: по возрастанию</option>
-  <option value="price-desc">Цена: по убыванию</option>
-  <option value="name-asc">Название: А-Я</option>
-  <option value="name-desc">Название: Я-А</option>
-</select>
+        <select id="sortSelect">
+          <option value="all">Все торты</option>
+        </select>
       </div>
     </div>
 
@@ -127,6 +123,7 @@
         SweetBakeTheme.createSwitcher('themeSwitcher');
         await updateAuthUI();
         await loadContacts();
+        await loadCategoriesToFilter();
         await loadCakes();
         
         const searchInput = document.getElementById('searchInput');
@@ -193,6 +190,15 @@
         } catch (e) { console.warn('Контакты не загружены'); }
       }
 
+      async function loadCategoriesToFilter() {
+        try {
+          const categories = await SweetBakeAPI.api.categories.getAll();
+          const select = document.getElementById('sortSelect');
+          select.innerHTML = '<option value="all">Все торты</option>' +
+            categories.map(c => `<option value="${c.id}">${c.icon||'📁'} ${c.name}</option>`).join('');
+        } catch (e) {}
+      }
+
       async function loadCakes(searchTerm = '') {
         const container = document.getElementById('cardsContainer');
         const sortBy = document.getElementById('sortSelect').value;
@@ -207,20 +213,9 @@
             (c.ingredients || []).join(' ').toLowerCase().includes(term)
           );
           
-          // Сортировка
-          switch (sortBy) {
-            case 'price-asc':
-              filtered.sort((a, b) => a.price - b.price);
-              break;
-            case 'price-desc':
-              filtered.sort((a, b) => b.price - a.price);
-              break;
-            case 'name-asc':
-              filtered.sort((a, b) => a.title.localeCompare(b.title, 'ru'));
-              break;
-            case 'name-desc':
-              filtered.sort((a, b) => b.title.localeCompare(a.title, 'ru'));
-              break;
+          // Фильтр по категории
+          if (sortBy !== 'all') {
+            filtered = filtered.filter(c => c.categoryId === sortBy);
           }
           
           if (filtered.length === 0) {
