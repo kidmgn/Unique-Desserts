@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="ru">
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Great+Vibes&display=swap" rel="stylesheet">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Уникальные десерты — Каталог</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' x='-10' font-size='90'>🍰</text></svg>">
   
-  <!-- Блокирующий скрипт для темы (предотвращает мигание) -->
   <script>
     (function() {
       var theme = localStorage.getItem('sweetbake_theme');
@@ -19,7 +17,7 @@
   </script>
   
   <link rel="stylesheet" href="css/style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Great+Vibes&display=swap" rel="stylesheet">
   <style>
     .pill {
       display: flex;
@@ -38,19 +36,22 @@
       <div class="nav-actions">
         <div id="themeSwitcher"></div>
         
-        <!-- Кнопка для гостей -->
         <a href="login.html" class="pill" id="guestBtn" style="text-decoration: none;">
           <span>👤</span>
           <span>Вход / Регистрация</span>
         </a>
         
-        <!-- Элементы для авторизованных -->
         <span class="pill" id="userGreeting" style="display: none;">
           <span id="userAvatar">👤</span>
           <span id="userName">Гость</span>
         </span>
         <a href="settings.html" class="btn" id="settingsLink" style="display: none;">⚙️ Настройки</a>
-        <a href="admin.html" class="btn primary" id="adminLink" style="display: none;">🛠️ Админ</a>
+        
+        <span class="btn-wrapper" id="adminBtnWrapper" style="display: none;">
+          <a href="admin.html" class="btn primary">🛠️ Админ</a>
+          <span class="notification-dot" id="adminNotificationDot"></span>
+        </span>
+        
         <button class="btn" id="logoutBtn" style="display: none;">🚪 Выйти</button>
       </div>
     </div>
@@ -89,7 +90,6 @@
     </div>
   </footer>
 
-  <!-- Внешние скрипты -->
   <script src="js/theme.js"></script>
   <script src="js/api.js"></script>
   <script src="js/utils.js"></script>
@@ -101,86 +101,64 @@
 
       let currentUser = null;
 
-      // ===== ИНИЦИАЛИЗАЦИЯ =====
       async function init() {
-        // Создаём переключатель тем
         SweetBakeTheme.createSwitcher('themeSwitcher');
-        
-        // Обновляем UI авторизации
         await updateAuthUI();
-        
-        // Загружаем контакты
         await loadContacts();
-        
-        // Загружаем торты
         await loadCakes();
         
-        // Настраиваем поиск
         const searchInput = document.getElementById('searchInput');
         const debouncedLoad = SweetBakeUtils.debounce(loadCakes, 300);
         searchInput.addEventListener('input', () => {
           debouncedLoad(searchInput.value);
         });
         
-        // Кнопка выхода
         document.getElementById('logoutBtn')?.addEventListener('click', () => {
           SweetBakeAPI.auth.logout();
           window.location.reload();
         });
       }
 
-      // ===== ОБНОВЛЕНИЕ UI ПОСЛЕ АВТОРИЗАЦИИ =====
       async function updateAuthUI() {
-        try {
-          currentUser = await SweetBakeAPI.auth.getCurrentUser();
-        } catch (e) {
-          currentUser = null;
-        }
+        try { currentUser = await SweetBakeAPI.auth.getCurrentUser(); } catch (e) { currentUser = null; }
         
         const guestBtn = document.getElementById('guestBtn');
         const userGreeting = document.getElementById('userGreeting');
-        const adminLink = document.getElementById('adminLink');
+        const adminBtnWrapper = document.getElementById('adminBtnWrapper');
         const settingsLink = document.getElementById('settingsLink');
         const logoutBtn = document.getElementById('logoutBtn');
         
         if (!currentUser) {
-          // Гость
           if (guestBtn) guestBtn.style.display = 'flex';
           if (userGreeting) userGreeting.style.display = 'none';
-          if (adminLink) adminLink.style.display = 'none';
+          if (adminBtnWrapper) adminBtnWrapper.style.display = 'none';
           if (settingsLink) settingsLink.style.display = 'none';
           if (logoutBtn) logoutBtn.style.display = 'none';
         } else {
-          // Авторизован
           if (guestBtn) guestBtn.style.display = 'none';
           if (userGreeting) {
             userGreeting.style.display = 'flex';
-            
-            // Загружаем аватар
             const savedAvatar = localStorage.getItem(`avatar_${currentUser.id}`) || '👤';
-            const avatarSpan = document.getElementById('userAvatar');
-            const nameSpan = document.getElementById('userName');
-            
-            if (avatarSpan) avatarSpan.textContent = savedAvatar;
-            if (nameSpan) nameSpan.textContent = currentUser.name || currentUser.email;
+            document.getElementById('userAvatar').textContent = savedAvatar;
+            document.getElementById('userName').textContent = currentUser.name || currentUser.email;
           }
           if (settingsLink) settingsLink.style.display = 'inline-flex';
-          if (adminLink) {
-            adminLink.style.display = currentUser.role === 'admin' ? 'inline-flex' : 'none';
+          if (adminBtnWrapper) {
+            adminBtnWrapper.style.display = currentUser.role === 'admin' ? 'inline-flex' : 'none';
+            if (currentUser.role === 'admin') {
+              SweetBakeUtils.checkNewOrders();
+            }
           }
           if (logoutBtn) logoutBtn.style.display = 'inline-flex';
         }
-        
         return currentUser;
       }
 
-      // ===== ЗАГРУЗКА КОНТАКТОВ =====
       async function loadContacts() {
         try {
           const contacts = await SweetBakeAPI.api.contacts.get();
           const container = document.getElementById('footerContacts');
           if (!container) return;
-          
           container.innerHTML = '';
           (contacts.items || []).forEach(item => {
             const row = document.createElement('div');
@@ -188,12 +166,9 @@
             row.innerHTML = `<span class="contact-label">${item.label}</span><span>${item.value}</span>`;
             container.appendChild(row);
           });
-        } catch (e) {
-          console.warn('Контакты не загружены');
-        }
+        } catch (e) { console.warn('Контакты не загружены'); }
       }
 
-      // ===== ЗАГРУЗКА ТОРТОВ =====
       async function loadCakes(searchTerm = '') {
         const container = document.getElementById('cardsContainer');
         
