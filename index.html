@@ -19,18 +19,23 @@
   <link rel="stylesheet" href="css/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Great+Vibes&display=swap" rel="stylesheet">
   <style>
-    .pill { display: flex; align-items: center; gap: 8px; }
-    
-    #sortSelect {
-      border: none;
-      background: transparent;
-      outline: none;
-      color: var(--text);
-      font-family: inherit;
-      font-size: 1rem;
-      cursor: pointer;
-    }
-  </style>
+  .pill { display: flex; align-items: center; gap: 8px; }
+  
+  #sortSelect {
+    border: none;
+    background: transparent;
+    outline: none;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  
+  #sortSelect option {
+    background: var(--bg) !important;
+    color: var(--text) !important;
+  }
+</style>
 </head>
 <body id="app-body">
   <header>
