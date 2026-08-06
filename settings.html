@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="ru">
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Great+Vibes&display=swap" rel="stylesheet">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,7 +17,7 @@
   </script>
   
   <link rel="stylesheet" href="css/style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Pacifico&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Great+Vibes&display=swap" rel="stylesheet">
   <style>
     .settings-container { max-width: 800px; margin: 0 auto; }
     .page-title { font-size: 2rem; font-weight: 700; margin-bottom: 30px; }
@@ -34,84 +33,36 @@
     .section-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
     .section-desc { color: var(--muted); margin-bottom: 25px; font-size: 0.95rem; }
     
-    .profile-header {
-      display: flex;
-      align-items: center;
-      gap: 25px;
-      margin-bottom: 25px;
-      flex-wrap: wrap;
-    }
+    .profile-header { display: flex; align-items: center; gap: 25px; margin-bottom: 25px; flex-wrap: wrap; }
     
-    .avatar-section {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 15px;
-    }
+    .avatar-section { display: flex; flex-direction: column; align-items: center; gap: 15px; }
     
     .avatar-preview {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
+      width: 100px; height: 100px; border-radius: 50%;
       background: linear-gradient(135deg, var(--accent2), var(--accent));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 3rem;
-      border: 3px solid var(--border);
-      box-shadow: var(--shadow);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3rem; border: 3px solid var(--border); box-shadow: var(--shadow);
     }
     
-    .avatar-selector {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
+    .avatar-selector { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
     
     .avatar-option {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.8rem;
-      background: var(--bg);
-      border: 2px solid var(--border);
-      cursor: pointer;
-      transition: all 0.2s;
+      width: 50px; height: 50px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem; background: var(--bg); border: 2px solid var(--border);
+      cursor: pointer; transition: all 0.2s;
     }
-    
     .avatar-option:hover { transform: scale(1.1); border-color: var(--accent); }
+    .avatar-option.active { border-color: var(--accent); border-width: 3px; background: var(--card); }
     
-    .avatar-option.active {
-      border-color: var(--accent);
-      border-width: 3px;
-      background: var(--card);
-    }
-    
-    .profile-info {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 15px 20px;
-      align-items: center;
-      flex: 1;
-    }
-    
+    .profile-info { display: grid; grid-template-columns: auto 1fr; gap: 15px 20px; align-items: center; flex: 1; }
     .profile-label { color: var(--muted); font-weight: 500; min-width: 100px; }
     .profile-value { font-weight: 600; }
     .profile-badge { display: inline-block; padding: 4px 12px; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; }
     .badge-admin { background: linear-gradient(135deg, var(--accent2), var(--accent)); color: white; }
     .badge-user { background: var(--bg); border: 1px solid var(--border); color: var(--text); }
     
-    .email-tooltip {
-      color: var(--accent);
-      cursor: help;
-      font-weight: 700;
-      font-size: 1.2rem;
-      margin-left: 2px;
-    }
+    .email-tooltip { color: var(--accent); cursor: help; font-weight: 700; font-size: 1.2rem; margin-left: 2px; }
     
     .theme-selector { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; margin-top: 20px; }
     .theme-option {
@@ -123,30 +74,16 @@
     .theme-preview { width: 60px; height: 60px; border-radius: 50%; margin: 0 auto 12px; border: 2px solid var(--border); }
     .theme-name { font-weight: 600; margin-bottom: 5px; }
     .theme-desc { font-size: 0.8rem; color: var(--muted); }
-    .theme-hint {
-      margin-top: 20px;
-      padding: 15px;
-      background: var(--bg);
-      border-radius: 16px;
-      color: var(--muted);
-      font-size: 0.9rem;
-      text-align: center;
-    }
+    .theme-hint { margin-top: 20px; padding: 15px; background: var(--bg); border-radius: 16px; color: var(--muted); font-size: 0.9rem; text-align: center; }
     
     .btn-save { margin-top: 20px; width: 100%; justify-content: center; }
     
     .form-group { margin-bottom: 15px; }
     .form-group label { display: block; margin-bottom: 5px; color: var(--muted); }
-    
     .form-group input {
-      width: 100%;
-      padding: 12px 16px;
-      border-radius: 20px;
-      border: 1px solid var(--border);
-      background: var(--bg);
-      color: var(--text);
-      font-family: inherit;
-      font-size: 1rem;
+      width: 100%; padding: 12px 16px; border-radius: 20px;
+      border: 1px solid var(--border); background: var(--bg);
+      color: var(--text); font-family: inherit; font-size: 1rem;
     }
     
     .empty-state { text-align: center; padding: 60px 40px; background: var(--card); border: 1px solid var(--border); border-radius: 30px; }
@@ -154,51 +91,16 @@
     .empty-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 10px; }
     .empty-text { color: var(--muted); margin-bottom: 25px; }
     
-    .success-message {
-      background: rgba(34, 197, 94, 0.1);
-      border: 1px solid rgba(34, 197, 94, 0.3);
-      color: #22c55e;
-      padding: 12px 18px;
-      border-radius: 18px;
-      margin-top: 15px;
-      display: none;
-    }
-    
+    .success-message { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.3); color: #22c55e; padding: 12px 18px; border-radius: 18px; margin-top: 15px; display: none; }
     .success-message.show { display: block; }
     
-    .error-message {
-      background: rgba(239, 68, 68, 0.1);
-      border: 1px solid rgba(239, 68, 68, 0.3);
-      color: #ef4444;
-      padding: 12px 18px;
-      border-radius: 18px;
-      margin-top: 10px;
-      display: none;
-    }
-    
+    .error-message { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: #ef4444; padding: 12px 18px; border-radius: 18px; margin-top: 10px; display: none; }
     .error-message.show { display: block; }
     
-    .setting-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 15px;
-    }
-    
+    .setting-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; }
     .setting-label { font-weight: 600; margin-bottom: 5px; }
     .setting-desc { font-size: 0.85rem; color: var(--muted); }
-    
-    select.setting-select {
-      padding: 10px 16px;
-      border-radius: 20px;
-      border: 1px solid var(--border);
-      background: var(--bg);
-      color: var(--text);
-      font-family: inherit;
-      font-size: 1rem;
-      cursor: pointer;
-    }
+    select.setting-select { padding: 10px 16px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-family: inherit; font-size: 1rem; cursor: pointer; }
   </style>
 </head>
 <body id="app-body">
@@ -212,7 +114,12 @@
         <div id="themeSwitcher"></div>
         <a href="index.html" class="btn">🏠 Каталог</a>
         <a href="orders.html" class="btn">📦 Заказы</a>
-        <a href="admin.html" class="btn primary" id="adminLink" style="display: none;">🛠️ Админ</a>
+        
+        <span class="btn-wrapper" id="adminBtnWrapper" style="display: none;">
+          <a href="admin.html" class="btn primary">🛠️ Админ</a>
+          <span class="notification-dot" id="adminNotificationDot"></span>
+        </span>
+        
         <button class="btn" id="logoutBtn" style="display: none;">🚪 Выйти</button>
       </div>
     </div>
@@ -235,7 +142,7 @@
       <div id="settingsContent" style="display: none;">
         <h1 class="page-title">⚙️ Настройки</h1>
         
-        <!-- Профиль с аватаром -->
+        <!-- Профиль -->
         <div class="settings-section">
           <div class="section-title"><span>👤</span><span>Профиль</span></div>
           
@@ -244,7 +151,6 @@
               <div class="avatar-preview" id="avatarPreview">🍰</div>
               <div class="avatar-selector" id="avatarSelector"></div>
             </div>
-            
             <div class="profile-info" id="profileInfo"></div>
           </div>
           
@@ -254,18 +160,9 @@
           <!-- Смена пароля -->
           <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border);">
             <h3 style="margin-bottom: 15px;">🔒 Сменить пароль</h3>
-            <div class="form-group">
-              <label>Текущий пароль</label>
-              <input type="password" id="currentPassword" placeholder="••••••••">
-            </div>
-            <div class="form-group">
-              <label>Новый пароль</label>
-              <input type="password" id="newPassword" placeholder="••••••••">
-            </div>
-            <div class="form-group">
-              <label>Подтвердите новый пароль</label>
-              <input type="password" id="confirmNewPassword" placeholder="••••••••">
-            </div>
+            <div class="form-group"><label>Текущий пароль</label><input type="password" id="currentPassword" placeholder="••••••••"></div>
+            <div class="form-group"><label>Новый пароль</label><input type="password" id="newPassword" placeholder="••••••••"></div>
+            <div class="form-group"><label>Подтвердите новый пароль</label><input type="password" id="confirmNewPassword" placeholder="••••••••"></div>
             <button class="btn primary" id="changePasswordBtn">🔒 Сменить пароль</button>
             <div class="success-message" id="passwordSuccess">✅ Пароль изменён!</div>
             <div class="error-message" id="passwordError"></div>
@@ -277,13 +174,9 @@
           <div class="section-title"><span>🎨</span><span>Оформление</span></div>
           <p class="section-desc">Настройте внешний вид сайта под себя.</p>
           
-          <!-- Выбор темы -->
           <div class="theme-selector" id="themeSelector"></div>
-          <div class="theme-hint">
-            💡 Тему также можно быстро переключить с помощью кружков в шапке сайта.
-          </div>
+          <div class="theme-hint">💡 Тему также можно быстро переключить с помощью кружков в шапке сайта.</div>
           
-          <!-- Переключатель эмодзи-фона -->
           <div style="margin-top: 25px; padding-top: 20px; border-top: 1px solid var(--border);">
             <div class="setting-row">
               <div>
@@ -297,7 +190,6 @@
             </div>
           </div>
           
-          <!-- Выбор шрифта -->
           <div style="margin-top: 25px; padding-top: 20px; border-top: 1px solid var(--border);">
             <div class="setting-row">
               <div>
@@ -305,13 +197,13 @@
                 <div class="setting-desc">Выберите шрифт для всех страниц</div>
               </div>
               <select id="fontSelect" class="setting-select">
-                <option value="nunito">Nunito</option>
-                <option value="georgia">Georgia</option>
+                <option value="nunito">Nunito (текущий)</option>
+                <option value="georgia">Georgia (классический)</option>
                 <option value="times">Times New Roman</option>
                 <option value="arial">Arial</option>
                 <option value="verdana">Verdana</option>
                 <option value="roboto">Roboto</option>
-                <option value="greatvibes">Great Vibes</option>
+                <option value="greatvibes">Great Vibes (каллиграфический)</option>
               </select>
             </div>
           </div>
@@ -322,7 +214,7 @@
           <div class="section-title"><span>ℹ️</span><span>О сайте</span></div>
           <div class="profile-info">
             <span class="profile-label">Название</span><span class="profile-value">Уникальные десерты</span>
-            <span class="profile-label">Версия</span><span class="profile-value">2.5</span>
+            <span class="profile-label">Версия</span><span class="profile-value">2.6</span>
             <span class="profile-label">Лицензия</span><span class="profile-value">MIT</span>
             <span class="profile-label">Автор</span><span class="profile-value">Уникальные десерты</span>
           </div>
@@ -357,26 +249,19 @@
       let currentUser = null;
       let currentTheme = null;
       let selectedAvatar = '🍰';
-
       const AVATARS = ['🍰', '🧁', '🍪', '🍩', '🍫', '🍓', '🍒', '🥐', '☕', '🍵'];
 
-      // ===== ВАЛИДАЦИЯ =====
       function isValidRussianEmail(email) {
-        const allowedDomains = ['@mail.ru', '@yandex.ru'];
-        return allowedDomains.some(domain => email.toLowerCase().endsWith(domain));
+        return ['@mail.ru', '@yandex.ru'].some(d => email.toLowerCase().endsWith(d));
       }
-
       function isValidEmailFormat(email) {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(email);
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
       }
 
-      // ===== ИНИЦИАЛИЗАЦИЯ =====
       async function init() {
         SweetBakeTheme.createSwitcher('themeSwitcher');
         currentTheme = SweetBakeTheme.getCurrent();
         await loadContacts();
-        
         currentUser = await SweetBakeUtils.updateAuthUI();
         
         if (!currentUser) {
@@ -395,16 +280,16 @@
           setupEmojiToggle();
           setupFontSelector();
           
-          const adminLink = document.getElementById('adminLink');
-          if (adminLink) adminLink.style.display = currentUser.role === 'admin' ? 'inline-flex' : 'none';
+          const adminBtnWrapper = document.getElementById('adminBtnWrapper');
+          if (adminBtnWrapper) {
+            adminBtnWrapper.style.display = currentUser.role === 'admin' ? 'inline-flex' : 'none';
+            if (currentUser.role === 'admin') SweetBakeUtils.checkNewOrders();
+          }
           
           const logoutBtn = document.getElementById('logoutBtn');
           if (logoutBtn) {
             logoutBtn.style.display = 'inline-flex';
-            logoutBtn.addEventListener('click', () => {
-              SweetBakeAPI.auth.logout();
-              window.location.href = 'index.html';
-            });
+            logoutBtn.addEventListener('click', () => { SweetBakeAPI.auth.logout(); window.location.href = 'index.html'; });
           }
           
           document.getElementById('saveProfileBtn').addEventListener('click', saveProfile);
@@ -412,7 +297,6 @@
         }
       }
 
-      // ===== КОНТАКТЫ =====
       async function loadContacts() {
         try {
           const contacts = await SweetBakeAPI.api.contacts.get();
@@ -425,76 +309,44 @@
             row.innerHTML = `<span class="contact-label">${item.label}</span><span>${item.value}</span>`;
             container.appendChild(row);
           });
-        } catch (e) { console.warn('Контакты не загружены'); }
+        } catch (e) {}
       }
 
-      // ===== АВАТАР =====
       function renderAvatarSelector() {
         const container = document.getElementById('avatarSelector');
         const preview = document.getElementById('avatarPreview');
-        
-        container.innerHTML = AVATARS.map(avatar => `
-          <div class="avatar-option ${selectedAvatar === avatar ? 'active' : ''}" data-avatar="${avatar}">${avatar}</div>
-        `).join('');
-        
+        container.innerHTML = AVATARS.map(a => `<div class="avatar-option ${selectedAvatar===a?'active':''}" data-avatar="${a}">${a}</div>`).join('');
         preview.textContent = selectedAvatar;
-        
-        container.querySelectorAll('.avatar-option').forEach(option => {
-          option.addEventListener('click', () => {
-            selectedAvatar = option.dataset.avatar;
-            container.querySelectorAll('.avatar-option').forEach(opt => opt.classList.remove('active'));
-            option.classList.add('active');
+        container.querySelectorAll('.avatar-option').forEach(opt => {
+          opt.addEventListener('click', () => {
+            selectedAvatar = opt.dataset.avatar;
+            container.querySelectorAll('.avatar-option').forEach(o => o.classList.remove('active'));
+            opt.classList.add('active');
             document.getElementById('avatarPreview').textContent = selectedAvatar;
           });
         });
       }
 
-      // ===== ПРОФИЛЬ =====
       function renderProfile() {
         const container = document.getElementById('profileInfo');
-        const roleBadge = currentUser.role === 'admin' 
-          ? '<span class="profile-badge badge-admin">Администратор</span>'
-          : '<span class="profile-badge badge-user">Пользователь</span>';
-        
+        const badge = currentUser.role === 'admin' ? '<span class="profile-badge badge-admin">Администратор</span>' : '<span class="profile-badge badge-user">Пользователь</span>';
         container.innerHTML = `
-          <span class="profile-label">Имя</span>
-          <span class="profile-value">
-            <input type="text" id="profileName" value="${currentUser.name || ''}" placeholder="Ваше имя" style="width: 100%; padding: 8px 12px; border-radius: 12px; border: 1px solid var(--border); background: var(--bg); color: var(--text);">
-          </span>
-          
-          <span class="profile-label">Email <span class="email-tooltip" title="Разрешены только: @mail.ru и @yandex.ru">*</span></span>
-          <span class="profile-value">
-            <input type="email" id="profileEmail" value="${currentUser.email || ''}" placeholder="your@mail.ru" style="width: 100%; padding: 8px 12px; border-radius: 12px; border: 1px solid var(--border); background: var(--bg); color: var(--text);">
-          </span>
-          
-          <span class="profile-label">Роль</span>
-          <span class="profile-value">${roleBadge}</span>
+          <span class="profile-label">Имя</span><span class="profile-value"><input type="text" id="profileName" value="${currentUser.name||''}" placeholder="Ваше имя" style="width:100%;padding:8px 12px;border-radius:12px;border:1px solid var(--border);background:var(--bg);color:var(--text);"></span>
+          <span class="profile-label">Email <span class="email-tooltip" title="Разрешены только: @mail.ru и @yandex.ru">*</span></span><span class="profile-value"><input type="email" id="profileEmail" value="${currentUser.email||''}" placeholder="your@mail.ru" style="width:100%;padding:8px 12px;border-radius:12px;border:1px solid var(--border);background:var(--bg);color:var(--text);"></span>
+          <span class="profile-label">Роль</span><span class="profile-value">${badge}</span>
         `;
       }
 
-      // ===== СОХРАНЕНИЕ ПРОФИЛЯ =====
       async function saveProfile() {
         const newName = document.getElementById('profileName').value.trim();
         const newEmail = document.getElementById('profileEmail').value.trim();
-        
         localStorage.setItem(`avatar_${currentUser.id}`, selectedAvatar);
         
         if (newEmail && newEmail !== currentUser.email) {
-          if (!isValidEmailFormat(newEmail)) {
-            SweetBakeUtils.showToast('❌ Некорректный формат email', 'error');
-            return;
-          }
-          
-          if (!isValidRussianEmail(newEmail)) {
-            SweetBakeUtils.showToast('❌ Разрешены только email: @mail.ru или @yandex.ru', 'error');
-            return;
-          }
-          
+          if (!isValidEmailFormat(newEmail)) { SweetBakeUtils.showToast('❌ Некорректный формат email', 'error'); return; }
+          if (!isValidRussianEmail(newEmail)) { SweetBakeUtils.showToast('❌ Разрешены только: @mail.ru или @yandex.ru', 'error'); return; }
           const allUsers = await SweetBakeAPI.api.users.getAll();
-          if (allUsers.some(u => u.email.toLowerCase() === newEmail.toLowerCase() && u.id !== currentUser.id)) {
-            SweetBakeUtils.showToast('❌ Этот email уже используется', 'error');
-            return;
-          }
+          if (allUsers.some(u => u.email.toLowerCase() === newEmail.toLowerCase() && u.id !== currentUser.id)) { SweetBakeUtils.showToast('❌ Этот email уже используется', 'error'); return; }
         }
         
         const updates = {};
@@ -506,137 +358,85 @@
             const updated = await SweetBakeAPI.api.users.update(currentUser.id, { ...currentUser, ...updates });
             currentUser = updated;
             SweetBakeUtils.showToast('✅ Данные обновлены');
-          } catch (e) {
-            SweetBakeUtils.showToast('❌ Ошибка при обновлении', 'error');
-          }
+          } catch (e) { SweetBakeUtils.showToast('❌ Ошибка', 'error'); }
         }
-        
-        const successMsg = document.getElementById('saveSuccess');
-        successMsg.classList.add('show');
-        setTimeout(() => successMsg.classList.remove('show'), 3000);
+        document.getElementById('saveSuccess').classList.add('show');
+        setTimeout(() => document.getElementById('saveSuccess').classList.remove('show'), 3000);
       }
 
-      // ===== СМЕНА ПАРОЛЯ =====
       async function changePassword() {
-        const currentPassword = document.getElementById('currentPassword').value;
-        const newPassword = document.getElementById('newPassword').value;
-        const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+        const cp = document.getElementById('currentPassword').value;
+        const np = document.getElementById('newPassword').value;
+        const cn = document.getElementById('confirmNewPassword').value;
+        const err = document.getElementById('passwordError');
+        const ok = document.getElementById('passwordSuccess');
+        err.style.display = 'none'; err.classList.remove('show');
+        ok.style.display = 'none'; ok.classList.remove('show');
         
-        const errorEl = document.getElementById('passwordError');
-        const successEl = document.getElementById('passwordSuccess');
-        
-        errorEl.style.display = 'none';
-        errorEl.classList.remove('show');
-        successEl.style.display = 'none';
-        successEl.classList.remove('show');
-        
-        if (!currentPassword || !newPassword || !confirmNewPassword) {
-          errorEl.textContent = '❌ Заполните все поля';
-          errorEl.style.display = 'block'; errorEl.classList.add('show');
-          return;
-        }
-        
-        if (currentPassword !== currentUser.password) {
-          errorEl.textContent = '❌ Неверный текущий пароль';
-          errorEl.style.display = 'block'; errorEl.classList.add('show');
-          return;
-        }
-        
-        if (newPassword.length < 6) {
-          errorEl.textContent = '❌ Новый пароль должен содержать минимум 6 символов';
-          errorEl.style.display = 'block'; errorEl.classList.add('show');
-          return;
-        }
-        
-        if (newPassword !== confirmNewPassword) {
-          errorEl.textContent = '❌ Новые пароли не совпадают';
-          errorEl.style.display = 'block'; errorEl.classList.add('show');
-          return;
-        }
+        if (!cp || !np || !cn) { err.textContent = '❌ Заполните все поля'; err.style.display = 'block'; err.classList.add('show'); return; }
+        if (cp !== currentUser.password) { err.textContent = '❌ Неверный текущий пароль'; err.style.display = 'block'; err.classList.add('show'); return; }
+        if (np.length < 6) { err.textContent = '❌ Минимум 6 символов'; err.style.display = 'block'; err.classList.add('show'); return; }
+        if (np !== cn) { err.textContent = '❌ Пароли не совпадают'; err.style.display = 'block'; err.classList.add('show'); return; }
         
         try {
-          await SweetBakeAPI.api.users.update(currentUser.id, { ...currentUser, password: newPassword });
-          currentUser.password = newPassword;
-          document.getElementById('currentPassword').value = '';
-          document.getElementById('newPassword').value = '';
-          document.getElementById('confirmNewPassword').value = '';
-          successEl.style.display = 'block'; successEl.classList.add('show');
-          setTimeout(() => { successEl.style.display = 'none'; successEl.classList.remove('show'); }, 3000);
+          await SweetBakeAPI.api.users.update(currentUser.id, { ...currentUser, password: np });
+          currentUser.password = np;
+          ['currentPassword','newPassword','confirmNewPassword'].forEach(id => document.getElementById(id).value = '');
+          ok.style.display = 'block'; ok.classList.add('show');
+          setTimeout(() => { ok.style.display = 'none'; ok.classList.remove('show'); }, 3000);
           SweetBakeUtils.showToast('✅ Пароль изменён');
-        } catch (e) {
-          errorEl.textContent = '❌ Ошибка при смене пароля';
-          errorEl.style.display = 'block'; errorEl.classList.add('show');
-        }
+        } catch (e) { err.textContent = '❌ Ошибка'; err.style.display = 'block'; err.classList.add('show'); }
       }
 
-      // ===== ЭМОДЗИ =====
       function setupEmojiToggle() {
-        const emojiToggle = document.getElementById('emojiToggle');
-        const emojiToggleLabel = document.getElementById('emojiToggleLabel');
-        if (!emojiToggle) return;
-        
-        const emojiEnabled = SweetBakeTheme.isEmojiEnabled();
-        emojiToggle.checked = emojiEnabled;
-        emojiToggleLabel.textContent = emojiEnabled ? 'Выключить' : 'Включить';
-        
-        emojiToggle.addEventListener('change', () => {
-          SweetBakeTheme.toggleEmoji(emojiToggle.checked);
-          emojiToggleLabel.textContent = emojiToggle.checked ? 'Выключить' : 'Включить';
-          SweetBakeUtils.showToast(emojiToggle.checked ? '✅ Эмодзи включены' : '❌ Эмодзи выключены');
+        const toggle = document.getElementById('emojiToggle');
+        const label = document.getElementById('emojiToggleLabel');
+        if (!toggle) return;
+        const enabled = SweetBakeTheme.isEmojiEnabled();
+        toggle.checked = enabled;
+        label.textContent = enabled ? 'Выключить' : 'Включить';
+        toggle.addEventListener('change', () => {
+          SweetBakeTheme.toggleEmoji(toggle.checked);
+          label.textContent = toggle.checked ? 'Выключить' : 'Включить';
+          SweetBakeUtils.showToast(toggle.checked ? '✅ Эмодзи включены' : '❌ Эмодзи выключены');
         });
       }
 
-      // ===== ШРИФТ =====
       function setupFontSelector() {
-        const fontSelect = document.getElementById('fontSelect');
-        if (!fontSelect) return;
-        
-        const savedFont = localStorage.getItem('sweetbake_font') || 'nunito';
-        fontSelect.value = savedFont;
-        
-        fontSelect.addEventListener('change', () => {
-          const font = fontSelect.value;
-          SweetBakeFonts.apply(font);
-          SweetBakeUtils.showToast(`✅ Шрифт изменён`);
+        const select = document.getElementById('fontSelect');
+        if (!select) return;
+        select.value = localStorage.getItem('sweetbake_font') || 'nunito';
+        select.addEventListener('change', () => {
+          SweetBakeFonts.apply(select.value);
+          SweetBakeUtils.showToast('✅ Шрифт изменён');
         });
       }
 
-      // ===== ТЕМА =====
       function renderThemeSelector() {
         const container = document.getElementById('themeSelector');
         const themes = SweetBakeTheme.getList();
-        
-        container.innerHTML = themes.map(theme => {
-          const isActive = theme.id === currentTheme;
-          return `
-            <div class="theme-option ${isActive ? 'active' : ''}" data-theme="${theme.id}">
-              <div class="theme-preview" style="background: linear-gradient(145deg, ${theme.accent2}, ${theme.accent});"></div>
-              <div class="theme-name">${theme.name}</div>
-              <div class="theme-desc">${getThemeDescription(theme.id)}</div>
-            </div>
-          `;
+        container.innerHTML = themes.map(t => {
+          const active = t.id === currentTheme;
+          return `<div class="theme-option ${active?'active':''}" data-theme="${t.id}">
+            <div class="theme-preview" style="background:linear-gradient(145deg,${t.accent2},${t.accent})"></div>
+            <div class="theme-name">${t.name}</div>
+            <div class="theme-desc">${getThemeDesc(t.id)}</div>
+          </div>`;
         }).join('');
-        
-        container.querySelectorAll('.theme-option').forEach(option => {
-          option.addEventListener('click', () => {
-            const themeId = option.dataset.theme;
-            SweetBakeTheme.apply(themeId);
-            currentTheme = themeId;
-            container.querySelectorAll('.theme-option').forEach(opt => opt.classList.remove('active'));
-            option.classList.add('active');
-            SweetBakeUtils.showToast(`✅ Тема "${getThemeName(themeId)}" применена`);
+        container.querySelectorAll('.theme-option').forEach(opt => {
+          opt.addEventListener('click', () => {
+            SweetBakeTheme.apply(opt.dataset.theme);
+            currentTheme = opt.dataset.theme;
+            container.querySelectorAll('.theme-option').forEach(o => o.classList.remove('active'));
+            opt.classList.add('active');
+            SweetBakeUtils.showToast(`✅ Тема применена`);
           });
         });
       }
 
-      function getThemeDescription(id) {
-        const desc = { pink: 'Нежная розовая', brown: 'Тёплый шоколад', green: 'Свежая матча', yellow: 'Солнечный лимон', dark: 'Тёмная ночь' };
-        return desc[id] || '';
-      }
-
-      function getThemeName(id) {
-        const names = { pink: '🌸 Розовая', brown: '☕ Шоколад', green: '🌿 Матча', yellow: '🍋 Лимон', dark: '🌙 Тёмная' };
-        return names[id] || id;
+      function getThemeDesc(id) {
+        const d = { pink: 'Нежная розовая', brown: 'Тёплый шоколад', green: 'Свежая матча', yellow: 'Солнечный лимон', dark: 'Тёмная ночь' };
+        return d[id] || '';
       }
 
       init();
