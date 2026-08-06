@@ -61,7 +61,7 @@
         border-radius: 20px;
         color: var(--text);
         backdrop-filter: blur(10px);
-        z-index: 1000;
+        z-index: 10000;
         animation: slideIn 0.3s ease;
       `;
       
@@ -98,11 +98,69 @@
       
       // Обновляем приветствие
       const greetingEl = document.getElementById('userGreeting');
-      if (greetingEl) {
-        greetingEl.textContent = user ? `👤 ${user.name || user.email}` : '👤 Гость';
+      if (greetingEl && user) {
+        greetingEl.textContent = `👤 ${user.name || user.email}`;
       }
       
       return user;
+    },
+    
+    // ===== ПРОВЕРКА НОВЫХ ЗАКАЗОВ =====
+    async checkNewOrders() {
+      const session = SweetBakeAPI.auth.getSession();
+      if (!session || session.role !== 'admin') return 0;
+      
+      try {
+        const orders = await SweetBakeAPI.api.orders.getAll();
+        const newCount = orders.filter(o => o.status === 'new').length;
+        
+        // Красная точка на кнопке «Админ»
+        document.querySelectorAll('#adminNotificationDot').forEach(dot => {
+          dot.classList.toggle('show', newCount > 0);
+        });
+        
+        // Пульсация кнопки
+        document.querySelectorAll('#adminBtnWrapper').forEach(wrapper => {
+          wrapper.classList.toggle('pulse', newCount > 0);
+        });
+        
+        // Счётчик на вкладке «Заказы» в админ-панели
+        const orderBadge = document.getElementById('orderBadge');
+        if (orderBadge) {
+          if (newCount > 0) {
+            orderBadge.textContent = newCount > 99 ? '99+' : `+${newCount}`;
+            orderBadge.style.display = 'inline-block';
+          } else {
+            orderBadge.style.display = 'none';
+          }
+        }
+        
+        return newCount;
+      } catch (e) {
+        return 0;
+      }
+    },
+    
+    // ===== ЗВУК УВЕДОМЛЕНИЯ =====
+    playNotificationSound() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        
+        osc.type = 'sine';
+        osc.frequency.value = 800;
+        gain.gain.value = 0.08;
+        
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        
+        osc.start();
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+        osc.stop(ctx.currentTime + 0.3);
+      } catch (e) {
+        // Браузер не поддерживает
+      }
     }
   };
 
