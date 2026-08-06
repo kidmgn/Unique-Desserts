@@ -30,19 +30,30 @@
       font-size: 0.9rem;
     }
     
-    .tab-btn { position: relative; }
+    .tab-btn {
+      position: relative;
+    }
     
     .tab-badge {
       position: absolute;
-      top: -8px; right: -8px;
-      background: #ef4444; color: white;
-      font-size: 0.7rem; padding: 2px 6px;
-      border-radius: 12px; font-weight: 700;
+      top: -8px;
+      right: -8px;
+      background: #ef4444;
+      color: white;
+      font-size: 0.7rem;
+      padding: 2px 6px;
+      border-radius: 12px;
+      font-weight: 700;
       display: none;
     }
     
-    .tab-badge.show { display: block; }
-    .confirm-status { display: none; }
+    .tab-badge.show {
+      display: block;
+    }
+    
+    .confirm-status {
+      display: none;
+    }
   </style>
 </head>
 <body id="app-body">
@@ -115,6 +126,7 @@
         <div class="panel">
           <div class="panel-title">📦 Заказы</div>
           
+          <!-- Фильтры -->
           <div class="order-filters">
             <button class="filter-btn active" data-filter="all">Все</button>
             <button class="filter-btn" data-filter="new">Новые</button>
@@ -213,8 +225,13 @@
         } catch (e) { SweetBakeAPI.auth.logout(); window.location.href = 'login.html'; return false; }
       }
 
-      async function loadCakes() { try { currentCakes = await SweetBakeAPI.api.cakes.getAll(); renderCakesTable(); } catch (e) {} }
-      async function loadContacts() { try { currentContacts = await SweetBakeAPI.api.contacts.get(); renderContactsEditor(); renderContactsPreview(); } catch (e) {} }
+      async function loadCakes() {
+        try { currentCakes = await SweetBakeAPI.api.cakes.getAll(); renderCakesTable(); } catch (e) {}
+      }
+
+      async function loadContacts() {
+        try { currentContacts = await SweetBakeAPI.api.contacts.get(); renderContactsEditor(); renderContactsPreview(); } catch (e) {}
+      }
 
       async function loadOrders() {
         const container = document.getElementById('ordersList');
@@ -232,7 +249,9 @@
           if (newCount > 0) {
             badge.textContent = newCount > 99 ? '99+' : `+${newCount}`;
             badge.classList.add('show');
-          } else { badge.classList.remove('show'); }
+          } else {
+            badge.classList.remove('show');
+          }
         }
       }
 
@@ -240,66 +259,63 @@
         const container = document.getElementById('ordersList');
         const filtered = currentFilter === 'all' ? allOrders : allOrders.filter(o => o.status === currentFilter);
         
-        if (filtered.length === 0) { container.innerHTML = '<div class="empty-state">📭 Нет заказов</div>'; return; }
+        if (filtered.length === 0) {
+          container.innerHTML = '<div class="empty-state">📭 Нет заказов</div>';
+          return;
+        }
         
-        container.innerHTML = filtered.map(order => `
-          <div class="order-card" id="order-${order.id}">
-            <div class="order-header">
-              <h3>${order.cakeTitle}</h3>
-              <span class="order-status ${getStatusClass(order.status)}">${getStatusText(order.status)}</span>
-            </div>
-            <div class="order-info">
-              <div class="info-item"><span class="info-label">Заказчик</span><span class="info-value"><a href="#" class="user-link" data-userid="${order.userId}">${order.userEmail}</a></span></div>
-              <div class="info-item"><span class="info-label">Номер</span><span class="info-value">#${order.id.slice(-8).toUpperCase()}</span></div>
-              <div class="info-item"><span class="info-label">Сумма</span><span class="info-value">${SweetBakeUtils.formatPrice(order.price||0)}</span></div>
-            </div>
-            <div class="order-footer">
-              <span class="order-date">📅 ${SweetBakeUtils.formatDateTime(order.createdAt)}</span>
-              <div class="order-actions">
-                <select class="status-select" data-id="${order.id}">
-                  <option value="">-- Действие --</option>
-                  <option value="accepted">✅ Принять</option>
-                  <option value="processing">⚙️ Взять в работу</option>
-                  <option value="completed">🎉 Завершить</option>
-                  <option value="cancelled">❌ Отменить</option>
-                </select>
-                <button class="btn small success confirm-status" data-id="${order.id}">✓ Подтвердить</button>
-                <button class="btn small danger delete-order" data-id="${order.id}">🗑️</button>
+        container.innerHTML = filtered.map(order => {
+          const sc = getStatusClass(order.status);
+          const st = getStatusText(order.status);
+          return `
+            <div class="order-card" id="order-${order.id}">
+              <div class="order-header">
+                <h3>${order.cakeTitle}</h3>
+                <span class="order-status ${sc}">${st}</span>
+              </div>
+              <div class="order-info">
+                <div class="info-item"><span class="info-label">Заказчик</span><span class="info-value"><a href="#" class="user-link" data-userid="${order.userId}">${order.userEmail}</a></span></div>
+                <div class="info-item"><span class="info-label">Номер</span><span class="info-value">#${order.id.slice(-8).toUpperCase()}</span></div>
+                <div class="info-item"><span class="info-label">Сумма</span><span class="info-value">${SweetBakeUtils.formatPrice(order.price||0)}</span></div>
+              </div>
+              <div class="order-footer">
+                <span class="order-date">📅 ${SweetBakeUtils.formatDateTime(order.createdAt)}</span>
+                <div class="order-actions">
+                  <select class="status-select" data-id="${order.id}">
+                    <option value="">-- Действие --</option>
+                    <option value="accepted">✅ Принять</option>
+                    <option value="processing">⚙️ Взять в работу</option>
+                    <option value="completed">🎉 Завершить</option>
+                    <option value="cancelled">❌ Отменить</option>
+                  </select>
+                  <button class="btn small success confirm-status" data-id="${order.id}">✓ Подтвердить</button>
+                  <button class="btn small danger delete-order" data-id="${order.id}">🗑️</button>
+                </div>
               </div>
             </div>
-          </div>
-        `).join('');
+          `;
+        }).join('');
 
-        // Показываем кнопку подтверждения
+        // Показываем кнопку подтверждения при выборе статуса
         document.querySelectorAll('.status-select').forEach(sel => {
           sel.addEventListener('change', () => {
             const confirmBtn = document.querySelector(`.confirm-status[data-id="${sel.dataset.id}"]`);
-            if (confirmBtn) confirmBtn.style.display = sel.value ? 'inline-flex' : 'none';
+            if (confirmBtn) {
+              confirmBtn.style.display = sel.value ? 'inline-flex' : 'none';
+            }
           });
         });
 
-        // Подтверждение изменения статуса (с проверкой пароля для отмены)
+        // Подтверждение изменения статуса
         document.querySelectorAll('.confirm-status').forEach(btn => {
           btn.addEventListener('click', async () => {
             const orderId = btn.dataset.id;
             const select = document.querySelector(`.status-select[data-id="${orderId}"]`);
             const newStatus = select.value;
             
-            if (!newStatus) { SweetBakeUtils.showToast('⚠️ Выберите действие', 'error'); return; }
-            
-            // Проверка пароля для отмены
-            if (newStatus === 'cancelled') {
-              const password = prompt('🔒 Для отмены заказа введите пароль администратора:');
-              if (!password) { SweetBakeUtils.showToast('❌ Отмена отклонена', 'error'); return; }
-              
-              const session = SweetBakeAPI.auth.getSession();
-              try {
-                const adminUser = await SweetBakeAPI.api.users.get(session.userId);
-                if (!adminUser || adminUser.password !== password) {
-                  SweetBakeUtils.showToast('❌ Неверный пароль', 'error');
-                  return;
-                }
-              } catch (e) { SweetBakeUtils.showToast('❌ Ошибка проверки', 'error'); return; }
+            if (!newStatus) {
+              SweetBakeUtils.showToast('⚠️ Выберите действие', 'error');
+              return;
             }
             
             if (!confirm(`Изменить статус на «${getStatusText(newStatus)}»?`)) return;
@@ -315,53 +331,52 @@
           });
         });
 
-        // Удаление заказа (с подтверждением паролем)
-document.querySelectorAll('.delete-order').forEach(btn => {
-  btn.addEventListener('click', async () => {
-    const orderId = btn.dataset.id;
-    const order = allOrders.find(o => o.id === orderId);
-    
-    if (!order) return;
-    
-    // Проверка статуса
-    if (order.status !== 'completed' && order.status !== 'cancelled') {
-      SweetBakeUtils.showToast('❌ Нельзя удалить активный заказ. Сначала завершите или отмените его.', 'error');
-      return;
-    }
-    
-    // Запрос пароля
-    const password = prompt('🔒 Для удаления заказа введите пароль администратора:');
-    
-    if (!password) {
-      SweetBakeUtils.showToast('❌ Удаление отменено', 'error');
-      return;
-    }
-    
-    // Проверка пароля
-    const session = SweetBakeAPI.auth.getSession();
-    if (!session) {
-      SweetBakeUtils.showToast('❌ Сессия истекла', 'error');
-      return;
-    }
-    
-    try {
-      const adminUser = await SweetBakeAPI.api.users.get(session.userId);
-      
-      if (adminUser.password !== password) {
-        SweetBakeUtils.showToast('❌ Неверный пароль', 'error');
-        return;
-      }
-      
-      // Пароль верный — удаляем
-      await SweetBakeAPI.api.orders.delete(orderId);
-      SweetBakeUtils.showToast('🗑️ Заказ удалён');
-      await loadOrders();
-      
-    } catch (e) {
-      SweetBakeUtils.showToast('❌ Ошибка при удалении', 'error');
-    }
-  });
-});
+        // Удаление заказа (с проверкой статуса и паролем)
+        document.querySelectorAll('.delete-order').forEach(btn => {
+          btn.addEventListener('click', async () => {
+            const orderId = btn.dataset.id;
+            const order = allOrders.find(o => o.id === orderId);
+            
+            if (!order) return;
+            
+            // Проверка: можно удалить только завершённые или отменённые
+            if (order.status !== 'completed' && order.status !== 'cancelled') {
+              SweetBakeUtils.showToast('❌ Нельзя удалить активный заказ. Сначала завершите или отмените его.', 'error');
+              return;
+            }
+            
+            // Запрос пароля
+            const password = prompt('🔒 Для удаления заказа введите пароль администратора:');
+            
+            if (!password) {
+              SweetBakeUtils.showToast('❌ Удаление отменено', 'error');
+              return;
+            }
+            
+            try {
+              const session = SweetBakeAPI.auth.getSession();
+              if (!session) {
+                SweetBakeUtils.showToast('❌ Сессия истекла', 'error');
+                return;
+              }
+              
+              const adminUser = await SweetBakeAPI.api.users.get(session.userId);
+              
+              if (adminUser.password !== password) {
+                SweetBakeUtils.showToast('❌ Неверный пароль', 'error');
+                return;
+              }
+              
+              await SweetBakeAPI.api.orders.delete(orderId);
+              SweetBakeUtils.showToast('🗑️ Заказ удалён');
+              await loadOrders();
+              
+            } catch (e) {
+              SweetBakeUtils.showToast('❌ Ошибка при удалении', 'error');
+            }
+          });
+        });
+
         // Профиль заказчика
         document.querySelectorAll('.user-link').forEach(link => {
           link.addEventListener('click', async (e) => {
@@ -386,36 +401,51 @@ document.querySelectorAll('.delete-order').forEach(btn => {
       }
 
       function getStatusClass(s) {
-        const m = { new:'status-new', accepted:'status-accepted', processing:'status-processing', completed:'status-completed', cancelled:'status-cancelled' };
-        return m[s]||'status-new';
+        const m = { 
+          new: 'status-new', 
+          accepted: 'status-accepted', 
+          processing: 'status-processing', 
+          completed: 'status-completed', 
+          cancelled: 'status-cancelled' 
+        };
+        return m[s] || 'status-new';
       }
 
       function getStatusText(s) {
-        const m = { new:'Новый', accepted:'✅ Принято', processing:'⚙️ В работе', completed:'🎉 Завершено', cancelled:'❌ Отменено' };
-        return m[s]||'Новый';
+        const m = { 
+          new: 'Новый', 
+          accepted: '✅ Принято', 
+          processing: '⚙️ В работе', 
+          completed: '🎉 Завершено', 
+          cancelled: '❌ Отменено' 
+        };
+        return m[s] || 'Новый';
       }
 
       function renderCakesTable() {
         const tbody = document.getElementById('cakesTableBody');
-        if (currentCakes.length === 0) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Нет тортов</td></tr>'; return; }
+        if (currentCakes.length === 0) { 
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Нет тортов</td></tr>'; 
+          return; 
+        }
         tbody.innerHTML = currentCakes.map(c => `
           <tr>
-            <td>${c.media?.[0]?.url?`<img src="${c.media[0].url}" class="cake-thumb" alt="${c.title}">`:'📷'}</td>
+            <td>${c.media?.[0]?.url ? `<img src="${c.media[0].url}" class="cake-thumb" alt="${c.title}">` : '📷'}</td>
             <td><strong>${c.title}</strong><br><small style="color:var(--muted);">${c.short}</small></td>
             <td>${SweetBakeUtils.formatPrice(c.price)}</td>
             <td>${(c.ingredients||[]).slice(0,3).join(', ')}</td>
             <td><div class="actions"><button class="btn small edit-cake" data-id="${c.id}">✏️</button><button class="btn small danger delete-cake" data-id="${c.id}">🗑️</button></div></td>
           </tr>
         `).join('');
-        document.querySelectorAll('.edit-cake').forEach(b=>b.addEventListener('click',()=>editCake(b.dataset.id)));
-        document.querySelectorAll('.delete-cake').forEach(b=>b.addEventListener('click',()=>deleteCake(b.dataset.id)));
+        document.querySelectorAll('.edit-cake').forEach(b => b.addEventListener('click', () => editCake(b.dataset.id)));
+        document.querySelectorAll('.delete-cake').forEach(b => b.addEventListener('click', () => deleteCake(b.dataset.id)));
       }
 
       function renderContactsEditor() {
         const container = document.getElementById('contactsEditor');
         const items = currentContacts.items || [];
-        container.innerHTML = items.map((item,idx)=>{
-          const isFirst=idx===0,isLast=idx===items.length-1;
+        container.innerHTML = items.map((item, idx) => {
+          const isFirst = idx === 0, isLast = idx === items.length - 1;
           return `
             <div class="contact-item">
               <select data-index="${idx}" data-field="type">
@@ -431,24 +461,43 @@ document.querySelectorAll('.delete-order').forEach(btn => {
             </div>
           `;
         }).join('');
-        document.querySelectorAll('[data-field]').forEach(el=>{const h=(e)=>{currentContacts.items[e.target.dataset.index][e.target.dataset.field]=e.target.value;};el.addEventListener('change',h);el.addEventListener('input',h);});
-        document.querySelectorAll('.move-up').forEach(b=>b.addEventListener('click',()=>{const i=parseInt(b.dataset.index);if(i>0){[currentContacts.items[i],currentContacts.items[i-1]]=[currentContacts.items[i-1],currentContacts.items[i]];renderContactsEditor();}}));
-        document.querySelectorAll('.move-down').forEach(b=>b.addEventListener('click',()=>{const i=parseInt(b.dataset.index);if(i<currentContacts.items.length-1){[currentContacts.items[i],currentContacts.items[i+1]]=[currentContacts.items[i+1],currentContacts.items[i]];renderContactsEditor();}}));
-        document.querySelectorAll('.delete-contact').forEach(b=>b.addEventListener('click',()=>{currentContacts.items.splice(parseInt(b.dataset.index),1);renderContactsEditor();}));
+        
+        document.querySelectorAll('[data-field]').forEach(el => {
+          const h = (e) => { currentContacts.items[e.target.dataset.index][e.target.dataset.field] = e.target.value; };
+          el.addEventListener('change', h); el.addEventListener('input', h);
+        });
+        document.querySelectorAll('.move-up').forEach(b => b.addEventListener('click', () => { 
+          const i = parseInt(b.dataset.index); 
+          if(i>0){ [currentContacts.items[i],currentContacts.items[i-1]]=[currentContacts.items[i-1],currentContacts.items[i]]; renderContactsEditor(); } 
+        }));
+        document.querySelectorAll('.move-down').forEach(b => b.addEventListener('click', () => { 
+          const i = parseInt(b.dataset.index); 
+          if(i<currentContacts.items.length-1){ [currentContacts.items[i],currentContacts.items[i+1]]=[currentContacts.items[i+1],currentContacts.items[i]]; renderContactsEditor(); } 
+        }));
+        document.querySelectorAll('.delete-contact').forEach(b => b.addEventListener('click', () => { 
+          currentContacts.items.splice(parseInt(b.dataset.index),1); renderContactsEditor(); 
+        }));
       }
 
       function renderContactsPreview() {
-        const container = document.getElementById('footerContactsPreview'); container.innerHTML = '';
-        (currentContacts.items||[]).forEach(item=>{const row=document.createElement('div');row.className='contact-row';row.innerHTML=`<span class="contact-label">${item.label}</span><span>${item.value}</span>`;container.appendChild(row);});
+        const container = document.getElementById('footerContactsPreview');
+        container.innerHTML = '';
+        (currentContacts.items||[]).forEach(item => {
+          const row = document.createElement('div'); row.className = 'contact-row';
+          row.innerHTML = `<span class="contact-label">${item.label}</span><span>${item.value}</span>`;
+          container.appendChild(row);
+        });
       }
 
       function renderIngredientsList() {
-        document.getElementById('ingredientsList').innerHTML = tempIngredients.map(i=>`<span class="ingredient-item">${i} <button type="button" onclick="this.parentElement.remove();window.tempIngredients=window.tempIngredients.filter(x=>x!=='${i}');">✕</button></span>`).join('');
+        document.getElementById('ingredientsList').innerHTML = tempIngredients.map(i => 
+          `<span class="ingredient-item">${i} <button type="button" onclick="this.parentElement.remove();window.tempIngredients=window.tempIngredients.filter(x=>x!=='${i}');">✕</button></span>`
+        ).join('');
         window.tempIngredients = tempIngredients;
       }
 
       function renderMediaList() {
-        document.getElementById('mediaList').innerHTML = tempMedia.map((m,idx)=>`
+        document.getElementById('mediaList').innerHTML = tempMedia.map((m,idx) => `
           <div class="media-item">
             <select onchange="window.tempMedia[${idx}].type=this.value"><option value="image" ${m.type==='image'?'selected':''}>🖼️ Фото</option><option value="video" ${m.type==='video'?'selected':''}>🎬 Видео</option></select>
             <input type="text" value="${m.url}" placeholder="URL" onchange="window.tempMedia[${idx}].url=this.value">
@@ -459,58 +508,161 @@ document.querySelectorAll('.delete-order').forEach(btn => {
       }
 
       function editCake(id) {
-        const cake = currentCakes.find(c=>c.id===id); if(!cake)return;
-        editingCakeId=id;
-        document.getElementById('modalTitle').textContent='✏️ Редактировать торт';
-        document.getElementById('cakeId').value=id;
-        document.getElementById('cakeTitle').value=cake.title;
-        document.getElementById('cakePrice').value=cake.price;
-        document.getElementById('cakeShort').value=cake.short;
-        document.getElementById('cakeDescription').value=cake.description||'';
-        tempIngredients=[...(cake.ingredients||[])]; tempMedia=[...(cake.media||[])];
-        renderIngredientsList(); renderMediaList();
+        const cake = currentCakes.find(c => c.id === id); 
+        if (!cake) return;
+        editingCakeId = id;
+        document.getElementById('modalTitle').textContent = '✏️ Редактировать торт';
+        document.getElementById('cakeId').value = id;
+        document.getElementById('cakeTitle').value = cake.title;
+        document.getElementById('cakePrice').value = cake.price;
+        document.getElementById('cakeShort').value = cake.short;
+        document.getElementById('cakeDescription').value = cake.description||'';
+        tempIngredients = [...(cake.ingredients||[])]; 
+        tempMedia = [...(cake.media||[])];
+        renderIngredientsList(); 
+        renderMediaList();
         document.getElementById('cakeModal').classList.add('active');
       }
 
       async function deleteCake(id) {
-        if(!confirm('Удалить торт?'))return;
-        try{await SweetBakeAPI.api.cakes.delete(id);SweetBakeUtils.showToast('✅ Торт удалён');await loadCakes();}catch(e){SweetBakeUtils.showToast('❌ Ошибка','error');}
+        if (!confirm('Удалить торт?')) return;
+        try { 
+          await SweetBakeAPI.api.cakes.delete(id); 
+          SweetBakeUtils.showToast('✅ Торт удалён'); 
+          await loadCakes(); 
+        } catch (e) { SweetBakeUtils.showToast('❌ Ошибка', 'error'); }
       }
 
       async function saveCake(data) {
-        try{
-          if(editingCakeId){await SweetBakeAPI.api.cakes.update(editingCakeId,data);SweetBakeUtils.showToast('✅ Торт обновлён');}
-          else{data.id=SweetBakeUtils.generateId('cake_');await SweetBakeAPI.api.cakes.create(data);SweetBakeUtils.showToast('✅ Торт добавлен');}
-          document.getElementById('cakeModal').classList.remove('active');await loadCakes();
-        }catch(e){SweetBakeUtils.showToast('❌ Ошибка','error');}
+        try {
+          if (editingCakeId) { 
+            await SweetBakeAPI.api.cakes.update(editingCakeId, data); 
+            SweetBakeUtils.showToast('✅ Торт обновлён'); 
+          } else { 
+            data.id = SweetBakeUtils.generateId('cake_'); 
+            await SweetBakeAPI.api.cakes.create(data); 
+            SweetBakeUtils.showToast('✅ Торт добавлен'); 
+          }
+          document.getElementById('cakeModal').classList.remove('active'); 
+          await loadCakes();
+        } catch (e) { SweetBakeUtils.showToast('❌ Ошибка', 'error'); }
       }
 
       async function saveContacts() {
-        try{await SweetBakeAPI.api.contacts.update(currentContacts);SweetBakeUtils.showToast('✅ Контакты сохранены');renderContactsPreview();}catch(e){SweetBakeUtils.showToast('❌ Ошибка','error');}
+        try { 
+          await SweetBakeAPI.api.contacts.update(currentContacts); 
+          SweetBakeUtils.showToast('✅ Контакты сохранены'); 
+          renderContactsPreview(); 
+        } catch (e) { SweetBakeUtils.showToast('❌ Ошибка', 'error'); }
       }
 
       async function init() {
         SweetBakeTheme.createSwitcher('themeSwitcher');
-        if(!await checkAccess())return;
-        await loadCakes(); await loadContacts(); await loadOrders();
+        if (!await checkAccess()) return;
         
-        document.querySelectorAll('.tab-btn').forEach(btn=>{btn.addEventListener('click',()=>{document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));btn.classList.add('active');document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');if(btn.dataset.tab==='orders')loadOrders();});});
-        document.querySelectorAll('.filter-btn').forEach(btn=>{btn.addEventListener('click',()=>{document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');currentFilter=btn.dataset.filter;renderFilteredOrders();});});
+        await loadCakes(); 
+        await loadContacts(); 
+        await loadOrders();
+        
+        // Табы
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
+            if (btn.dataset.tab === 'orders') loadOrders();
+          });
+        });
 
-        document.getElementById('logoutBtn').addEventListener('click',()=>{SweetBakeAPI.auth.logout();window.location.href='index.html';});
-        document.getElementById('addCakeBtn').addEventListener('click',()=>{editingCakeId=null;document.getElementById('modalTitle').textContent='🍰 Добавить торт';document.getElementById('cakeForm').reset();document.getElementById('cakeId').value='';tempIngredients=[];tempMedia=[];renderIngredientsList();renderMediaList();document.getElementById('cakeModal').classList.add('active');});
-        document.getElementById('addIngredientBtn').addEventListener('click',()=>{const v=document.getElementById('newIngredient').value.trim();if(v&&!tempIngredients.includes(v)){tempIngredients.push(v);renderIngredientsList();document.getElementById('newIngredient').value='';}});
-        document.getElementById('addMediaBtn').addEventListener('click',()=>{tempMedia.push({type:'image',url:''});renderMediaList();});
-        document.getElementById('cakeForm').addEventListener('submit',e=>{e.preventDefault();saveCake({title:document.getElementById('cakeTitle').value,price:parseInt(document.getElementById('cakePrice').value),short:document.getElementById('cakeShort').value,description:document.getElementById('cakeDescription').value,ingredients:tempIngredients,media:tempMedia.filter(m=>m.url.trim())});});
-        document.getElementById('cancelModalBtn').addEventListener('click',()=>document.getElementById('cakeModal').classList.remove('active'));
-        document.getElementById('addContactBtn').addEventListener('click',()=>{currentContacts.items.push({id:SweetBakeUtils.generateId('c_'),type:'phone',label:'Новый контакт',value:''});renderContactsEditor();});
-        document.getElementById('saveContactsBtn').addEventListener('click',saveContacts);
-        document.getElementById('cakeModal').addEventListener('click',e=>{if(e.target.classList.contains('modal'))document.getElementById('cakeModal').classList.remove('active');});
-        document.getElementById('closeUserModal').addEventListener('click',()=>document.getElementById('userModal').classList.remove('active'));
-        document.getElementById('userModal').addEventListener('click',e=>{if(e.target.classList.contains('user-modal'))document.getElementById('userModal').classList.remove('active');});
+        // Фильтры
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentFilter = btn.dataset.filter;
+            renderFilteredOrders();
+          });
+        });
+
+        // Кнопки
+        document.getElementById('logoutBtn').addEventListener('click', () => { 
+          SweetBakeAPI.auth.logout(); 
+          window.location.href = 'index.html'; 
+        });
+        
+        document.getElementById('addCakeBtn').addEventListener('click', () => {
+          editingCakeId = null; 
+          document.getElementById('modalTitle').textContent = '🍰 Добавить торт';
+          document.getElementById('cakeForm').reset(); 
+          document.getElementById('cakeId').value = '';
+          tempIngredients = []; 
+          tempMedia = []; 
+          renderIngredientsList(); 
+          renderMediaList();
+          document.getElementById('cakeModal').classList.add('active');
+        });
+        
+        document.getElementById('addIngredientBtn').addEventListener('click', () => {
+          const v = document.getElementById('newIngredient').value.trim();
+          if (v && !tempIngredients.includes(v)) { 
+            tempIngredients.push(v); 
+            renderIngredientsList(); 
+            document.getElementById('newIngredient').value = ''; 
+          }
+        });
+        
+        document.getElementById('addMediaBtn').addEventListener('click', () => { 
+          tempMedia.push({type:'image',url:''}); 
+          renderMediaList(); 
+        });
+        
+        document.getElementById('cakeForm').addEventListener('submit', e => {
+          e.preventDefault();
+          saveCake({
+            title: document.getElementById('cakeTitle').value,
+            price: parseInt(document.getElementById('cakePrice').value),
+            short: document.getElementById('cakeShort').value,
+            description: document.getElementById('cakeDescription').value,
+            ingredients: tempIngredients,
+            media: tempMedia.filter(m => m.url.trim())
+          });
+        });
+        
+        document.getElementById('cancelModalBtn').addEventListener('click', () => 
+          document.getElementById('cakeModal').classList.remove('active')
+        );
+        
+        document.getElementById('addContactBtn').addEventListener('click', () => {
+          currentContacts.items.push({ 
+            id: SweetBakeUtils.generateId('c_'), 
+            type:'phone', 
+            label:'Новый контакт', 
+            value:'' 
+          });
+          renderContactsEditor();
+        });
+        
+        document.getElementById('saveContactsBtn').addEventListener('click', saveContacts);
+        
+        document.getElementById('cakeModal').addEventListener('click', e => { 
+          if (e.target.classList.contains('modal')) 
+            document.getElementById('cakeModal').classList.remove('active'); 
+        });
+        
+        document.getElementById('closeUserModal').addEventListener('click', () => 
+          document.getElementById('userModal').classList.remove('active')
+        );
+        
+        document.getElementById('userModal').addEventListener('click', e => { 
+          if (e.target.classList.contains('user-modal')) 
+            document.getElementById('userModal').classList.remove('active'); 
+        });
       }
 
-      window.tempIngredients=tempIngredients; window.tempMedia=tempMedia; window.renderMediaList=renderMediaList;
+      window.tempIngredients = tempIngredients; 
+      window.tempMedia = tempMedia; 
+      window.renderMediaList = renderMediaList;
       init();
     })();
   </script>
