@@ -862,3 +862,20 @@ textarea::-webkit-scrollbar-thumb,
   padding: 40px;
   color: var(--muted);
 }
+
+/* ===== СТИЛИ ДЛЯ SELECT (ВЫПАДАЮЩИЕ СПИСКИ) ===== */
+select.setting-select {
+  padding: 10px 16px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--bg) !important;
+  color: var(--text) !important;
+  font-family: inherit;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+select.setting-select option {
+  background: var(--bg);
+  color: var(--text);
+}
