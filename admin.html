@@ -331,51 +331,59 @@
           });
         });
 
-        // Удаление заказа (с проверкой статуса и паролем)
-        document.querySelectorAll('.delete-order').forEach(btn => {
-          btn.addEventListener('click', async () => {
-            const orderId = btn.dataset.id;
-            const order = allOrders.find(o => o.id === orderId);
-            
-            if (!order) return;
-            
-            // Проверка: можно удалить только завершённые или отменённые
-            if (order.status !== 'completed' && order.status !== 'cancelled') {
-              SweetBakeUtils.showToast('❌ Нельзя удалить активный заказ. Сначала завершите или отмените его.', 'error');
-              return;
-            }
-            
-            // Запрос пароля
-            const password = prompt('🔒 Для удаления заказа введите пароль администратора:');
-            
-            if (!password) {
-              SweetBakeUtils.showToast('❌ Удаление отменено', 'error');
-              return;
-            }
-            
-            try {
-              const session = SweetBakeAPI.auth.getSession();
-              if (!session) {
-                SweetBakeUtils.showToast('❌ Сессия истекла', 'error');
-                return;
-              }
-              
-              const adminUser = await SweetBakeAPI.api.users.get(session.userId);
-              
-              if (adminUser.password !== password) {
-                SweetBakeUtils.showToast('❌ Неверный пароль', 'error');
-                return;
-              }
-              
-              await SweetBakeAPI.api.orders.delete(orderId);
-              SweetBakeUtils.showToast('🗑️ Заказ удалён');
-              await loadOrders();
-              
-            } catch (e) {
-              SweetBakeUtils.showToast('❌ Ошибка при удалении', 'error');
-            }
-          });
-        });
+        // Удаление заказа
+document.querySelectorAll('.delete-order').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const orderId = btn.dataset.id;
+    const order = allOrders.find(o => o.id === orderId);
+    
+    if (!order) return;
+    
+    // Если заказ активный — нужен пароль
+    if (order.status === 'new' || order.status === 'accepted' || order.status === 'processing') {
+      const password = prompt('🔒 Заказ активен! Для удаления введите пароль администратора:');
+      
+      if (!password) {
+        SweetBakeUtils.showToast('❌ Удаление отменено', 'error');
+        return;
+      }
+      
+      try {
+        const session = SweetBakeAPI.auth.getSession();
+        if (!session) {
+          SweetBakeUtils.showToast('❌ Сессия истекла', 'error');
+          return;
+        }
+        
+        const adminUser = await SweetBakeAPI.api.users.get(session.userId);
+        
+        if (adminUser.password !== password) {
+          SweetBakeUtils.showToast('❌ Неверный пароль', 'error');
+          return;
+        }
+        
+        await SweetBakeAPI.api.orders.delete(orderId);
+        SweetBakeUtils.showToast('🗑️ Заказ удалён');
+        await loadOrders();
+        
+      } catch (e) {
+        SweetBakeUtils.showToast('❌ Ошибка при удалении', 'error');
+      }
+      return;
+    }
+    
+    // Заказ завершён или отменён — удаляем сразу
+    if (!confirm('Удалить заказ?')) return;
+    
+    try {
+      await SweetBakeAPI.api.orders.delete(orderId);
+      SweetBakeUtils.showToast('🗑️ Заказ удалён');
+      await loadOrders();
+    } catch (e) {
+      SweetBakeUtils.showToast('❌ Ошибка при удалении', 'error');
+    }
+  });
+});
 
         // Профиль заказчика
         document.querySelectorAll('.user-link').forEach(link => {
