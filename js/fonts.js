@@ -9,31 +9,24 @@
     arial: "Arial, sans-serif",
     verdana: "Verdana, sans-serif",
     roboto: "'Roboto', sans-serif",
-    greatvibes: "'Great Vibes', cursive"
+    playfair: "'Playfair Display', serif"
   };
 
   function applyFont(fontName) {
+    // Если выбранный шрифт не найден — используем Nunito
     const font = FONTS[fontName] || FONTS.nunito;
-    
-    // Удаляем старый стиль
+
+    // Удаляем старый динамический стиль
     const oldStyle = document.getElementById('dynamic-font-style');
     if (oldStyle) oldStyle.remove();
-    
-    // Создаём новый стиль
+
+    // Создаём новый стиль с максимальным приоритетом
     const style = document.createElement('style');
     style.id = 'dynamic-font-style';
     style.textContent = `* { font-family: ${font} !important; }`;
     document.head.appendChild(style);
-    
-    // Для каллиграфических шрифтов — шире буквы, обычный размер
-    if (fontName === 'greatvibes') {
-      document.body.style.letterSpacing = '0.5px';
-      document.body.style.fontSize = '';
-    } else {
-      document.body.style.letterSpacing = '';
-      document.body.style.fontSize = '';
-    }
-    
+
+    // Сохраняем выбор
     localStorage.setItem('sweetbake_font', fontName);
   }
 
