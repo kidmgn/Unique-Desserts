@@ -454,13 +454,12 @@
         }
       }
 
-      async function handleOrder() {
+            async function handleOrder() {
         if (!currentUser) {
           if (confirm('Для заказа необходимо войти. Перейти на страницу входа?')) window.location.href = 'login.html';
           return;
         }
         if (!currentCake) return;
-        
         try {
           await SweetBakeAPI.api.orders.create({
             id: SweetBakeUtils.generateId('o_'),
@@ -472,8 +471,30 @@
             createdAt: Date.now(),
             price: currentCake.price
           });
+
           SweetBakeUtils.showToast(`🎉 Заказ на "${currentCake.title}" оформлен!`);
-        } catch (e) { SweetBakeUtils.showToast('❌ Ошибка при оформлении заказа', 'error'); }
+
+          // Проверка на юбилейный заказ
+          const allOrders = await SweetBakeAPI.api.orders.getAll();
+          const totalOrders = allOrders.length;
+          const isMilestone = totalOrders >= 10 && Math.log10(totalOrders) % 1 === 0;
+
+          if (isMilestone) {
+            // Уведомление для пользователя
+            SweetBakeUtils.showToast(`🏆 Поздравляем! Ваш заказ стал юбилейным — №${totalOrders}!`);
+
+            // Сохраняем уведомление для админа
+            const notifKey = 'sweetbake_milestone_notifications';
+            const notifications = JSON.parse(localStorage.getItem(notifKey) || '[]');
+            notifications.push({
+              message: `🏆 Юбилейный заказ №${totalOrders} от ${currentUser.email}`,
+              date: Date.now()
+            });
+            localStorage.setItem(notifKey, JSON.stringify(notifications));
+          }
+        } catch (e) {
+          SweetBakeUtils.showToast('❌ Ошибка при оформлении заказа', 'error');
+        }
       }
 
       init();
