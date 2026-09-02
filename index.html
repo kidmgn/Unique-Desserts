@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Уникальные десерты — Каталог</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23fff5f5'/><path d='M20 60 L30 40 L40 50 L50 30 L60 50 L70 40 L80 60 L80 70 L20 70 Z' fill='%23ff8fa3'/><rect x='25' y='70' width='50' height='10' rx='3' fill='%23d4a373'/><circle cx='50' cy='22' r='8' fill='%23d00000'/><path d='M50 14 Q55 5 60 14' stroke='%23333' stroke-width='2' fill='none'/></svg>">
+  <title>🍰 Уникальные десерты — Каталог</title>
 
-  <!-- Блокирующий скрипт для темы (без favicon) -->
+  <!-- Блокирующий скрипт для темы -->
   <script>
     (function() {
       var theme = localStorage.getItem('sweetbake_theme');
@@ -97,16 +96,21 @@
     <section class="hero-full" id="home">
       <div class="hero-parallax" id="heroParallax">
         <img
-  src="https://images.unsplash.com/photo-1551218808-94e220e084d2?q=80&w=1600&auto=format&fit=crop"
-  alt="Красивые торты ручной работы"
-  loading="eager"
-/>
+          src="https://images.unsplash.com/photo-1551218808-94e220e084d2?q=80&w=1600&auto=format&fit=crop"
+          alt="Элегантная витрина с десертами"
+          loading="eager"
+        />
       </div>
       <div class="hero-overlay hero-overlay-dark"></div>
       <div class="hero-overlay hero-overlay-accent"></div>
       <div class="hero-circle hero-circle-1"></div>
       <div class="hero-circle hero-circle-2"></div>
       <div class="hero-circle hero-circle-3"></div>
+
+      <!-- Дополнительные узоры -->
+      <div class="hero-pattern hero-pattern-dots"></div>
+      <div class="hero-pattern hero-pattern-ring"></div>
+      <div class="hero-pattern hero-pattern-wave"></div>
 
       <div class="hero-content">
         <div class="hero-badge animate-fade-in">
@@ -413,15 +417,6 @@
         } catch (e) {}
       }
 
-      function formatOrdersCount(count) {
-        if (count < 1000) return String(count);
-        let magnitude = 1000;
-        while (count >= magnitude * 10) {
-          magnitude *= 10;
-        }
-        return magnitude + '+';
-      }
-
       async function loadHomeContent() {
         try {
           const homeContent = await SweetBakeAPI.api.homeContent.get();
@@ -431,16 +426,15 @@
           const ordersCount = orders.length;
           const avgRating = reviews.length > 0 ? (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1) : '5.0';
 
-                    const heroStats = document.querySelector('.hero-stats');
+          const heroStats = document.querySelector('.hero-stats');
           if (heroStats) {
-            const formattedOrders = formatOrdersCount(ordersCount);
             heroStats.innerHTML = `
               <div class="hero-stat">
                 <div class="hero-stat-value">${homeContent.hero.recipesValue || '20+'}</div>
                 <div class="hero-stat-label">${homeContent.hero.recipesLabel || 'рецептов'}</div>
               </div>
               <div class="hero-stat">
-                <div class="hero-stat-value">${formattedOrders}</div>
+                <div class="hero-stat-value">${ordersCount}+</div>
                 <div class="hero-stat-label">заказов</div>
               </div>
               <div class="hero-stat">
@@ -448,6 +442,11 @@
                 <div class="hero-stat-label">рейтинг</div>
               </div>
             `;
+          }
+
+          const heroImg = document.querySelector('.hero-parallax img');
+          if (heroImg) {
+            heroImg.src = homeContent.hero.bg || 'https://images.unsplash.com/photo-1551218808-94e220e084d2?q=80&w=1600&auto=format&fit=crop';
           }
 
           const aboutSubtitle = document.querySelector('.about-subtitle');
@@ -551,23 +550,32 @@
 
       function initParallaxAndScrollAnimations() {
         const hero = document.getElementById('home');
-const heroParallax = document.getElementById('heroParallax');
-const heroImg = heroParallax?.querySelector('img');
+        const heroImg = document.querySelector('.hero-parallax img');
+        const patterns = document.querySelectorAll('.hero-pattern, .hero-circle');
 
-if (hero && heroImg) {
-  hero.addEventListener('mousemove', (e) => {
-    const rect = hero.getBoundingClientRect();
-    const x = e.clientX - rect.left - rect.width / 2;
-    const y = e.clientY - rect.top - rect.height / 2;
+        if (hero) {
+          hero.addEventListener('mousemove', (e) => {
+            const rect = hero.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
 
-    // Двигаем фон в противоположную сторону от курсора
-    heroImg.style.transform = `scale(1.1) translate(${x * -0.02}px, ${y * -0.02}px)`;
-  });
+            // Фон двигается слабо
+            if (heroImg) {
+              heroImg.style.transform = `scale(1.1) translate(${x * -0.01}px, ${y * -0.01}px)`;
+            }
 
-  hero.addEventListener('mouseleave', () => {
-    heroImg.style.transform = 'scale(1.1) translate(0, 0)';
-  });
-}
+            // Узоры — с разной амплитудой для глубины
+            patterns.forEach((pattern, i) => {
+              const depth = 0.03 + (i * 0.01);
+              pattern.style.transform = `translate(${x * depth}px, ${y * depth}px)`;
+            });
+          });
+
+          hero.addEventListener('mouseleave', () => {
+            if (heroImg) heroImg.style.transform = 'scale(1.1) translate(0, 0)';
+            patterns.forEach(p => p.style.transform = 'translate(0, 0)');
+          });
+        }
 
         const observer = new IntersectionObserver((entries) => {
           entries.forEach(entry => {
