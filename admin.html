@@ -4,8 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Админ-панель | Уникальные десерты</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23fff5f5'/><path d='M20 60 L30 40 L40 50 L50 30 L60 50 L70 40 L80 60 L80 70 L20 70 Z' fill='%23ff8fa3'/><rect x='25' y='70' width='50' height='10' rx='3' fill='%23d4a373'/><circle cx='50' cy='22' r='8' fill='%23d00000'/><path d='M50 14 Q55 5 60 14' stroke='%23333' stroke-width='2' fill='none'/></svg>">
-  
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' x='-10' font-size='90'%3E🍰%3C/text%3E%3C/svg%3E">
+
+  <!-- Блокирующий скрипт для темы -->
   <script>
     (function() {
       var theme = localStorage.getItem('sweetbake_theme');
@@ -15,7 +16,7 @@
       }
     })();
   </script>
-  
+
   <link rel="stylesheet" href="css/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
   <style>
@@ -29,9 +30,9 @@
       font-family: inherit;
       font-size: 0.9rem;
     }
-    
+
     .tab-btn { position: relative; }
-    
+
     .tab-badge {
       position: absolute;
       top: -8px; right: -8px;
@@ -196,11 +197,13 @@
                 <label>Подпись для рецептов</label>
                 <input type="text" id="heroRecipesLabel" placeholder="рецептов">
               </div>
-                        </div>
-            <div style="margin-top: 20px; display: flex; gap: 10px;">
-              <button class="btn" id="previewHeroBtn">👁 Предпросмотр</button>
-              <button class="btn primary" id="saveHeroBtn">💾 Сохранить</button>
             </div>
+            <div class="form-group">
+              <label>Фоновое изображение Hero</label>
+              <input type="text" id="heroBg" placeholder="https://...jpg">
+            </div>
+            <button class="btn" id="previewHeroBtn">👁 Предпросмотр</button>
+            <button class="btn primary" id="saveHeroBtn">💾 Сохранить</button>
           </div>
           <hr class="section-divider">
 
@@ -221,7 +224,7 @@
             <h4 style="margin-top:20px">Статистика</h4>
             <div id="aboutStatsList"></div>
             <button class="btn" id="addAboutStatBtn">➕ Добавить статистику</button>
-            <div style="margin-top:20px; display: flex; gap: 10px;">
+            <div style="margin-top:15px; display: flex; gap: 10px;">
               <button class="btn" id="previewAboutBtn">👁 Предпросмотр</button>
               <button class="btn primary" id="saveAboutBtn">💾 Сохранить</button>
             </div>
@@ -243,7 +246,7 @@
               <div class="form-group"><label>Ссылка на фото 2</label><input type="text" id="seasonalImage2"></div>
             </div>
             <div class="form-group"><label>Ссылка на фон</label><input type="text" id="seasonalBg"></div>
-            <div style="margin-top: 20px; display: flex; gap: 10px;">
+            <div style="display: flex; gap: 10px;">
               <button class="btn" id="previewSeasonalBtn">👁 Предпросмотр</button>
               <button class="btn primary" id="saveSeasonalBtn">💾 Сохранить</button>
             </div>
@@ -445,6 +448,7 @@
         // Hero
         document.getElementById('heroRecipesValue').value = homeContent.hero?.recipesValue || '';
         document.getElementById('heroRecipesLabel').value = homeContent.hero?.recipesLabel || '';
+        document.getElementById('heroBg').value = homeContent.hero?.bg || '';
         // About
         document.getElementById('aboutSubtitle').value = homeContent.about?.subtitle || '';
         document.getElementById('aboutTitlePart1').value = homeContent.about?.titlePart1 || '';
@@ -536,10 +540,11 @@
         if (section === 'hero') {
           const recipesValue = document.getElementById('heroRecipesValue').value || '20+';
           const recipesLabel = document.getElementById('heroRecipesLabel').value || 'рецептов';
+          const bg = document.getElementById('heroBg').value || '';
           content.innerHTML = `
-            <div class="hero-full" style="min-height: 500px; border-radius: 30px; margin-bottom: 0;">
+            <div class="hero-full" style="min-height: 500px; border-radius: 30px; margin-bottom: 0; position: relative; overflow: hidden;">
               <div class="hero-parallax" style="position:absolute; inset:0;">
-                <img src="https://images.pexels.com/photos/34073612/pexels-photo-34073612.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=1400&w=1200" style="width:100%;height:100%;object-fit:cover;">
+                <img src="${bg}" style="width:100%;height:100%;object-fit:cover;" />
               </div>
               <div class="hero-overlay hero-overlay-dark" style="position:absolute;inset:0;background:linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0.6));"></div>
               <div class="hero-overlay hero-overlay-accent" style="position:absolute;inset:0;background:linear-gradient(to right, var(--accent), transparent);opacity:0.3;"></div>
@@ -578,7 +583,7 @@
           const titleAccent = document.getElementById('aboutTitleAccent').value || 'в каждом десерте';
           const desc1 = document.getElementById('aboutDesc1').value || '';
           const desc2 = document.getElementById('aboutDesc2').value || '';
-          const image = document.getElementById('aboutImage').value || 'https://images.pexels.com/photos/19499006/pexels-photo-19499006.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=700';
+          const image = document.getElementById('aboutImage').value || '';
           const values = homeContent.about.values || [];
           const stats = homeContent.aboutStats || [];
 
@@ -678,6 +683,7 @@
         homeContent.hero = homeContent.hero || {};
         homeContent.hero.recipesValue = document.getElementById('heroRecipesValue').value;
         homeContent.hero.recipesLabel = document.getElementById('heroRecipesLabel').value;
+        homeContent.hero.bg = document.getElementById('heroBg').value;
         saveHomeContent();
       });
       document.getElementById('saveAboutBtn').addEventListener('click', () => {
@@ -1001,14 +1007,14 @@
         SweetBakeTheme.createSwitcher('themeSwitcher');
         if (!await checkAccess()) return;
         await loadCakes(); await loadCategories(); await loadContacts(); await loadOrders(); await loadHomeContent();
-		
-		 // Показать юбилейные уведомления
-  const notifKey = 'sweetbake_milestone_notifications';
-  const notifications = JSON.parse(localStorage.getItem(notifKey) || '[]');
-  if (notifications.length > 0) {
-    notifications.forEach(n => SweetBakeUtils.showToast(n.message));
-    localStorage.removeItem(notifKey);
-  }
+
+        // Показать юбилейные уведомления
+        const notifKey = 'sweetbake_milestone_notifications';
+        const notifications = JSON.parse(localStorage.getItem(notifKey) || '[]');
+        if (notifications.length > 0) {
+          notifications.forEach(n => SweetBakeUtils.showToast(n.message));
+          localStorage.removeItem(notifKey);
+        }
 
         document.querySelectorAll('.tab-btn').forEach(btn => {
           btn.addEventListener('click', () => {
