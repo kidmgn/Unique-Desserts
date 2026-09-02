@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="ru">
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Great+Vibes&display=swap" rel="stylesheet">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Регистрация | Уникальные десерты</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' x='-10' font-size='90'>📝</text></svg>">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23fff5f5'/><path d='M20 60 L30 40 L40 50 L50 30 L60 50 L70 40 L80 60 L80 70 L20 70 Z' fill='%23ff8fa3'/><rect x='25' y='70' width='50' height='10' rx='3' fill='%23d4a373'/><circle cx='50' cy='22' r='8' fill='%23d00000'/><path d='M50 14 Q55 5 60 14' stroke='%23333' stroke-width='2' fill='none'/></svg>">
   
   <script>
     (function() {
@@ -18,10 +17,9 @@
   </script>
   
   <link rel="stylesheet" href="css/style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
   <style>
     .auth-container { max-width: 450px; margin: 40px auto; }
-    
     .auth-panel {
       background: var(--card);
       border: 1px solid var(--border);
@@ -30,16 +28,11 @@
       backdrop-filter: blur(8px);
       box-shadow: var(--shadow);
     }
-    
     .auth-title { font-size: 2rem; font-weight: 700; margin-bottom: 8px; text-align: center; }
     .auth-subtitle { text-align: center; color: var(--muted); margin-bottom: 28px; }
-    
     .auth-form { display: flex; flex-direction: column; gap: 22px; }
-    
     .form-group { display: flex; flex-direction: column; gap: 8px; }
-    
     .form-group label { color: var(--text); font-weight: 600; font-size: 0.95rem; margin-left: 5px; }
-    
     .form-group input {
       width: 100%;
       padding: 15px 18px;
@@ -52,20 +45,16 @@
       transition: border-color 0.2s, box-shadow 0.2s;
       outline: none;
     }
-    
     .form-group input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(249, 168, 212, 0.15); }
-    
     .form-group input::placeholder { color: var(--muted); opacity: 0.6; font-size: 0.9rem; }
-    
-    .password-hint { font-size: 0.8rem; color: var(--muted); margin-top: 5px; margin-left: 5px; }
-    
-    .email-hint { font-size: 0.8rem; color: var(--muted); margin-top: 5px; margin-left: 5px; }
-    
+    .password-hint, .email-hint { font-size: 0.8rem; color: var(--muted); margin-left: 5px; margin-top: 5px; }
     .btn-register {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       width: 100%;
       padding: 16px;
       font-size: 1.1rem;
-      justify-content: center;
       margin-top: 10px;
       background: linear-gradient(135deg, var(--accent2), var(--accent));
       border: none;
@@ -75,15 +64,11 @@
       cursor: pointer;
       transition: transform 0.2s, box-shadow 0.2s;
     }
-    
     .btn-register:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
     .btn-register:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-    
     .auth-footer { text-align: center; margin-top: 25px; padding-top: 20px; border-top: 1px solid var(--border); }
-    
     .auth-footer a { color: var(--accent); font-weight: 700; text-decoration: none; transition: opacity 0.2s; }
     .auth-footer a:hover { opacity: 0.8; text-decoration: underline; }
-    
     .error-message {
       background: rgba(239, 68, 68, 0.1);
       border: 1px solid rgba(239, 68, 68, 0.3);
@@ -94,9 +79,7 @@
       display: none;
       margin-bottom: 20px;
     }
-    
     .error-message.show { display: block; }
-    
     .success-message {
       background: rgba(34, 197, 94, 0.1);
       border: 1px solid rgba(34, 197, 94, 0.3);
@@ -107,21 +90,38 @@
       display: none;
       margin-bottom: 20px;
     }
-    
     .success-message.show { display: block; }
   </style>
 </head>
 <body id="app-body">
-  <header>
+  <header id="siteHeader">
     <div class="container nav">
       <a href="index.html" class="brand">
         <div class="logo"></div>
         <div>🍰 Уникальные десерты</div>
       </a>
-      <div class="nav-actions">
+
+      <div class="nav-actions desktop-nav" id="desktopNav">
         <div id="themeSwitcher"></div>
         <a href="index.html" class="btn">🏠 Каталог</a>
+        <a href="login.html" class="btn">🔐 Вход</a>
       </div>
+
+      <button class="burger-btn" id="burgerBtn" aria-label="Открыть меню">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <div class="mobile-menu" id="mobileMenu">
+      <div class="mobile-menu-header">
+        <span class="brand">🍰 Уникальные десерты</span>
+        <button class="mobile-close" id="mobileClose" aria-label="Закрыть меню">✕</button>
+      </div>
+      <nav class="mobile-nav">
+        <a href="index.html">🏠 Каталог</a>
+        <a href="orders.html">📦 Заказы</a>
+        <a href="login.html">🔐 Вход</a>
+      </nav>
     </div>
   </header>
 
@@ -130,36 +130,36 @@
       <div class="auth-panel">
         <h1 class="auth-title">📝 Регистрация</h1>
         <p class="auth-subtitle">Создайте аккаунт для заказов и отзывов</p>
-        
+
         <div class="error-message" id="errorMessage"></div>
         <div class="success-message" id="successMessage"></div>
-        
-        <form class="auth-form" id="registerForm">
+
+        <form class="auth-form" id="registerForm" novalidate>
           <div class="form-group">
             <label>👤 Имя</label>
             <input type="text" id="name" placeholder="Анна" autocomplete="name">
           </div>
-          
+
           <div class="form-group">
             <label>📧 Email *</label>
             <input type="email" id="email" placeholder="you@mail.ru" required autocomplete="email">
             <div class="email-hint">Разрешены только: @mail.ru и @yandex.ru</div>
           </div>
-          
+
           <div class="form-group">
             <label>🔒 Пароль *</label>
             <input type="password" id="password" placeholder="••••••••" required autocomplete="new-password">
             <div class="password-hint">Минимум 6 символов</div>
           </div>
-          
+
           <div class="form-group">
             <label>🔒 Подтверждение пароля *</label>
             <input type="password" id="confirmPassword" placeholder="••••••••" required autocomplete="new-password">
           </div>
-          
+
           <button type="submit" class="btn-register">📝 Зарегистрироваться</button>
         </form>
-        
+
         <div class="auth-footer">
           Уже есть аккаунт? <a href="login.html">Войти</a>
         </div>
@@ -192,16 +192,17 @@
       "use strict";
 
       async function init() {
+        document.getElementById('registerForm').addEventListener('submit', handleRegister);
+
         SweetBakeTheme.createSwitcher('themeSwitcher');
         await loadContacts();
-        
+        initNavbar();
+
         const session = SweetBakeAPI.auth.getSession();
         if (session) {
           window.location.href = 'index.html';
           return;
         }
-        
-        document.getElementById('registerForm').addEventListener('submit', handleRegister);
       }
 
       async function loadContacts() {
@@ -209,7 +210,6 @@
           const contacts = await SweetBakeAPI.api.contacts.get();
           const container = document.getElementById('footerContacts');
           if (!container) return;
-          
           container.innerHTML = '';
           (contacts.items || []).forEach(item => {
             const row = document.createElement('div');
@@ -220,19 +220,15 @@
         } catch (e) { console.warn('Контакты не загружены'); }
       }
 
-      // ===== ВАЛИДАЦИЯ РОССИЙСКОГО EMAIL =====
       function isValidRussianEmail(email) {
-        const allowedDomains = ['@mail.ru', '@yandex.ru'];
-        return allowedDomains.some(domain => email.toLowerCase().endsWith(domain));
+        return email.toLowerCase().endsWith('@mail.ru') || email.toLowerCase().endsWith('@yandex.ru');
       }
 
-      // ===== БАЗОВАЯ ВАЛИДАЦИЯ EMAIL =====
       function isValidEmailFormat(email) {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return re.test(email);
       }
 
-      // ===== ПОКАЗАТЬ ОШИБКУ =====
       function showError(message) {
         const errorEl = document.getElementById('errorMessage');
         errorEl.textContent = message;
@@ -241,72 +237,94 @@
 
       async function handleRegister(e) {
         e.preventDefault();
-        
+
         const name = document.getElementById('name').value.trim();
         const email = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value;
         const confirmPassword = document.getElementById('confirmPassword').value;
-        
+
         const errorEl = document.getElementById('errorMessage');
         const successEl = document.getElementById('successMessage');
-        
         errorEl.classList.remove('show');
         successEl.classList.remove('show');
-        
-        // Валидация
+
         if (!email || !password || !confirmPassword) {
           showError('❌ Пожалуйста, заполните все обязательные поля');
           return;
         }
-        
+
         if (!isValidEmailFormat(email)) {
           showError('❌ Пожалуйста, введите корректный email');
           return;
         }
-        
+
         if (!isValidRussianEmail(email)) {
           showError('❌ Разрешены только email: @mail.ru или @yandex.ru');
           return;
         }
-        
+
         if (password.length < 6) {
           showError('❌ Пароль должен содержать минимум 6 символов');
           return;
         }
-        
+
         if (password !== confirmPassword) {
           showError('❌ Пароли не совпадают');
           return;
         }
-        
+
         const submitBtn = e.target.querySelector('button[type="submit"]');
         const originalText = submitBtn.textContent;
         submitBtn.textContent = '⏳ Регистрируем...';
         submitBtn.disabled = true;
-        
+
         try {
           const userData = {
             name: name || email.split('@')[0],
             email: email,
             password: password
           };
-          
+
           const result = await SweetBakeAPI.auth.register(userData);
-          
+
           successEl.textContent = '✅ Регистрация успешна! Перенаправляем...';
           successEl.classList.add('show');
-          
           SweetBakeUtils.showToast(`🎉 Добро пожаловать, ${result.user.name || result.user.email}!`);
-          
+
           setTimeout(() => {
             window.location.href = 'index.html';
           }, 1000);
-          
+
         } catch (error) {
           showError(error.message || '❌ Ошибка при регистрации. Попробуйте другой email.');
           submitBtn.textContent = originalText;
           submitBtn.disabled = false;
         }
+      }
+
+      function initNavbar() {
+        const header = document.getElementById('siteHeader');
+        const burgerBtn = document.getElementById('burgerBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileClose = document.getElementById('mobileClose');
+
+        window.addEventListener('scroll', () => {
+          if (header) header.classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        burgerBtn?.addEventListener('click', () => mobileMenu?.classList.add('active'));
+        mobileClose?.addEventListener('click', () => mobileMenu?.classList.remove('active'));
+        document.querySelectorAll('.mobile-nav a, .mobile-nav button').forEach(el => {
+          el.addEventListener('click', () => mobileMenu?.classList.remove('active'));
+        });
+        document.addEventListener('click', (e) => {
+          if (mobileMenu?.classList.contains('active') &&
+              !mobileMenu.contains(e.target) &&
+              e.target !== burgerBtn &&
+              !burgerBtn.contains(e.target)) {
+            mobileMenu.classList.remove('active');
+          }
+        });
       }
 
       init();
