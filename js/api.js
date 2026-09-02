@@ -6,11 +6,8 @@
 
   // ===== ДЕМО-ДАННЫЕ (загружаются при первом запуске) =====
   function seedData() {
-    // Торты (пустой каталог)
-if (!localStorage.getItem('sweetbake_cakes')) {
-  localStorage.setItem('sweetbake_cakes', JSON.stringify([]));
-}
-    /*if (!localStorage.getItem('sweetbake_cakes')) {
+    // Торты
+    if (!localStorage.getItem('sweetbake_cakes')) {
       const cakes = [
         {
           id: 'cake_1',
@@ -20,8 +17,7 @@ if (!localStorage.getItem('sweetbake_cakes')) {
           price: 1990,
           categoryId: null,
           media: [
-            { type: 'image', url: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=600&q=80' },
-            { type: 'video', url: 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4' }
+            { type: 'image', url: 'https://static.1000.menu/img/content-v2/6f/e4/20557/shokoladnyi-mussovyi-tort-biskvitnyi_1645768527_14_max.jpg' }
           ],
           description: 'Слой за слоем: влажный бисквит, шоколадный мусс, тонкая глазурь.'
         },
@@ -33,7 +29,7 @@ if (!localStorage.getItem('sweetbake_cakes')) {
           price: 2390,
           categoryId: null,
           media: [
-            { type: 'image', url: 'https://images.unsplash.com/photo-1542826438-bd32f43d626f?auto=format&fit=crop&w=600&q=80' }
+            { type: 'image', url: 'https://img.povar.ru/uploads/8a/00/87/b9/klubnichnii_chizkeik_s_tvorogom_bez_vipechki-748219.JPG' }
           ],
           description: 'Нежный крем-чиз, песочная основа и клубничная шапка.'
         },
@@ -45,13 +41,13 @@ if (!localStorage.getItem('sweetbake_cakes')) {
           price: 1790,
           categoryId: null,
           media: [
-            { type: 'image', url: 'https://images.unsplash.com/photo-1603532648955-039310d9ed75?auto=format&fit=crop&w=600&q=80' }
+            { type: 'image', url: 'https://i.pinimg.com/736x/b0/33/d6/b033d6cd0eb7dd00b74583ab71ad8a11.jpg' }
           ],
           description: 'Домашний вкус, мягкие коржи и крем с карамелью.'
         }
       ];
       localStorage.setItem('sweetbake_cakes', JSON.stringify(cakes));
-    }*/
+    }
 
     // Пользователи
     if (!localStorage.getItem('sweetbake_users')) {
@@ -105,6 +101,47 @@ if (!localStorage.getItem('sweetbake_cakes')) {
       ];
       localStorage.setItem('sweetbake_categories', JSON.stringify(categories));
     }
+
+    // Контент главной страницы
+    if (!localStorage.getItem('sweetbake_home_content')) {
+      const homeContent = {
+        hero: {
+          recipesValue: '20+',
+          recipesLabel: 'рецептов'
+        },
+        about: {
+          subtitle: 'Наша история',
+          titlePart1: 'Страсть, запечённая',
+          titleAccent: 'в каждом десерте',
+          desc1: 'Мы начали в 2018 году с небольшой домашней кондитерской. Сегодня создаём торты и десерты, которые становятся украшением праздников и радуют тысячи клиентов.',
+          desc2: 'Каждое утро мы готовим свежие коржи, карамелизируем орехи, взбиваем нежные кремы и декорируем каждый торт вручную. Без компромиссов.',
+          image: 'https://images.pexels.com/photos/19499006/pexels-photo-19499006.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=700',
+          values: [
+            { id: 'v1', icon: '🌿', title: 'Натуральные продукты', desc: 'Фермерские ягоды, бельгийский шоколад, свежие сливки' },
+            { id: 'v2', icon: '🎨', title: 'Ручная работа', desc: 'Каждый торт расписан и украшен вручную' },
+            { id: 'v3', icon: '🚚', title: 'Доставка вовремя', desc: 'Привезём точно к празднику в любую точку города' },
+            { id: 'v4', icon: '💝', title: 'С заботой о вас', desc: 'Прислушиваемся к пожеланиям и создаём десерты мечты' }
+          ]
+        },
+        aboutStats: [
+          { id: 's1', value: '12+', label: 'лет мастерства' },
+          { id: 's2', value: '200+', label: 'рецептов' },
+          { id: 's3', value: '50 000+', label: 'довольных клиентов' },
+          { id: 's4', value: '18', label: 'наград' }
+        ],
+        seasonal: {
+          badgeText: 'Сезонное предложение',
+          title: 'Летнее вдохновение',
+          titleAccent: 'Коллекция вкусов',
+          desc: 'Каждый сезон приносит новые идеи. В нашей летней коллекции — спелые ягоды, цветочные ноты и нежная сладость лучших сезонных продуктов.',
+          price: '350 ₽',
+          image1: 'https://images.pexels.com/photos/34569681/pexels-photo-34569681.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=500&w=400',
+          image2: 'https://images.pexels.com/photos/11522869/pexels-photo-11522869.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=500&w=400',
+          bg: 'https://images.pexels.com/photos/17869890/pexels-photo-17869890.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=400&w=1400'
+        }
+      };
+      localStorage.setItem('sweetbake_home_content', JSON.stringify(homeContent));
+    }
   }
 
   // ===== ПОМОЩНИКИ =====
@@ -139,19 +176,18 @@ if (!localStorage.getItem('sweetbake_cakes')) {
       },
       update: (id, data) => {
         const cakes = getAll('cakes');
-        const index = cakes.findIndex(c => c.id === id);
-        if (index === -1) return Promise.reject(new Error('Торт не найден'));
-        cakes[index] = { ...cakes[index], ...data };
+        const idx = cakes.findIndex(c => c.id === id);
+        if (idx === -1) return Promise.reject(new Error('Торт не найден'));
+        cakes[idx] = { ...cakes[idx], ...data };
         saveAll('cakes', cakes);
-        return Promise.resolve(cakes[index]);
+        return Promise.resolve(cakes[idx]);
       },
       delete: (id) => {
-        const cakes = getAll('cakes').filter(c => c.id !== id);
-        saveAll('cakes', cakes);
+        saveAll('cakes', getAll('cakes').filter(c => c.id !== id));
         return Promise.resolve({ success: true });
       }
     },
-    
+
     // Пользователи
     users: {
       getAll: () => Promise.resolve(getAll('users')),
@@ -169,19 +205,18 @@ if (!localStorage.getItem('sweetbake_cakes')) {
       },
       update: (id, data) => {
         const users = getAll('users');
-        const index = users.findIndex(u => u.id === id);
-        if (index === -1) return Promise.reject(new Error('Пользователь не найден'));
-        users[index] = { ...users[index], ...data };
+        const idx = users.findIndex(u => u.id === id);
+        if (idx === -1) return Promise.reject(new Error('Пользователь не найден'));
+        users[idx] = { ...users[idx], ...data };
         saveAll('users', users);
-        return Promise.resolve(users[index]);
+        return Promise.resolve(users[idx]);
       },
       delete: (id) => {
-        const users = getAll('users').filter(u => u.id !== id);
-        saveAll('users', users);
+        saveAll('users', getAll('users').filter(u => u.id !== id));
         return Promise.resolve({ success: true });
       }
     },
-    
+
     // Контакты
     contacts: {
       get: () => Promise.resolve(JSON.parse(localStorage.getItem('sweetbake_contacts') || '{"items":[]}')),
@@ -190,7 +225,7 @@ if (!localStorage.getItem('sweetbake_cakes')) {
         return Promise.resolve(data);
       }
     },
-    
+
     // Отзывы
     reviews: {
       getAll: (cakeId) => {
@@ -207,7 +242,7 @@ if (!localStorage.getItem('sweetbake_cakes')) {
         return Promise.resolve(newReview);
       }
     },
-    
+
     // Заказы
     orders: {
       getAll: () => {
@@ -240,7 +275,7 @@ if (!localStorage.getItem('sweetbake_cakes')) {
         return Promise.resolve({ success: true });
       }
     },
-    
+
     // Категории
     categories: {
       getAll: () => Promise.resolve(getAll('categories')),
@@ -267,6 +302,15 @@ if (!localStorage.getItem('sweetbake_cakes')) {
         saveAll('categories', getAll('categories').filter(c => c.id !== id));
         return Promise.resolve({ success: true });
       }
+    },
+
+    // Контент главной страницы
+    homeContent: {
+      get: () => Promise.resolve(JSON.parse(localStorage.getItem('sweetbake_home_content') || '{}')),
+      update: (data) => {
+        localStorage.setItem('sweetbake_home_content', JSON.stringify(data));
+        return Promise.resolve(data);
+      }
     }
   };
 
@@ -275,68 +319,33 @@ if (!localStorage.getItem('sweetbake_cakes')) {
     async login(email, password) {
       const users = await api.users.getAll();
       const user = users.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
-      
-      if (!user) {
-        throw new Error('❌ Неверный email или пароль');
-      }
-      
+      if (!user) throw new Error('❌ Неверный email или пароль');
       const session = { userId: user.id, email: user.email, role: user.role };
       localStorage.setItem(SESSION_KEY, JSON.stringify(session));
-      
       return { user, session };
     },
-    
     async register(userData) {
       const users = await api.users.getAll();
-      
-      if (users.some(u => u.email.toLowerCase() === userData.email.toLowerCase())) {
-        throw new Error('❌ Пользователь с таким email уже существует');
-      }
-      
-      const newUser = await api.users.create({
-        ...userData,
-        role: 'user'
-      });
-      
+      if (users.some(u => u.email.toLowerCase() === userData.email.toLowerCase())) throw new Error('❌ Пользователь с таким email уже существует');
+      const newUser = await api.users.create({ ...userData, role: 'user' });
       const session = { userId: newUser.id, email: newUser.email, role: newUser.role };
       localStorage.setItem(SESSION_KEY, JSON.stringify(session));
-      
       return { user: newUser, session };
     },
-    
-    logout() {
-      localStorage.removeItem(SESSION_KEY);
-    },
-    
-    getSession() {
-      return JSON.parse(localStorage.getItem(SESSION_KEY) || 'null');
-    },
-    
+    logout() { localStorage.removeItem(SESSION_KEY); },
+    getSession() { return JSON.parse(localStorage.getItem(SESSION_KEY) || 'null'); },
     async getCurrentUser() {
       const session = this.getSession();
       if (!session?.userId) return null;
-      
-      try {
-        return await api.users.get(session.userId);
-      } catch {
-        this.logout();
-        return null;
-      }
+      try { return await api.users.get(session.userId); } catch { this.logout(); return null; }
     },
-    
-    isAdmin() {
-      const session = this.getSession();
-      return session?.role === 'admin';
-    }
+    isAdmin() { const session = this.getSession(); return session?.role === 'admin'; }
   };
 
   // ===== ЗАПУСК =====
   seedData();
 
   // ===== ЭКСПОРТ =====
-  global.SweetBakeAPI = {
-    api,
-    auth
-  };
+  global.SweetBakeAPI = { api, auth };
 
 })(window);
