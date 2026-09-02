@@ -1924,3 +1924,9 @@ html {
     flex-direction: column;
   }
 }
+
+.hero-parallax img {
+  will-change: transform;
+  transition: transform 0.2s ease-out;
+  scale: 1.1;
+}
