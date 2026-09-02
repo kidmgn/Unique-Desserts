@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Уникальные десерты — Каталог</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23fff5f5'/><path d='M20 60 L30 40 L40 50 L50 30 L60 50 L70 40 L80 60 L80 70 L20 70 Z' fill='%23ff8fa3'/><rect x='25' y='70' width='50' height='10' rx='3' fill='%23d4a373'/><circle cx='50' cy='22' r='8' fill='%23d00000'/><path d='M50 14 Q55 5 60 14' stroke='%23333' stroke-width='2' fill='none'/></svg>">
-  
+
+  <!-- Блокирующий скрипт для темы (без favicon) -->
   <script>
     (function() {
       var theme = localStorage.getItem('sweetbake_theme');
@@ -15,12 +16,13 @@
       }
     })();
   </script>
-  
+
   <link rel="stylesheet" href="css/style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Great+Vibes&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
   <style>
     .pill { display: flex; align-items: center; gap: 8px; }
-    
+
+    /* Выпадающий список категорий без видимых рамок */
     #sortSelect {
       border: none;
       background: transparent;
@@ -29,8 +31,11 @@
       font-family: inherit;
       font-size: 1rem;
       cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
     }
-    
+
     #sortSelect option {
       background: var(--bg) !important;
       color: var(--text) !important;
@@ -38,48 +43,189 @@
   </style>
 </head>
 <body id="app-body">
-  <header>
+  <header id="siteHeader">
     <div class="container nav">
       <a href="index.html" class="brand">
         <div class="logo"></div>
         <div>🍰 Уникальные десерты</div>
       </a>
-      <div class="nav-actions">
+
+      <!-- Десктопная навигация -->
+      <div class="nav-actions desktop-nav" id="desktopNav">
         <div id="themeSwitcher"></div>
-        
         <a href="login.html" class="pill" id="guestBtn" style="text-decoration: none;">
           <span>👤</span>
           <span>Вход / Регистрация</span>
         </a>
-        
         <span class="pill" id="userGreeting" style="display: none;">
           <span id="userAvatar">👤</span>
           <span id="userName">Гость</span>
         </span>
         <a href="settings.html" class="btn" id="settingsLink" style="display: none;">⚙️ Настройки</a>
-        
         <span class="btn-wrapper" id="adminBtnWrapper" style="display: none;">
           <a href="admin.html" class="btn primary">🛠️ Админ</a>
           <span class="notification-dot" id="adminNotificationDot"></span>
         </span>
-        
         <button class="btn" id="logoutBtn" style="display: none;">🚪 Выйти</button>
       </div>
+
+      <!-- Бургер-кнопка -->
+      <button class="burger-btn" id="burgerBtn" aria-label="Открыть меню">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <!-- Мобильное меню -->
+    <div class="mobile-menu" id="mobileMenu">
+      <div class="mobile-menu-header">
+        <span class="brand">🍰 Уникальные десерты</span>
+        <button class="mobile-close" id="mobileClose" aria-label="Закрыть меню">✕</button>
+      </div>
+      <nav class="mobile-nav">
+        <a href="index.html">🏠 Каталог</a>
+        <a href="orders.html">📦 Заказы</a>
+        <a href="settings.html" id="mobileSettingsLink" style="display: none;">⚙️ Настройки</a>
+        <a href="admin.html" id="mobileAdminLink" style="display: none;">🛠️ Админ</a>
+        <a href="login.html" id="mobileGuestLink">👤 Вход / Регистрация</a>
+        <button class="btn" id="mobileLogoutBtn" style="display: none;">🚪 Выйти</button>
+      </nav>
     </div>
   </header>
 
   <main class="container">
-    <div class="hero">
-      <h1>Десерты, созданные с душой</h1>
-      <p>Только натуральные ингредиенты · Доставка по городу</p>
-    </div>
+    <!-- Hero -->
+    <section class="hero-full" id="home">
+      <div class="hero-parallax" id="heroParallax">
+        <img
+  src="https://images.unsplash.com/photo-1551218808-94e220e084d2?q=80&w=1600&auto=format&fit=crop"
+  alt="Красивые торты ручной работы"
+  loading="eager"
+/>
+      </div>
+      <div class="hero-overlay hero-overlay-dark"></div>
+      <div class="hero-overlay hero-overlay-accent"></div>
+      <div class="hero-circle hero-circle-1"></div>
+      <div class="hero-circle hero-circle-2"></div>
+      <div class="hero-circle hero-circle-3"></div>
 
+      <div class="hero-content">
+        <div class="hero-badge animate-fade-in">
+          <span class="hero-badge-star">⭐</span>
+          <span>Кондитерская с 2018 года</span>
+          <span class="hero-badge-star">⭐</span>
+        </div>
+        <h1 class="hero-title animate-slide-up">
+          Каждый десерт —
+          <span class="hero-title-accent">со своей историей</span>
+        </h1>
+        <p class="hero-subtitle animate-slide-up animation-delay-200">
+          Натуральные ингредиенты, авторские рецепты и доставка прямо к вашему празднику
+        </p>
+        <div class="hero-buttons animate-slide-up animation-delay-400">
+          <button onclick="scrollToCards()" class="btn hero-btn-primary">Выбрать торт</button>
+          <button onclick="scrollToFooter()" class="btn hero-btn-secondary">Наши контакты</button>
+        </div>
+        <div class="hero-stats animate-slide-up animation-delay-600">
+          <!-- Заполняется скриптом -->
+        </div>
+      </div>
+
+      <button class="hero-scroll" onclick="scrollToCards()" aria-label="Прокрутить вниз">
+        <span>Листайте</span>
+        <span class="hero-scroll-arrow">↓</span>
+      </button>
+    </section>
+
+    <!-- О нас -->
+    <section class="about" id="about">
+      <div class="about-grid">
+        <div class="about-text animate-on-scroll">
+          <span class="about-subtitle"></span>
+          <h2 class="about-title"></h2>
+          <p class="about-desc about-desc-1"></p>
+          <p class="about-desc about-desc-2"></p>
+          <div class="about-values"></div>
+        </div>
+        <div class="about-image animate-on-scroll">
+          <img
+            src=""
+            alt="Авторские торты крупным планом"
+            loading="lazy"
+          />
+          <div class="about-badge about-badge-years">12+ лет опыта</div>
+          <div class="about-badge about-badge-awards">🏆 18 наград</div>
+        </div>
+      </div>
+      <div class="about-stats"></div>
+    </section>
+
+    <!-- Отзывы -->
+    <section class="reviews-section-home" id="reviews">
+      <div class="reviews-header animate-on-scroll">
+        <span class="reviews-subtitle">Отзывы</span>
+        <h2 class="reviews-title">Что говорят наши гости</h2>
+        <p class="reviews-desc">Настоящие слова от наших любимых клиентов</p>
+        <div class="reviews-rating-overall">
+          <div class="reviews-stars">★★★★★</div>
+          <span class="reviews-rating-value">4.9</span>
+          <span class="reviews-rating-count">из 150+ отзывов</span>
+        </div>
+      </div>
+      <div class="reviews-carousel" id="reviewsCarousel"></div>
+      <div class="reviews-nav">
+        <button class="reviews-arrow" id="reviewsPrev" aria-label="Предыдущий отзыв">‹</button>
+        <div class="reviews-dots" id="reviewsDots"></div>
+        <button class="reviews-arrow" id="reviewsNext" aria-label="Следующий отзыв">›</button>
+      </div>
+    </section>
+
+    <!-- Сезонное предложение -->
+    <section class="seasonal-banner" id="seasonal">
+      <div class="seasonal-bg">
+        <img
+          src=""
+          alt="Десерты"
+          loading="lazy"
+        />
+        <div class="seasonal-overlay"></div>
+      </div>
+      <div class="seasonal-content animate-on-scroll">
+        <div class="seasonal-left">
+          <div class="seasonal-badge">
+            <span>✨</span>
+            <span class="seasonal-badge-text"></span>
+          </div>
+          <h2 class="seasonal-title">
+            <span class="seasonal-title-main"></span>
+            <span class="seasonal-title-accent"></span>
+          </h2>
+          <p class="seasonal-desc"></p>
+          <div class="seasonal-buttons">
+            <button onclick="scrollToCards()" class="btn seasonal-btn-primary">Выбрать торт</button>
+            <button onclick="scrollToCards()" class="btn seasonal-btn-secondary">Смотреть все</button>
+          </div>
+        </div>
+        <div class="seasonal-visual">
+          <div class="seasonal-card seasonal-card-1">
+            <img src="" alt="Летний десерт" loading="lazy"/>
+          </div>
+          <div class="seasonal-card seasonal-card-2">
+            <img src="" alt="Сезонные торты" loading="lazy"/>
+          </div>
+          <div class="seasonal-price">
+            <div class="seasonal-price-label">Цена от</div>
+            <div class="seasonal-price-value"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Поиск и сортировка -->
     <div class="toolbar">
       <div class="pill">
         <span>🔍</span>
         <input type="text" id="searchInput" placeholder="Шоколад, клубника, карамель...">
       </div>
-      
       <div class="pill">
         <span>📋</span>
         <select id="sortSelect">
@@ -88,23 +234,64 @@
       </div>
     </div>
 
+    <!-- Каталог -->
     <div class="cards-grid" id="cardsContainer">
       <div class="notice">🍬 Загружаем вкусности...</div>
     </div>
   </main>
 
   <footer>
+    <div class="footer-cta">
+      <div class="footer-cta-overlay"></div>
+      <div class="footer-cta-content">
+        <span class="footer-cta-script">Сладкое приглашение</span>
+        <h3 class="footer-cta-title">Готовы побаловать себя?</h3>
+        <p class="footer-cta-desc">Подпишитесь на наши новости и получайте эксклюзивные предложения первыми</p>
+        <form id="subscribeForm" class="footer-cta-form">
+          <input type="email" id="subscribeEmail" placeholder="ваш@email.ru" required>
+          <button type="submit" class="btn footer-cta-btn">Подписаться</button>
+        </form>
+        <p id="subscribeMessage" class="footer-cta-message"></p>
+      </div>
+    </div>
+
     <div class="container footer-wrap">
-      <div>
-        <div class="footer-title">📞 Контакты</div>
-        <div class="footer-sub">Свяжитесь с нами для заказа</div>
+      <div class="footer-brand">
+        <div class="footer-logo">🍰 Уникальные десерты</div>
+        <p class="footer-brand-desc">Авторская кондитерская. Создаём десерты, которые делают праздники ярче.</p>
+        <div class="footer-socials">
+          <a href="#" class="footer-social" aria-label="Instagram">📷</a>
+          <a href="#" class="footer-social" aria-label="ВКонтакте">💬</a>
+          <a href="#" class="footer-social" aria-label="Telegram">✈️</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Разделы</h4>
+        <ul>
+          <li><a href="index.html">Каталог</a></li>
+          <li><a href="cake.html?id=cake_1">Пример торта</a></li>
+          <li><a href="orders.html">Заказы</a></li>
+          <li><a href="settings.html">Настройки</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Информация</h4>
+        <ul>
+          <li><a href="#">О нас</a></li>
+          <li><a href="#">Доставка и оплата</a></li>
+          <li><a href="#">Вопросы и ответы</a></li>
+          <li><a href="#">Политика конфиденциальности</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Контакты</h4>
         <div class="contact-list" id="footerContacts"></div>
       </div>
-      <div class="small">
-        <div><b>🍪 Навигация:</b></div>
-        <div><a href="index.html">Каталог</a> · <a href="cake.html?id=cake_1">Пример торта</a> · <a href="orders.html">Заказы</a></div>
-        <div style="margin-top: 16px;">© 2026 Уникальные десерты</div>
-      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2026 Уникальные десерты. Все права защищены.</p>
+      <p>Сделано с ❤️</p>
     </div>
   </footer>
 
@@ -112,7 +299,7 @@
   <script src="js/api.js"></script>
   <script src="js/utils.js"></script>
   <script src="js/fonts.js"></script>
-  
+
   <script>
     (function(){
       "use strict";
@@ -124,39 +311,54 @@
         await updateAuthUI();
         await loadContacts();
         await loadCategoriesToFilter();
+        await loadHomeContent();
         await loadCakes();
-        
+
         const searchInput = document.getElementById('searchInput');
         const debouncedLoad = SweetBakeUtils.debounce(loadCakes, 300);
         searchInput.addEventListener('input', () => {
           debouncedLoad(searchInput.value);
         });
-        
+
         document.getElementById('sortSelect').addEventListener('change', () => {
           loadCakes(searchInput.value);
         });
-        
+
         document.getElementById('logoutBtn')?.addEventListener('click', () => {
           SweetBakeAPI.auth.logout();
           window.location.reload();
         });
+
+        initParallaxAndScrollAnimations();
+        initReviewsCarousel();
+        initNavbar();
+        initSubscription();
       }
 
       async function updateAuthUI() {
         try { currentUser = await SweetBakeAPI.auth.getCurrentUser(); } catch (e) { currentUser = null; }
-        
+
         const guestBtn = document.getElementById('guestBtn');
         const userGreeting = document.getElementById('userGreeting');
         const adminBtnWrapper = document.getElementById('adminBtnWrapper');
         const settingsLink = document.getElementById('settingsLink');
         const logoutBtn = document.getElementById('logoutBtn');
-        
+
+        const mobileSettingsLink = document.getElementById('mobileSettingsLink');
+        const mobileAdminLink = document.getElementById('mobileAdminLink');
+        const mobileGuestLink = document.getElementById('mobileGuestLink');
+        const mobileLogoutBtn = document.getElementById('mobileLogoutBtn');
+
         if (!currentUser) {
           if (guestBtn) guestBtn.style.display = 'flex';
           if (userGreeting) userGreeting.style.display = 'none';
           if (adminBtnWrapper) adminBtnWrapper.style.display = 'none';
           if (settingsLink) settingsLink.style.display = 'none';
           if (logoutBtn) logoutBtn.style.display = 'none';
+          if (mobileGuestLink) mobileGuestLink.style.display = 'block';
+          if (mobileSettingsLink) mobileSettingsLink.style.display = 'none';
+          if (mobileAdminLink) mobileAdminLink.style.display = 'none';
+          if (mobileLogoutBtn) mobileLogoutBtn.style.display = 'none';
         } else {
           if (guestBtn) guestBtn.style.display = 'none';
           if (userGreeting) {
@@ -171,6 +373,18 @@
             if (currentUser.role === 'admin') SweetBakeUtils.checkNewOrders();
           }
           if (logoutBtn) logoutBtn.style.display = 'inline-flex';
+          if (mobileGuestLink) mobileGuestLink.style.display = 'none';
+          if (mobileSettingsLink) mobileSettingsLink.style.display = 'block';
+          if (mobileAdminLink) {
+            mobileAdminLink.style.display = currentUser.role === 'admin' ? 'block' : 'none';
+          }
+          if (mobileLogoutBtn) {
+            mobileLogoutBtn.style.display = 'block';
+            mobileLogoutBtn.addEventListener('click', () => {
+              SweetBakeAPI.auth.logout();
+              window.location.reload();
+            });
+          }
         }
         return currentUser;
       }
@@ -195,38 +409,125 @@
           const categories = await SweetBakeAPI.api.categories.getAll();
           const select = document.getElementById('sortSelect');
           select.innerHTML = '<option value="all">Все торты</option>' +
-            categories.map(c => `<option value="${c.id}">${c.icon||'📁'} ${c.name}</option>`).join('');
+            categories.map(c => `<option value="${c.id}">${c.icon ? c.icon + ' ' : ''}${c.name}</option>`).join('');
         } catch (e) {}
+      }
+
+      function formatOrdersCount(count) {
+        if (count < 1000) return String(count);
+        let magnitude = 1000;
+        while (count >= magnitude * 10) {
+          magnitude *= 10;
+        }
+        return magnitude + '+';
+      }
+
+      async function loadHomeContent() {
+        try {
+          const homeContent = await SweetBakeAPI.api.homeContent.get();
+
+          const orders = await SweetBakeAPI.api.orders.getAll();
+          const reviews = await SweetBakeAPI.api.reviews.getAll();
+          const ordersCount = orders.length;
+          const avgRating = reviews.length > 0 ? (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1) : '5.0';
+
+                    const heroStats = document.querySelector('.hero-stats');
+          if (heroStats) {
+            const formattedOrders = formatOrdersCount(ordersCount);
+            heroStats.innerHTML = `
+              <div class="hero-stat">
+                <div class="hero-stat-value">${homeContent.hero.recipesValue || '20+'}</div>
+                <div class="hero-stat-label">${homeContent.hero.recipesLabel || 'рецептов'}</div>
+              </div>
+              <div class="hero-stat">
+                <div class="hero-stat-value">${formattedOrders}</div>
+                <div class="hero-stat-label">заказов</div>
+              </div>
+              <div class="hero-stat">
+                <div class="hero-stat-value">${avgRating}</div>
+                <div class="hero-stat-label">рейтинг</div>
+              </div>
+            `;
+          }
+
+          const aboutSubtitle = document.querySelector('.about-subtitle');
+          if (aboutSubtitle) aboutSubtitle.textContent = homeContent.about.subtitle || '';
+          const aboutTitle = document.querySelector('.about-title');
+          if (aboutTitle) aboutTitle.innerHTML = `${homeContent.about.titlePart1 || ''}<br><em class="about-title-accent">${homeContent.about.titleAccent || ''}</em>`;
+          const aboutDesc1 = document.querySelector('.about-desc-1');
+          const aboutDesc2 = document.querySelector('.about-desc-2');
+          if (aboutDesc1) aboutDesc1.textContent = homeContent.about.desc1 || '';
+          if (aboutDesc2) aboutDesc2.textContent = homeContent.about.desc2 || '';
+
+          // Обновление изображения "О нас"
+          const aboutImage = document.querySelector('.about-image img');
+          if (aboutImage) {
+            aboutImage.src = homeContent.about.image || 'https://images.pexels.com/photos/19499006/pexels-photo-19499006.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=700';
+          }
+
+          const aboutValuesContainer = document.querySelector('.about-values');
+          if (aboutValuesContainer) {
+            aboutValuesContainer.innerHTML = (homeContent.about.values || []).map(v => `
+              <div class="about-value">
+                <div class="about-value-icon">${v.icon || '📁'}</div>
+                <div class="about-value-text">
+                  <h3>${v.title}</h3>
+                  <p>${v.desc}</p>
+                </div>
+              </div>
+            `).join('');
+          }
+
+          const aboutStatsContainer = document.querySelector('.about-stats');
+          if (aboutStatsContainer) {
+            aboutStatsContainer.innerHTML = (homeContent.aboutStats || []).map(s => `
+              <div class="about-stat">
+                <div class="about-stat-value">${s.value}</div>
+                <div class="about-stat-label">${s.label}</div>
+              </div>
+            `).join('');
+          }
+
+          document.querySelector('.seasonal-badge-text').textContent = homeContent.seasonal.badgeText || '';
+          document.querySelector('.seasonal-title-main').textContent = homeContent.seasonal.title || '';
+          document.querySelector('.seasonal-title-accent').textContent = homeContent.seasonal.titleAccent || '';
+          document.querySelector('.seasonal-desc').textContent = homeContent.seasonal.desc || '';
+          document.querySelector('.seasonal-price-value').textContent = homeContent.seasonal.price || '0 ₽';
+          document.querySelector('.seasonal-card-1 img').src = homeContent.seasonal.image1 || '';
+          document.querySelector('.seasonal-card-2 img').src = homeContent.seasonal.image2 || '';
+          document.querySelector('.seasonal-bg img').src = homeContent.seasonal.bg || '';
+        } catch (e) {
+          console.error('Ошибка загрузки контента главной страницы:', e);
+        }
       }
 
       async function loadCakes(searchTerm = '') {
         const container = document.getElementById('cardsContainer');
         const sortBy = document.getElementById('sortSelect').value;
-        
+
         try {
           const cakes = await SweetBakeAPI.api.cakes.getAll();
           const term = searchTerm.toLowerCase();
-          
-          let filtered = cakes.filter(c => 
-            !term || 
-            c.title.toLowerCase().includes(term) || 
+
+          let filtered = cakes.filter(c =>
+            !term ||
+            c.title.toLowerCase().includes(term) ||
             (c.ingredients || []).join(' ').toLowerCase().includes(term)
           );
-          
-          // Фильтр по категории
+
           if (sortBy !== 'all') {
             filtered = filtered.filter(c => c.categoryId === sortBy);
           }
-          
+
           if (filtered.length === 0) {
             container.innerHTML = '<div class="notice">😕 Ничего не найдено</div>';
             return;
           }
-          
+
           container.innerHTML = filtered.map(cake => `
             <article class="cake-card" onclick="location.href='cake.html?id=${cake.id}'">
               <div class="card-media">
-                ${cake.media?.[0]?.type === 'video' 
+                ${cake.media?.[0]?.type === 'video'
                   ? `<video src="${cake.media[0].url}" muted autoplay loop playsinline></video>`
                   : `<img src="${cake.media?.[0]?.url || 'https://placehold.co/600x400/fbcfe8/4a154b?text=🍰'}" alt="${cake.title}">`
                 }
@@ -243,11 +544,161 @@
               </div>
             </article>
           `).join('');
-          
         } catch (e) {
           container.innerHTML = '<div class="notice">⚠️ Сервер не запущен. Выполните: npm start</div>';
         }
       }
+
+      function initParallaxAndScrollAnimations() {
+        const heroParallax = document.getElementById('heroParallax');
+        if (heroParallax) {
+          window.addEventListener('scroll', () => {
+            const scrolled = window.scrollY;
+            heroParallax.style.transform = `translateY(${scrolled * 0.5}px)`;
+          }, { passive: true });
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.style.opacity = '1';
+              entry.target.style.transform = 'translateY(0)';
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+          el.style.opacity = '0';
+          el.style.transform = 'translateY(30px)';
+          el.style.transition = 'opacity 0.7s ease, transform 0.7s ease';
+          observer.observe(el);
+        });
+      }
+
+      function initReviewsCarousel() {
+        const reviewsData = [
+          { name: 'Анна Морозова', avatar: 'АМ', rating: 5, text: 'Торт превзошёл все ожидания! Очень нежный, свежий, а декор — произведение искусства. Гости были в восторге!', date: 'Июнь 2026' },
+          { name: 'Дмитрий Крылов', avatar: 'ДК', rating: 5, text: 'Заказывали чизкейк на день рождения. Вкус потрясающий, доставили вовремя, упаковка аккуратная. Обязательно закажем ещё!', date: 'Май 2026' },
+          { name: 'Ольга Смирнова', avatar: 'ОС', rating: 5, text: 'Лучшие десерты в городе! Брали медовик — тает во рту. Видно, что делают с душой и из натуральных продуктов.', date: 'Апрель 2026' },
+          { name: 'Игорь Волков', avatar: 'ИВ', rating: 5, text: 'Сотрудничаем для корпоративных мероприятий. Всегда свежо, красиво и невероятно вкусно. Рекомендую!', date: 'Март 2026' },
+          { name: 'Мария Лебедева', avatar: 'МЛ', rating: 5, text: 'Уже несколько раз заказывала торты для семьи. Каждый раз — новый вкус и восторг. Спасибо за ваше творчество!', date: 'Февраль 2026' }
+        ];
+
+        let currentReviewIndex = 0;
+        const reviewsCarousel = document.getElementById('reviewsCarousel');
+        const reviewsDots = document.getElementById('reviewsDots');
+
+        function renderReviews() {
+          if (!reviewsCarousel) return;
+          const isMobile = window.innerWidth <= 768;
+          const visibleCount = isMobile ? 1 : 3;
+          const visibleReviews = [];
+          for (let i = 0; i < visibleCount; i++) {
+            const idx = (currentReviewIndex + i) % reviewsData.length;
+            visibleReviews.push(reviewsData[idx]);
+          }
+
+          reviewsCarousel.innerHTML = visibleReviews.map((review, i) => `
+            <div class="review-card ${isMobile ? '' : (i === 1 ? 'central' : '')}">
+              <div class="review-quote">"</div>
+              <p class="review-text">"${review.text}"</p>
+              <div class="review-footer">
+                <div class="review-avatar">${review.avatar}</div>
+                <div>
+                  <div class="review-author">${review.name}</div>
+                  <div class="review-meta">
+                    <span class="review-rating">${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}</span>
+                    <span class="review-date">${review.date}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `).join('');
+
+          renderDots();
+        }
+
+        function renderDots() {
+          if (!reviewsDots) return;
+          reviewsDots.innerHTML = reviewsData.map((_, i) => `
+            <div class="reviews-dot ${i === currentReviewIndex ? 'active' : ''}" data-index="${i}"></div>
+          `).join('');
+
+          document.querySelectorAll('.reviews-dot').forEach(dot => {
+            dot.addEventListener('click', () => {
+              currentReviewIndex = parseInt(dot.dataset.index);
+              renderReviews();
+            });
+          });
+        }
+
+        document.getElementById('reviewsPrev')?.addEventListener('click', () => {
+          currentReviewIndex = (currentReviewIndex - 1 + reviewsData.length) % reviewsData.length;
+          renderReviews();
+        });
+        document.getElementById('reviewsNext')?.addEventListener('click', () => {
+          currentReviewIndex = (currentReviewIndex + 1) % reviewsData.length;
+          renderReviews();
+        });
+
+        window.addEventListener('resize', () => {
+          clearTimeout(window.reviewsResizeTimer);
+          window.reviewsResizeTimer = setTimeout(renderReviews, 200);
+        });
+
+        renderReviews();
+      }
+
+      function initNavbar() {
+        const header = document.getElementById('siteHeader');
+        const burgerBtn = document.getElementById('burgerBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileClose = document.getElementById('mobileClose');
+
+        window.addEventListener('scroll', () => {
+          if (header) header.classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        burgerBtn?.addEventListener('click', () => mobileMenu?.classList.add('active'));
+        mobileClose?.addEventListener('click', () => mobileMenu?.classList.remove('active'));
+
+        document.querySelectorAll('.mobile-nav a, .mobile-nav button').forEach(el => {
+          el.addEventListener('click', () => mobileMenu?.classList.remove('active'));
+        });
+
+        document.addEventListener('click', (e) => {
+          if (mobileMenu?.classList.contains('active') &&
+              !mobileMenu.contains(e.target) &&
+              e.target !== burgerBtn &&
+              !burgerBtn.contains(e.target)) {
+            mobileMenu.classList.remove('active');
+          }
+        });
+      }
+
+      function initSubscription() {
+        document.getElementById('subscribeForm')?.addEventListener('submit', function(e) {
+          e.preventDefault();
+          const email = document.getElementById('subscribeEmail').value.trim();
+          const message = document.getElementById('subscribeMessage');
+          if (email) {
+            message.textContent = 'Спасибо! Вы подписаны на новости.';
+            document.getElementById('subscribeEmail').value = '';
+            setTimeout(() => { message.textContent = ''; }, 5000);
+          }
+        });
+      }
+
+      window.scrollToCards = function() {
+        const el = document.getElementById('cardsContainer');
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      };
+
+      window.scrollToFooter = function() {
+        const footer = document.querySelector('footer');
+        if (footer) footer.scrollIntoView({ behavior: 'smooth' });
+      };
 
       init();
     })();
