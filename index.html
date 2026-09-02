@@ -550,13 +550,24 @@
       }
 
       function initParallaxAndScrollAnimations() {
-        const heroParallax = document.getElementById('heroParallax');
-        if (heroParallax) {
-          window.addEventListener('scroll', () => {
-            const scrolled = window.scrollY;
-            heroParallax.style.transform = `translateY(${scrolled * 0.5}px)`;
-          }, { passive: true });
-        }
+        const hero = document.getElementById('home');
+const heroParallax = document.getElementById('heroParallax');
+const heroImg = heroParallax?.querySelector('img');
+
+if (hero && heroImg) {
+  hero.addEventListener('mousemove', (e) => {
+    const rect = hero.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+
+    // Двигаем фон в противоположную сторону от курсора
+    heroImg.style.transform = `scale(1.1) translate(${x * -0.02}px, ${y * -0.02}px)`;
+  });
+
+  hero.addEventListener('mouseleave', () => {
+    heroImg.style.transform = 'scale(1.1) translate(0, 0)';
+  });
+}
 
         const observer = new IntersectionObserver((entries) => {
           entries.forEach(entry => {
