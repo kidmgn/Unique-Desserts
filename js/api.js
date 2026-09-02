@@ -107,7 +107,8 @@
       const homeContent = {
         hero: {
           recipesValue: '20+',
-          recipesLabel: 'рецептов'
+          recipesLabel: 'рецептов',
+          bg: 'https://images.unsplash.com/photo-1551218808-94e220e084d2?q=80&w=1600&auto=format&fit=crop'
         },
         about: {
           subtitle: 'Наша история',
@@ -159,7 +160,6 @@
 
   // ===== API =====
   const api = {
-    // Торты
     cakes: {
       getAll: () => Promise.resolve(getAll('cakes')),
       get: (id) => {
@@ -187,8 +187,6 @@
         return Promise.resolve({ success: true });
       }
     },
-
-    // Пользователи
     users: {
       getAll: () => Promise.resolve(getAll('users')),
       get: (id) => {
@@ -216,8 +214,6 @@
         return Promise.resolve({ success: true });
       }
     },
-
-    // Контакты
     contacts: {
       get: () => Promise.resolve(JSON.parse(localStorage.getItem('sweetbake_contacts') || '{"items":[]}')),
       update: (data) => {
@@ -225,8 +221,6 @@
         return Promise.resolve(data);
       }
     },
-
-    // Отзывы
     reviews: {
       getAll: (cakeId) => {
         let reviews = getAll('reviews');
@@ -242,8 +236,6 @@
         return Promise.resolve(newReview);
       }
     },
-
-    // Заказы
     orders: {
       getAll: () => {
         const orders = getAll('orders');
@@ -275,8 +267,6 @@
         return Promise.resolve({ success: true });
       }
     },
-
-    // Категории
     categories: {
       getAll: () => Promise.resolve(getAll('categories')),
       get: (id) => {
@@ -303,8 +293,6 @@
         return Promise.resolve({ success: true });
       }
     },
-
-    // Контент главной страницы
     homeContent: {
       get: () => Promise.resolve(JSON.parse(localStorage.getItem('sweetbake_home_content') || '{}')),
       update: (data) => {
