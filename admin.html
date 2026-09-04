@@ -6,7 +6,6 @@
   <title>Админ-панель | Уникальные десерты</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23fff5f5'/><path d='M20 60 L30 40 L40 50 L50 30 L60 50 L70 40 L80 60 L80 70 L20 70 Z' fill='%23ff8fa3'/><rect x='25' y='70' width='50' height='10' rx='3' fill='%23d4a373'/><circle cx='50' cy='22' r='8' fill='%23d00000'/><path d='M50 14 Q55 5 60 14' stroke='%23333' stroke-width='2' fill='none'/></svg>">
   
-  <!-- Блокирующий скрипт для темы -->
   <script>
     (function() {
       var theme = localStorage.getItem('sweetbake_theme');
@@ -16,7 +15,7 @@
       }
     })();
   </script>
-
+  
   <link rel="stylesheet" href="css/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
   <style>
@@ -30,9 +29,9 @@
       font-family: inherit;
       font-size: 0.9rem;
     }
-
+    
     .tab-btn { position: relative; }
-
+    
     .tab-badge {
       position: absolute;
       top: -8px; right: -8px;
@@ -99,8 +98,84 @@
       border: none;
       font-size: 2rem;
       cursor: pointer;
-      color: var(--text);
     }
+
+    /* Редактор декораций hero */
+    .hero-deco-stage {
+      position: relative;
+      min-height: 420px;
+      height: 420px;
+      border-radius: 24px;
+      overflow: hidden;
+      margin-bottom: 16px;
+      user-select: none;
+    }
+    .hero-deco-stage .hero-parallax {
+      transform: scale(1.1);
+      transition: transform 0.5s ease-out;
+    }
+    .hero-deco-stage .hero-content {
+      pointer-events: none;
+      padding: 40px 20px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .hero-deco-stage .hero-title { font-size: 2rem; color: #fff; margin-bottom: 8px; }
+    .hero-deco-stage .hero-subtitle { color: rgba(255,255,255,0.75); font-size: 0.95rem; max-width: 420px; }
+
+    .deco-controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .deco-controls label {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .deco-controls select,
+    .deco-controls input[type="number"],
+    .deco-controls input[type="range"] {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.9rem;
+    }
+    .deco-list { display: flex; flex-direction: column; gap: 8px; max-height: 220px; overflow-y: auto; }
+    .deco-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      font-size: 0.85rem;
+    }
+    .deco-item-selected { border-color: var(--accent); }
+    .deco-item button {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 8px;
+      cursor: pointer;
+      padding: 4px 8px;
+      font-size: 0.8rem;
+      margin-left: 4px;
+    }
+    .deco-item button:hover { background: var(--accent); color: #1a1a2e; }
+    .deco-hint { color: var(--muted); font-size: 0.85rem; margin: 8px 0 14px; }
+    .preview-modal-close { color: var(--text); }
   </style>
 </head>
 <body id="app-body">
@@ -198,14 +273,85 @@
                 <input type="text" id="heroRecipesLabel" placeholder="рецептов">
               </div>
             </div>
-                      <div class="form-group">
-            <label>Фоновое изображение Hero</label>
-            <input type="text" id="heroBg" placeholder="https://...jpg">
-          </div>
-          <div style="margin-top: 20px; display: flex; gap: 10px;">
-            <button class="btn" id="previewHeroBtn">👁 Предпросмотр</button>
-            <button class="btn primary" id="saveHeroBtn">💾 Сохранить</button>
-          </div>
+
+            <h4 style="margin-top: 24px;">Декорации hero</h4>
+            <p class="deco-hint">Перетаскивайте элементы мышью или стрелками. На главной посетители увидят только сохранённую композицию (без редактора).</p>
+
+            <div class="hero-full hero-deco-stage" id="heroDecoStage">
+              <div class="hero-parallax" id="heroDecoBg">
+                <img
+                  src="https://images.unsplash.com/photo-1551218808-94e220e084d2?q=80&w=1600&auto=format&fit=crop"
+                  alt=""
+                >
+              </div>
+              <div class="hero-overlay hero-overlay-dark"></div>
+              <div class="hero-overlay hero-overlay-accent"></div>
+              <div class="hero-decorations" id="heroDecorations"></div>
+              <div class="hero-content">
+                <h1 class="hero-title">Каждый десерт — <em>со своей историей</em></h1>
+                <p class="hero-subtitle">Превью декораций. Кнопки и статистика на сайте остаются как обычно.</p>
+              </div>
+            </div>
+
+            <div class="deco-controls">
+              <div>
+                <label>Тип</label>
+                <select id="decoType">
+                  <option value="circle">Круг</option>
+                  <option value="ring">Кольцо</option>
+                  <option value="dots">Точки</option>
+                  <option value="wave">Волна</option>
+                  <option value="cross">Крест</option>
+                  <option value="arc">Дуга</option>
+                  <option value="diamond">Ромб</option>
+                  <option value="glow">Свечение</option>
+                  <option value="stripes">Полосы</option>
+                </select>
+              </div>
+              <div>
+                <label>Размер (px)</label>
+                <input type="number" id="decoSize" value="150" min="1">
+              </div>
+              <div>
+                <label>X (%)</label>
+                <input type="number" id="decoX" value="10" min="0" max="100" step="0.5">
+              </div>
+              <div>
+                <label>Y (%)</label>
+                <input type="number" id="decoY" value="20" min="0" max="100" step="0.5">
+              </div>
+              <div>
+                <label>Прозрачность</label>
+                <input type="range" id="decoOpacity" min="0.1" max="1" step="0.1" value="0.5">
+              </div>
+              <div>
+                <label>Сила параллакса</label>
+                <input type="range" id="decoDepth" min="0" max="0.3" step="0.005" value="0.03">
+              </div>
+              <div>
+                <label>Анимация</label>
+                <select id="decoAnimation">
+                  <option value="none">Нет</option>
+                  <option value="spin">Вращение вправо</option>
+                  <option value="spin-reverse">Вращение влево</option>
+                  <option value="float">Покачивание</option>
+                </select>
+              </div>
+              <div>
+                <label>Скорость (сек)</label>
+                <input type="number" id="decoDuration" value="20" min="0.1" max="60" step="0.1">
+              </div>
+              <div style="display: flex; align-items: flex-end;">
+                <button type="button" class="btn" id="addDecoBtn">➕ Добавить</button>
+              </div>
+            </div>
+
+            <div class="deco-list" id="decoList"></div>
+
+            <div style="margin-top: 20px; display: flex; gap: 10px;">
+              <button class="btn" id="previewHeroBtn">👁 Предпросмотр</button>
+              <button class="btn primary" id="saveHeroBtn">💾 Сохранить</button>
+            </div>
           </div>
           <hr class="section-divider">
 
@@ -226,7 +372,7 @@
             <h4 style="margin-top:20px">Статистика</h4>
             <div id="aboutStatsList"></div>
             <button class="btn" id="addAboutStatBtn">➕ Добавить статистику</button>
-            <div style="margin-top:15px; display: flex; gap: 10px;">
+            <div style="margin-top:20px; display: flex; gap: 10px;">
               <button class="btn" id="previewAboutBtn">👁 Предпросмотр</button>
               <button class="btn primary" id="saveAboutBtn">💾 Сохранить</button>
             </div>
@@ -249,9 +395,9 @@
             </div>
             <div class="form-group"><label>Ссылка на фон</label><input type="text" id="seasonalBg"></div>
             <div style="margin-top: 20px; display: flex; gap: 10px;">
-            <button class="btn" id="previewSeasonalBtn">👁 Предпросмотр</button>
-            <button class="btn primary" id="saveSeasonalBtn">💾 Сохранить</button>
-          </div>
+              <button class="btn" id="previewSeasonalBtn">👁 Предпросмотр</button>
+              <button class="btn primary" id="saveSeasonalBtn">💾 Сохранить</button>
+            </div>
           </div>
         </div>
       </div>
@@ -362,6 +508,7 @@
   </footer>
 
   <script src="js/theme.js"></script>
+  <script src="js/hero-deco.js"></script>
   <script src="js/api.js"></script>
   <script src="js/utils.js"></script>
   <script src="js/fonts.js"></script>
@@ -379,6 +526,8 @@
       let allOrders = [];
       let currentFilter = 'all';
       let homeContent = {};
+      let heroDecoInstance = null;
+      let previewDecoInstance = null;
 
       const CATEGORY_EMOJIS = ['🍰','🍫','🍓','🍒','🍋','🍊','🍇','🍌','🍎','🥝','🍑','🧁','🍪','🍩','🎂','🥧','🍯','🌰','☕','🍵','🧸','🎉','🎄','🌸','🌿','💝'];
       const ABOUT_VALUE_EMOJIS = CATEGORY_EMOJIS;
@@ -450,7 +599,7 @@
         // Hero
         document.getElementById('heroRecipesValue').value = homeContent.hero?.recipesValue || '';
         document.getElementById('heroRecipesLabel').value = homeContent.hero?.recipesLabel || '';
-        document.getElementById('heroBg').value = homeContent.hero?.bg || '';
+        initHeroDecoEditor();
         // About
         document.getElementById('aboutSubtitle').value = homeContent.about?.subtitle || '';
         document.getElementById('aboutTitlePart1').value = homeContent.about?.titlePart1 || '';
@@ -469,6 +618,40 @@
         document.getElementById('seasonalImage1').value = homeContent.seasonal?.image1 || '';
         document.getElementById('seasonalImage2').value = homeContent.seasonal?.image2 || '';
         document.getElementById('seasonalBg').value = homeContent.seasonal?.bg || '';
+      }
+
+      function initHeroDecoEditor() {
+        if (!window.SweetBakeHeroDeco) return;
+        if (heroDecoInstance) heroDecoInstance.destroy();
+
+        homeContent.hero = homeContent.hero || {};
+        if (!Array.isArray(homeContent.hero.decorations)) {
+          homeContent.hero.decorations = SweetBakeHeroDeco.DEFAULT_DECORATIONS.map(d => ({ ...d }));
+        }
+
+        heroDecoInstance = SweetBakeHeroDeco.mount({
+          mode: 'edit',
+          heroEl: document.getElementById('heroDecoStage'),
+          decorationsEl: document.getElementById('heroDecorations'),
+          bgEl: document.getElementById('heroDecoBg'),
+          decoListEl: document.getElementById('decoList'),
+          addBtn: document.getElementById('addDecoBtn'),
+          form: {
+            type: 'decoType',
+            size: 'decoSize',
+            x: 'decoX',
+            y: 'decoY',
+            opacity: 'decoOpacity',
+            depth: 'decoDepth',
+            animation: 'decoAnimation',
+            duration: 'decoDuration'
+          },
+          decorations: homeContent.hero.decorations,
+          onChange(list) {
+            homeContent.hero = homeContent.hero || {};
+            homeContent.hero.decorations = list;
+          }
+        });
       }
 
       function renderAboutValues(values) {
@@ -542,50 +725,67 @@
         if (section === 'hero') {
           const recipesValue = document.getElementById('heroRecipesValue').value || '20+';
           const recipesLabel = document.getElementById('heroRecipesLabel').value || 'рецептов';
-          const bg = document.getElementById('heroBg').value || '';
+          const decorations = heroDecoInstance
+            ? heroDecoInstance.getDecorations()
+            : (homeContent.hero?.decorations || []);
           content.innerHTML = `
-            <div class="hero-full" style="min-height: 500px; border-radius: 30px; margin-bottom: 0; position: relative; overflow: hidden;">
-              <div class="hero-parallax" style="position:absolute; inset:0;">
-                <img src="${bg}" style="width:100%;height:100%;object-fit:cover;" />
+            <div class="hero-full" id="previewHeroStage" style="min-height: 500px; border-radius: 30px; margin-bottom: 0; position:relative; overflow:hidden;">
+              <div class="hero-parallax" style="position:absolute; inset:-5%;">
+                <img src="https://images.unsplash.com/photo-1551218808-94e220e084d2?q=80&w=1600&auto=format&fit=crop" style="width:100%;height:100%;object-fit:cover;">
               </div>
-              <div class="hero-overlay hero-overlay-dark" style="position:absolute;inset:0;background:linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0.6));"></div>
-              <div class="hero-overlay hero-overlay-accent" style="position:absolute;inset:0;background:linear-gradient(to right, var(--accent), transparent);opacity:0.3;"></div>
-              <div class="hero-content" style="position:relative;z-index:2;text-align:center;padding:40px;">
-                <div class="hero-badge" style="display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:40px;background:rgba(255,255,255,0.1);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.2);margin-bottom:20px;color:#fff;font-size:0.85rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;">
+              <div class="hero-overlay hero-overlay-dark"></div>
+              <div class="hero-overlay hero-overlay-accent"></div>
+              <div class="hero-decorations" id="previewHeroDecorations"></div>
+              <div class="hero-content" style="position:relative;z-index:3;text-align:center;padding:40px;">
+                <div class="hero-badge">
                   <span>⭐</span><span>Кондитерская с 2018 года</span><span>⭐</span>
                 </div>
-                <h1 class="hero-title" style="font-size:3rem;font-weight:800;line-height:1.1;color:#fff;margin-bottom:15px;">
-                  Каждый десерт — <span style="display:block;font-style:italic;color:var(--accent);">со своей историей</span>
+                <h1 class="hero-title">
+                  Каждый десерт — <span class="hero-title-accent">со своей историей</span>
                 </h1>
-                <p style="color:rgba(255,255,255,0.8);font-size:1.2rem;max-width:500px;margin:0 auto 25px;">Натуральные ингредиенты, авторские рецепты и доставка прямо к вашему празднику</p>
-                <div style="display:flex;justify-content:center;gap:20px;margin-bottom:30px;">
-                  <button class="btn" style="background:var(--accent);color:#fff;border:none;padding:14px 30px;">Выбрать торт</button>
-                  <button class="btn" style="background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.3);padding:14px 30px;">Наши контакты</button>
+                <p class="hero-subtitle">Натуральные ингредиенты, авторские рецепты и доставка прямо к вашему празднику</p>
+                <div class="hero-buttons" style="justify-content:center;margin-bottom:30px;">
+                  <button class="btn hero-btn-primary" type="button">Выбрать торт</button>
+                  <button class="btn hero-btn-secondary" type="button">Наши контакты</button>
                 </div>
-                <div style="display:flex;justify-content:center;gap:30px;">
-                  <div style="text-align:center;">
-                    <div style="font-size:2rem;font-weight:800;color:#fff;">${recipesValue}</div>
-                    <div style="font-size:0.8rem;color:rgba(255,255,255,0.7);text-transform:uppercase;letter-spacing:0.1em;">${recipesLabel}</div>
+                <div class="hero-stats" style="justify-content:center;">
+                  <div class="hero-stat">
+                    <div class="hero-stat-value">${recipesValue}</div>
+                    <div class="hero-stat-label">${recipesLabel}</div>
                   </div>
-                  <div style="text-align:center;">
-                    <div style="font-size:2rem;font-weight:800;color:#fff;">500+</div>
-                    <div style="font-size:0.8rem;color:rgba(255,255,255,0.7);text-transform:uppercase;letter-spacing:0.1em;">заказов</div>
+                  <div class="hero-stat">
+                    <div class="hero-stat-value">500+</div>
+                    <div class="hero-stat-label">заказов</div>
                   </div>
-                  <div style="text-align:center;">
-                    <div style="font-size:2rem;font-weight:800;color:#fff;">5.0</div>
-                    <div style="font-size:0.8rem;color:rgba(255,255,255,0.7);text-transform:uppercase;letter-spacing:0.1em;">рейтинг</div>
+                  <div class="hero-stat">
+                    <div class="hero-stat-value">5.0</div>
+                    <div class="hero-stat-label">рейтинг</div>
                   </div>
                 </div>
               </div>
             </div>
           `;
+          if (previewDecoInstance) {
+            previewDecoInstance.destroy();
+            previewDecoInstance = null;
+          }
+          const stage = document.getElementById('previewHeroStage');
+          const decoEl = document.getElementById('previewHeroDecorations');
+          if (stage && decoEl && window.SweetBakeHeroDeco) {
+            previewDecoInstance = SweetBakeHeroDeco.mount({
+              mode: 'view',
+              heroEl: stage,
+              decorationsEl: decoEl,
+              decorations
+            });
+          }
         } else if (section === 'about') {
           const subtitle = document.getElementById('aboutSubtitle').value || 'Наша история';
           const titlePart1 = document.getElementById('aboutTitlePart1').value || 'Страсть, запечённая';
           const titleAccent = document.getElementById('aboutTitleAccent').value || 'в каждом десерте';
           const desc1 = document.getElementById('aboutDesc1').value || '';
           const desc2 = document.getElementById('aboutDesc2').value || '';
-          const image = document.getElementById('aboutImage').value || '';
+          const image = document.getElementById('aboutImage').value || 'https://images.pexels.com/photos/19499006/pexels-photo-19499006.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=700';
           const values = homeContent.about.values || [];
           const stats = homeContent.aboutStats || [];
 
@@ -670,6 +870,10 @@
       }
 
       function closePreview() {
+        if (previewDecoInstance) {
+          previewDecoInstance.destroy();
+          previewDecoInstance = null;
+        }
         document.getElementById('previewModal').classList.remove('active');
       }
 
@@ -685,7 +889,9 @@
         homeContent.hero = homeContent.hero || {};
         homeContent.hero.recipesValue = document.getElementById('heroRecipesValue').value;
         homeContent.hero.recipesLabel = document.getElementById('heroRecipesLabel').value;
-        homeContent.hero.bg = document.getElementById('heroBg').value;
+        if (heroDecoInstance) {
+          homeContent.hero.decorations = heroDecoInstance.getDecorations();
+        }
         saveHomeContent();
       });
       document.getElementById('saveAboutBtn').addEventListener('click', () => {
@@ -1009,14 +1215,14 @@
         SweetBakeTheme.createSwitcher('themeSwitcher');
         if (!await checkAccess()) return;
         await loadCakes(); await loadCategories(); await loadContacts(); await loadOrders(); await loadHomeContent();
-
-        // Показать юбилейные уведомления
-        const notifKey = 'sweetbake_milestone_notifications';
-        const notifications = JSON.parse(localStorage.getItem(notifKey) || '[]');
-        if (notifications.length > 0) {
-          notifications.forEach(n => SweetBakeUtils.showToast(n.message));
-          localStorage.removeItem(notifKey);
-        }
+		
+		 // Показать юбилейные уведомления
+  const notifKey = 'sweetbake_milestone_notifications';
+  const notifications = JSON.parse(localStorage.getItem(notifKey) || '[]');
+  if (notifications.length > 0) {
+    notifications.forEach(n => SweetBakeUtils.showToast(n.message));
+    localStorage.removeItem(notifKey);
+  }
 
         document.querySelectorAll('.tab-btn').forEach(btn => {
           btn.addEventListener('click', () => {
