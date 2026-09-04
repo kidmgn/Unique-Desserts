@@ -17,7 +17,7 @@
           price: 1990,
           categoryId: null,
           media: [
-            { type: 'image', url: 'https://static.1000.menu/img/content-v2/6f/e4/20557/shokoladnyi-mussovyi-tort-biskvitnyi_1645768527_14_max.jpg' }
+            { type: 'image', url: 'https://avatars.mds.yandex.net/i?id=6849ed1de40d6a431b18c9c667c326c0_l-5614297-images-thumbs&n=13' }
           ],
           description: 'Слой за слоем: влажный бисквит, шоколадный мусс, тонкая глазурь.'
         },
