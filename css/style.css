@@ -340,39 +340,91 @@ header.scrolled {
   opacity: 0.3;
 }
 
-.hero-circle {
+/* ===== Hero decorations (из админки) ===== */
+.hero-decorations {
   position: absolute;
-  border: 1px solid rgba(255,255,255,0.15);
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.hero-deco {
+  position: absolute;
+  will-change: transform;
+  transition: transform 0.5s ease-out;
+  pointer-events: none;
+  touch-action: none;
+}
+
+.hero-deco-editor .hero-decorations,
+.hero-deco-stage .hero-decorations {
+  pointer-events: auto;
+}
+
+.hero-deco-editor .hero-deco,
+.hero-deco-stage .hero-deco {
+  pointer-events: auto;
+  cursor: grab;
+}
+
+.hero-deco.dragging { cursor: grabbing; }
+
+.hero-deco.selected {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+  box-shadow: 0 0 15px rgba(255, 143, 163, 0.6);
+}
+
+.hero-deco-inner {
+  width: 100%;
+  height: 100%;
+}
+
+.hero-deco-circle .hero-deco-inner {
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 50%;
-  z-index: 1;
-  animation: spin-slow 20s linear infinite;
 }
-
-.hero-circle-1 {
-  top: 25%;
-  right: 10%;
-  width: 250px;
-  height: 250px;
+.hero-deco-ring .hero-deco-inner {
+  border: 2px dashed rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
 }
-
-.hero-circle-2 {
-  top: 33%;
-  right: 16%;
-  width: 160px;
-  height: 160px;
-  animation-direction: reverse;
+.hero-deco-dots .hero-deco-inner {
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.4) 1px, transparent 1px);
+  background-size: 18px 18px;
+  border-radius: 20px;
 }
-
-.hero-circle-3 {
-  bottom: 25%;
-  left: 10%;
-  width: 190px;
-  height: 190px;
+.hero-deco-wave .hero-deco-inner {
+  background: radial-gradient(ellipse at 50% 100%, rgba(255, 255, 255, 0.25) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.hero-deco-cross .hero-deco-inner {
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)) center / 2px 100% no-repeat,
+    linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)) center / 100% 2px no-repeat;
+}
+.hero-deco-arc .hero-deco-inner {
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  transform: rotate(45deg);
+}
+.hero-deco-diamond .hero-deco-inner {
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  transform: rotate(45deg);
+}
+.hero-deco-glow .hero-deco-inner {
+  background: radial-gradient(circle, rgba(255, 143, 163, 0.5) 0%, transparent 70%);
+  filter: blur(14px);
+  border-radius: 50%;
+}
+.hero-deco-stripes .hero-deco-inner {
+  background: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.35) 0 2px, transparent 2px 14px);
+  border-radius: 12px;
 }
 
 .hero-content {
   position: relative;
-  z-index: 2;
+  z-index: 3;
   max-width: 800px;
   margin: 0 auto;
   padding: 60px 20px;
@@ -1923,82 +1975,4 @@ html {
   .footer-cta-form {
     flex-direction: column;
   }
-}
-
-.hero-parallax img {
-  will-change: transform;
-  transition: transform 0.2s ease-out;
-  scale: 1.1;
-}
-
-/* Узоры hero */
-.hero-pattern {
-  position: absolute;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.hero-pattern-dots {
-  top: 18%;
-  left: 8%;
-  width: 120px;
-  height: 120px;
-  background-image: radial-gradient(circle, rgba(255,255,255,0.25) 1px, transparent 1px);
-  background-size: 18px 18px;
-  opacity: 0.5;
-}
-
-.hero-pattern-ring {
-  bottom: 12%;
-  right: 12%;
-  width: 180px;
-  height: 180px;
-  border: 2px dashed rgba(255,255,255,0.3);
-  border-radius: 50%;
-  animation: spin-slow 30s linear infinite;
-}
-
-.hero-pattern-wave {
-  bottom: 20%;
-  left: 15%;
-  width: 200px;
-  height: 60px;
-  background: radial-gradient(ellipse at 50% 100%, rgba(255,255,255,0.15) 0%, transparent 70%);
-  border-radius: 50%;
-  transform: rotate(-15deg);
-}
-
-/* ===== УНИФИКАЦИЯ ФОРМ ===== */
-input[type="text"],
-input[type="email"],
-input[type="password"],
-input[type="number"],
-input[type="search"],
-input[type="url"],
-input[type="tel"],
-select,
-textarea {
-  width: 100%;
-  padding: 12px 16px;
-  border-radius: 14px;
-  border: 1.5px solid var(--border);
-  background: var(--bg);
-  color: var(--text);
-  font-family: inherit;
-  font-size: 1rem;
-  transition: border-color 0.2s, box-shadow 0.2s;
-  outline: none;
-}
-
-input:focus,
-select:focus,
-textarea:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(249, 168, 212, 0.15);
-}
-
-input::placeholder,
-textarea::placeholder {
-  color: var(--muted);
-  opacity: 0.6;
 }
