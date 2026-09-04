@@ -108,7 +108,20 @@
         hero: {
           recipesValue: '20+',
           recipesLabel: 'рецептов',
-          bg: 'https://images.unsplash.com/photo-1551218808-94e220e084d2?q=80&w=1600&auto=format&fit=crop'
+          decorations: [
+            { id: 'd1', type: 'circle', size: 250, x: 10, y: 25, opacity: 0.5, depth: 0.05, animation: 'spin', duration: 20 },
+            { id: 'd2', type: 'circle', size: 160, x: 16, y: 33, opacity: 0.4, depth: 0.06, animation: 'spin-reverse', duration: 15 },
+            { id: 'd3', type: 'circle', size: 190, x: 8, y: 70, opacity: 0.4, depth: 0.05, animation: 'spin', duration: 25 },
+            { id: 'd4', type: 'dots', size: 120, x: 8, y: 18, opacity: 0.5, depth: 0.08, animation: 'none', duration: 20 },
+            { id: 'd5', type: 'ring', size: 180, x: 82, y: 72, opacity: 0.4, depth: 0.1, animation: 'spin-reverse', duration: 18 },
+            { id: 'd6', type: 'wave', size: 200, x: 15, y: 80, opacity: 0.4, depth: 0.06, animation: 'float', duration: 3 },
+            { id: 'd7', type: 'arc', size: 260, x: 72, y: 6, opacity: 0.5, depth: 0.07, animation: 'spin', duration: 24 },
+            { id: 'd8', type: 'glow', size: 340, x: 58, y: 48, opacity: 0.5, depth: 0.04, animation: 'float', duration: 6 },
+            { id: 'd9', type: 'diamond', size: 90, x: 32, y: 10, opacity: 0.55, depth: 0.14, animation: 'spin-reverse', duration: 28 },
+            { id: 'd10', type: 'cross', size: 36, x: 62, y: 16, opacity: 0.7, depth: 0.16, animation: 'spin', duration: 30 },
+            { id: 'd11', type: 'stripes', size: 150, x: 86, y: 38, opacity: 0.35, depth: 0.09, animation: 'none', duration: 20 },
+            { id: 'd12', type: 'dots', size: 100, x: 42, y: 78, opacity: 0.4, depth: 0.12, animation: 'none', duration: 20 }
+          ]
         },
         about: {
           subtitle: 'Наша история',
@@ -160,6 +173,7 @@
 
   // ===== API =====
   const api = {
+    // Торты
     cakes: {
       getAll: () => Promise.resolve(getAll('cakes')),
       get: (id) => {
@@ -187,6 +201,8 @@
         return Promise.resolve({ success: true });
       }
     },
+
+    // Пользователи
     users: {
       getAll: () => Promise.resolve(getAll('users')),
       get: (id) => {
@@ -214,6 +230,8 @@
         return Promise.resolve({ success: true });
       }
     },
+
+    // Контакты
     contacts: {
       get: () => Promise.resolve(JSON.parse(localStorage.getItem('sweetbake_contacts') || '{"items":[]}')),
       update: (data) => {
@@ -221,6 +239,8 @@
         return Promise.resolve(data);
       }
     },
+
+    // Отзывы
     reviews: {
       getAll: (cakeId) => {
         let reviews = getAll('reviews');
@@ -236,6 +256,8 @@
         return Promise.resolve(newReview);
       }
     },
+
+    // Заказы
     orders: {
       getAll: () => {
         const orders = getAll('orders');
@@ -267,6 +289,8 @@
         return Promise.resolve({ success: true });
       }
     },
+
+    // Категории
     categories: {
       getAll: () => Promise.resolve(getAll('categories')),
       get: (id) => {
@@ -293,8 +317,17 @@
         return Promise.resolve({ success: true });
       }
     },
+
+    // Контент главной страницы
     homeContent: {
-      get: () => Promise.resolve(JSON.parse(localStorage.getItem('sweetbake_home_content') || '{}')),
+      get: () => {
+        const data = JSON.parse(localStorage.getItem('sweetbake_home_content') || '{}');
+        if (data.hero && !Array.isArray(data.hero.decorations) && global.SweetBakeHeroDeco) {
+          data.hero.decorations = global.SweetBakeHeroDeco.DEFAULT_DECORATIONS.map(d => ({ ...d }));
+          localStorage.setItem('sweetbake_home_content', JSON.stringify(data));
+        }
+        return Promise.resolve(data);
+      },
       update: (data) => {
         localStorage.setItem('sweetbake_home_content', JSON.stringify(data));
         return Promise.resolve(data);
